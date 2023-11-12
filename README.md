@@ -1,27 +1,75 @@
-# GardenStore
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
+# Aplicación Web Garden Store 🏠
 
-## Development server
+# Detalle 📄
+Esta es una aplicación web fullstack llamado garden store para vender productos de jardinería. Esta creada con las tecnologías de Django con python y una base de datos relacional Mysql en el lado del backend, y en el lado del frontend esta creado con el framework Angular
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+# Tecnologías ⚙️
+- Python v3.10.9
+- Django v4.2.3
+- Rest Framework v3.14.0
+- Base de Datos Relacional MySQL
+- Angular 15
+- Node JS v18.17.0
+- HTML
+- SASS
+- TypeScript
 
-## Code scaffolding
+# Instalación de Dependencias 📁
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# Django ❇️
+Para instalar las dependencias del proyecto de django, se adjunta un archivo llamado requirements.txt con todas las librerías necesarias. Pero primero, se debe crear un entorno virtual con Python usando el comando:
 
-## Build
+    python -m venv env 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Después de ejecutar el comando, se creará una carpeta con el entorno virtual. Para activar el entorno virtual, ejecute el archivo activate.bat ubicado en env\Scripts\activate.bat. Con el entorno virtual activado, instale las dependencias del proyecto usando el comando:
 
-## Running unit tests
+    pip install -r requirements.txt
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Posteriormente se instalarán las dependencias para ejecutar el proyecto.
 
-## Running end-to-end tests
+# Variables de Entorno 📌
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Para poder crear las variables de entorno se necesita crear una archivo .env en la carpeta core/, adentro de este archivo se deben poner las siguientes variables de entorno:
 
-## Further help
+```bash
+NAME_DATABASE=<db-name>
+USER_DATABASE=<username>
+PASSWORD_DATABASE=<password>
+HOST_DATABASE=localhost
+PORT_DATABASE=3306
+SECRET_KEY=<generate-secret-key>
+DEBUG=<True|False>
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+# Migraciones 📝
+Para migrar los modelos a la base de datos, primero se debe crear unas carpetas llamadas migrations/ en cada app del proyecto y un archivo __init__.py dentro de estas carpetas, configurar el archivo settings.py con los detalles de conexión de la base de datos (En las variables de entorno). Una vez que hayas hecho la configuración, ejecuta el comando:
+
+    python manage.py makemigrations
+
+Esto creará los archivos de migración. Luego, ejecute el comando:
+
+    python manage.py migrate 
+
+Esto ejecutará todas las migraciones y creará las tablas en la base de datos.
+
+# Ejecución Django ☑️
+Para ejecutar el proyecto, active el entorno virtual con las dependencias instaladas y luego ejecute el comando:
+
+    python manage.py runserver (numero de puerto opcional)
+    
+El número de puerto es opcional. Si no proporciona un número de puerto, el servidor se ejecutará en el puerto 8000 en localhost.
+
+# Angular 🅰️
+Para correr el servidor de angular primero que todo tenemos que instalar las dependencias, que se realiza con el siguiente comando:
+
+    npm install
+
+Donde se instalaran todas las dependencias del proyecto
+
+# Ejecución Angular ✅
+Después de haber instalado las dependencias al proyecto, ahora podrás ejecutarlo con el siguiente comando:
+
+    ng serve
+
+Donde se habilitará un servidor local en el puerto 4200
