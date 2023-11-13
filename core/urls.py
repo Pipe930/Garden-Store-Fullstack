@@ -2,11 +2,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from apps.products.urls import urlsCategories
+from apps.products.urls import urlsCategories, urlsProducts
+
+urls_api =  [
+    path("categories/", include(urlsCategories)),
+    path("products/", include(urlsProducts))
+]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("categories/", include(urlsCategories))
+    path("api/v1.0/", include(urls_api)),
 ]
 
 if settings.DEBUG:

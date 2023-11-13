@@ -2,13 +2,20 @@ from django.http import Http404
 from rest_framework.response import Response
 from .serializer import (
     ListCategorySerializer,
-    CreateUpdateCategorySerializer)
+    CreateUpdateCategorySerializer,
+    ListProductsSerializer,
+    CreateUpdateProductSerializer)
 from .models import Category, Product, Offer
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
-from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.parsers import FormParser, MultiPartParser
+from core.messages import (
+    message_response_list,
+    message_response_created,
+    message_response_bad_request,
+    message_response_no_content,
+    message_response_update)
 
 # ----------------------------- CATEGORY VIEWS --------------------------------
 
@@ -30,9 +37,13 @@ class ListCreateCategoryView(ListCreateAPIView):
         serializer = ListCategorySerializer(categories, many=True)
 
         if not categories.exists():
-            return Response({"status": "No Content", "message": "No tenemos categorias registradas"})
+            return Response(
+                message_response_no_content("categorias registradas"),
+                status.HTTP_204_NO_CONTENT)
 
-        return Response({"status": "OK", "data": serializer.data})
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)
 
     def post(self, request, format=None):
 
@@ -40,13 +51,13 @@ class ListCreateCategoryView(ListCreateAPIView):
 
         if not serializer.is_valid():
             return Response(
-                {"status": "Bad Request", "errors": serializer.errors, "message": "Error, la categoria no se creo"},
+                message_response_bad_request("la categoria", serializer.errors, "POST"),
                 status.HTTP_400_BAD_REQUEST)
 
         serializer.save()
 
         return Response(
-            {"status": "Created", "data": serializer.data, "message": "La categoria se creo con exito"},
+            message_response_created("la categoria", serializer.data),
             status.HTTP_201_CREATED)
 
 # Update a obtain category View
@@ -75,13 +86,13 @@ class UpdateRetrieveCategoryView(RetrieveUpdateAPIView):
 
         if not serializer.is_valid():
             return Response(
-                {"status": "Bad Request", "errors": serializer.errors, "message": "Error, la categoria no se actualizo"},
+                message_response_bad_request("la categoria", serializer.errors, "PUT"),
                 status.HTTP_400_BAD_REQUEST)
 
         serializer.save()
 
         return Response(
-            {"status": "Reset Content", "data": serializer.data, "message": "Se actualizo la categoria con exito"},
+            message_response_update("la categoria", serializer.data),
             status.HTTP_205_RESET_CONTENT)
 
     def get(self, request, id:int, format=None):
@@ -89,6 +100,117 @@ class UpdateRetrieveCategoryView(RetrieveUpdateAPIView):
         category = self.get_object(id)
         serializer = ListCategorySerializer(category)
 
-        return Response({"status": "OK", "data": serializer.data}, status.HTTP_200_OK)
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)
 
 # ----------------------------- PRODUCT VIEWS --------------------------------
+
+# Create and List Product View
+class ListCreateProductView(ListCreateAPIView):
+
+    queryset = Product.objects.filter(aviable=True).order_by("name_product")
+    parser_classes = [FormParser, MultiPartParser]
+
+    def get_permissions(self):
+
+        if self.request.method == 'POST':
+            return [IsAuthenticated(), IsAdminUser()]
+
+        return super().get_permissions()
+
+    def get(self, request, format=None):
+
+        products = self.get_queryset()
+        serializer = ListProductsSerializer(products, many=True)
+
+        if not products.exists():
+            return Response(
+                message_response_no_content("productos registrados"),
+                status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)
+
+    def post(self, request, format=None):
+
+        serializer = CreateUpdateProductSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(
+                message_response_bad_request("el producto", serializer.errors, "POST"),
+                status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+
+        return Response(
+            message_response_created("el producto", serializer.data),
+            status.HTTP_201_CREATED)
+
+# Update a obtain product View
+class UpdateRetrieveProductView(RetrieveUpdateAPIView):
+
+    parser_classes = [FormParser, MultiPartParser]
+
+    def get_permissions(self):
+
+        if self.request.method == 'PUT':
+            return [IsAuthenticated(), IsAdminUser()]
+
+        return super().get_permissions()
+
+    def get_object(self, id:int):
+
+        try:
+            product = Product.objects.get(id_product=id)
+        except Product.DoesNotExist:
+            raise Http404
+
+        return product
+
+    def update(self, request, id:int, format=None):
+
+        product = self.get_object(id)
+        serializer = CreateUpdateProductSerializer(product, data=request.data)
+
+        if not serializer.is_valid():
+            return Response(
+                message_response_bad_request("el producto", serializer.errors, "PUT"),
+                status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+
+        return Response(
+            message_response_update("el producto", serializer.data),
+            status.HTTP_205_RESET_CONTENT)
+
+    def get(self, request, id:int, format=None):
+
+        product = self.get_object(id)
+        serializer = ListProductsSerializer(product)
+
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)
+
+class ListProductAdminView(ListAPIView):
+
+    queryset = Product.objects.all().order_by("created")
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get(self, request, format=None):
+
+        products = self.get_queryset()
+        serializer = ListProductsSerializer(products, many=True)
+
+        if not products.exists():
+            return Response(
+                message_response_no_content("productos registrados"),
+                status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)
+
+# ----------------------------- OFFER VIEWS --------------------------------

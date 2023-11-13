@@ -52,6 +52,7 @@ class Product(models.Model):
     id_product = models.BigAutoField(primary_key=True)
     name_product = models.CharField(max_length=255, unique=True)
     price = models.PositiveIntegerField()
+    discount_price = models.PositiveIntegerField()
     stock = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to=nameImage)
     slug = models.SlugField(unique=True)
