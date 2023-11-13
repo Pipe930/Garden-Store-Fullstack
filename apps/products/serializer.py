@@ -34,7 +34,7 @@ class OfferSerializer(ModelSerializer):
     class Meta:
 
         model = Offer
-        fields = ["id_offer", "name_offer", "discount"]
+        fields = ["id_offer", "name_offer", "percentage_discount"]
 
 # List Products Serializer
 class ListProductsSerializer(ModelSerializer):
@@ -70,8 +70,10 @@ class CreateUpdateProductSerializer(ModelSerializer):
     def create(self, validated_data):
 
         try:
-            if validated_data["offer"] is not None:
-                discount_price = discount(product.price, product.offer.discount)
+            offer = validated_data["offer"]
+
+            if offer is not None:
+                discount_price = discount(product.price, offer.percentage_discount)
         except KeyError:
             discount_price = 0
 
@@ -82,9 +84,17 @@ class CreateUpdateProductSerializer(ModelSerializer):
     def update(self, instance, validated_data):
 
         try:
-            if validated_data["offer"] is not None:
-                discount_price = discount(instance.price, instance.offer.discount)
+            offer = validated_data["offer"]
+
+            if offer is not None:
+                discount_price = discount(instance.price, offer.percentage_discount)
+                instance.discount_price = discount_price
+                instance.offer = validated_data.get("offer", instance.offer)
+            else:
+                instance.offer = None
+
         except KeyError:
+            instance.offer = None
             discount_price = 0
 
         instance.name_product = validated_data.get("name_product", instance.name_product)
@@ -93,8 +103,36 @@ class CreateUpdateProductSerializer(ModelSerializer):
         instance.image = validated_data.get("image", instance.image)
         instance.description = validated_data.get("description", instance.description)
         instance.category = validated_data.get("category", instance.category)
-        instance.offer = validated_data.get("offer", instance.offer)
-        instance.discount_price = discount_price
+
+        instance.save()
+
+        return instance
+
+# List Offers Serializer
+class ListOfferSerializer(ModelSerializer):
+
+    class Meta:
+        model = Offer
+        fields = ["id_offer", "name_offer", "state", "start_date", "end_date", "percentage_discount"]
+
+# Create and Update Offer Serializer
+class CreateUpdateOfferSerializer(ModelSerializer):
+
+    class Meta:
+        model = Offer
+        fields = ["name_offer", "end_date", "percentage_discount"]
+
+    def create(self, validated_data):
+
+        offer = Offer.objects.create(**validated_data)
+
+        return offer
+
+    def update(self, instance, validated_data):
+
+        instance.name_offer = validated_data.get("name_offer", instance.name_offer)
+        instance.end_date = validated_data.get("end_date", instance.end_date)
+        instance.percentage_discount = validated_data.get("percentage_discount", instance.percentage_discount)
 
         instance.save()
 

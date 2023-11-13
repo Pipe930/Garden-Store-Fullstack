@@ -6,12 +6,12 @@ def message_response_list(data):
 def message_response_created(object:str, data):
     return {"status": "Created", "data": data, "message": f"{object} se creo con exito"}
 
-def message_response_bad_request(object:str, data, method):
+def message_response_bad_request(object:str, errors, method:str):
 
     if method == "PUT":
-        return {"status": "Bad Request", "errors": data, "message": f"Error, {object} no se actualizo"}
+        return {"status": "Bad Request", "errors": errors, "message": f"Error, {object} no se actualizo"}
     elif method == "POST":
-        return {"status": "Bad Request", "errors": data, "message": f"Error, {object} no se creo"}
+        return {"status": "Bad Request", "errors": errors, "message": f"Error, {object} no se creo"}
 
 def message_response_no_content(object:str):
     return {"status": "No Content", "message": f"No tenemos {object}"}

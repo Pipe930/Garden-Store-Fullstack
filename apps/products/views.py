@@ -4,7 +4,9 @@ from .serializer import (
     ListCategorySerializer,
     CreateUpdateCategorySerializer,
     ListProductsSerializer,
-    CreateUpdateProductSerializer)
+    CreateUpdateProductSerializer,
+    ListOfferSerializer,
+    CreateUpdateOfferSerializer)
 from .models import Category, Product, Offer
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, ListAPIView
@@ -63,12 +65,7 @@ class ListCreateCategoryView(ListCreateAPIView):
 # Update a obtain category View
 class UpdateRetrieveCategoryView(RetrieveUpdateAPIView):
 
-    def get_permissions(self):
-
-        if self.request.method == 'PUT':
-            return [IsAuthenticated(), IsAdminUser()]
-
-        return super().get_permissions()
+    permission_classes = [IsAuthenticated, IsAdminUser]
 
     def get_object(self, id:int):
 
@@ -109,15 +106,9 @@ class UpdateRetrieveCategoryView(RetrieveUpdateAPIView):
 # Create and List Product View
 class ListCreateProductView(ListCreateAPIView):
 
-    queryset = Product.objects.filter(aviable=True).order_by("name_product")
+    queryset = Product.objects.all().order_by("created")
+    permission_classes = [IsAuthenticated, IsAdminUser]
     parser_classes = [FormParser, MultiPartParser]
-
-    def get_permissions(self):
-
-        if self.request.method == 'POST':
-            return [IsAuthenticated(), IsAdminUser()]
-
-        return super().get_permissions()
 
     def get(self, request, format=None):
 
@@ -194,10 +185,10 @@ class UpdateRetrieveProductView(RetrieveUpdateAPIView):
             message_response_list(serializer.data),
             status.HTTP_200_OK)
 
-class ListProductAdminView(ListAPIView):
+# List Product a Clients View
+class ListProductClientView(ListAPIView):
 
-    queryset = Product.objects.all().order_by("created")
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Product.objects.filter(aviable=True).order_by("name_product")
 
     def get(self, request, format=None):
 
@@ -214,3 +205,77 @@ class ListProductAdminView(ListAPIView):
             status.HTTP_200_OK)
 
 # ----------------------------- OFFER VIEWS --------------------------------
+
+# Create and List Offers View
+class ListCreateOfferView(ListCreateAPIView):
+
+    queryset = Offer.objects.all().order_by("start_date")
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get(self, request, format=None):
+
+        offers = self.get_queryset()
+        serializer = ListOfferSerializer(offers, many=True)
+
+        if not offers.exists():
+            return Response(
+                message_response_no_content("ofertas registradas"),
+                status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)
+
+    def post(self, request, format=None):
+
+        serializer = CreateUpdateOfferSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(
+                message_response_bad_request("la oferta", serializer.errors, "POST"),
+                status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+
+        return Response(
+            message_response_created("la oferta", serializer.data),
+            status.HTTP_201_CREATED)
+
+# Update a obtain offer View
+class UpdateRetrieveOfferView(RetrieveUpdateAPIView):
+
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get_object(self, id:int):
+
+        try:
+            offer = Offer.objects.get(id_offer=id)
+        except Offer.DoesNotExist:
+            raise Http404
+
+        return offer
+
+    def update(self, request, id:int, format=None):
+
+        offer = self.get_object(id)
+        serializer = CreateUpdateOfferSerializer(offer, data=request.data)
+
+        if not serializer.is_valid():
+            return Response(
+                message_response_bad_request("la oferta", serializer.errors, "PUT"),
+                status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+
+        return Response(
+            message_response_update("la oferta", serializer.data),
+            status.HTTP_205_RESET_CONTENT)
+
+    def get(self, request, id:int, format=None):
+
+        offer = self.get_object(id)
+        serializer = ListOfferSerializer(offer)
+
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)

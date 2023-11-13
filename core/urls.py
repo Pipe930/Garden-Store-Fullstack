@@ -2,11 +2,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from apps.products.urls import urlsCategories, urlsProducts
+from apps.products.urls import urlsCategories, urlsProducts, urlsOffers
 
 urls_api =  [
     path("categories/", include(urlsCategories)),
-    path("products/", include(urlsProducts))
+    path("products/", include(urlsProducts)),
+    path("offers/", include(urlsOffers))
 ]
 
 urlpatterns = [

@@ -8,6 +8,11 @@ urlsCategories = [
 
 urlsProducts = [
     path("", views.ListCreateProductView.as_view(), name="listcreateproduct"),
-    path("admin", views.ListProductAdminView.as_view(), name="listadminproduct"),
+    path("client", views.ListProductClientView.as_view(), name="listclientproduct"),
     path("product/<int:id>", views.UpdateRetrieveProductView.as_view(), name="updateretrieveproduct")
+]
+
+urlsOffers = [
+    path("", views.ListCreateOfferView.as_view(), name="listcreateoffer"),
+    path("offer/<int:id>", views.UpdateRetrieveOfferView.as_view(), name="updateretrieveoffer")
 ]
