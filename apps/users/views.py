@@ -160,3 +160,25 @@ class LogoutView(RetrieveAPIView):
 
         except:
             return Response({"status": "Conflict","errors": "El token no se a encontrado en la cabecera"}, status.HTTP_409_CONFLICT)
+
+# Refresh Token a User View
+class RefreshTokenView(RetrieveAPIView):
+
+    def get(self, request, *args, **kwargs):
+
+        username = request.GET.get("username")
+        try:
+
+            user_token = Token.objects.get(
+                user = CreateUserSerializer().Meta.model.objects.filter(username = username).first()
+            )
+
+            return Response({
+                'token': user_token.key
+            })
+
+        except:
+            return Response({
+                "status": "Bad Request",
+                "error": "Credenciales enviadas incorrectas"
+            }, status.HTTP_400_BAD_REQUEST)
