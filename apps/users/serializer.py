@@ -1,8 +1,8 @@
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer, CharField, EmailField, Serializer, StringRelatedField
 from .models import User, Subscription
 
 # Serialized User Model
-class CreateUserSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(ModelSerializer):
 
     class Meta:
 
@@ -26,12 +26,12 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return user
 
 # Serialized Subscription Model
-class SubscriptionSerializer(serializers.ModelSerializer):
+class CreateSubscriptionSerializer(ModelSerializer):
 
     class Meta:
 
         model = Subscription
-        fields = ["mount", "id_user"]
+        fields = ["mount", "user"]
 
     def create(self, validated_data):
 
@@ -39,21 +39,30 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
         return subscription
 
+class ListSubscriptionSerializer(ModelSerializer):
+
+    user = StringRelatedField()
+
+    class Meta:
+
+        model = Subscription
+        fields = ["id_subscription", "created", "status", "mount", "user"]
+
 # Send mail serializer
-class MessageSerializer(serializers.Serializer):
+class MessageSerializer(Serializer):
 
     # Required attributes
-    full_name = serializers.CharField(max_length=60)
-    email = serializers.EmailField()
-    message = serializers.CharField(max_length=255)
+    full_name = CharField(max_length=60)
+    email = EmailField()
+    message = CharField(max_length=255)
 
 # Change Password Serializer
-class ChangePasswordSerializer(serializers.Serializer):
+class ChangePasswordSerializer(Serializer):
 
     model = User
 
     """
     Serializer for password change endpoint.
     """
-    old_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
+    old_password = CharField(required=True)
+    new_password = CharField(required=True)

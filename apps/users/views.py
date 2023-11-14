@@ -1,14 +1,13 @@
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveDestroyAPIView
 from django.http import Http404
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate, login, logout
 from .models import User, Subscription
-from .serializer import CreateUserSerializer, SubscriptionSerializer, MessageSerializer, ChangePasswordSerializer
+from .serializer import CreateUserSerializer, CreateSubscriptionSerializer, ListSubscriptionSerializer, MessageSerializer, ChangePasswordSerializer
 from django.contrib.sessions.models import Session
 from datetime import datetime
 from .util import Util
@@ -18,8 +17,7 @@ from django.urls import reverse
 from django_rest_passwordreset.signals import reset_password_token_created
 from rest_framework.authentication import get_authorization_header
 from django.core.mail import send_mail
-from rest_framework.parsers import JSONParser
-# from core.permission import validation_token
+from core.validation_token import validation_token
 from core.messages import (
     message_response_list,
     message_response_created,
@@ -175,10 +173,73 @@ class RefreshTokenView(RetrieveAPIView):
 
             return Response({
                 'token': user_token.key
-            })
+            }, status.HTTP_202_ACCEPTED)
 
         except:
             return Response({
                 "status": "Bad Request",
                 "error": "Credenciales enviadas incorrectas"
             }, status.HTTP_400_BAD_REQUEST)
+
+class CreateSubscriptionView(CreateAPIView):
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = CreateSubscriptionSerializer
+
+    # Petition POST
+    def post(self, request, format=None):
+
+        serializer = self.get_serializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(
+                message_response_bad_request("la subscripción", serializer.errors, "POST"),
+                status.HTTP_400_BAD_REQUEST)
+
+        if not validation_token(request, request.data["user"]):
+            return Response({"status": "Unauthorized","message": "Este token no le pertenece a este usuario"}, status.HTTP_401_UNAUTHORIZED)
+
+        serializer.save()
+        return Response(
+            message_response_created("La subscripción", serializer.data),
+            status.HTTP_201_CREATED)
+
+
+# View that gets a subscription by id
+class RetrieveDeleteSubscriptionView(RetrieveDestroyAPIView):
+
+    serializer_class = ListSubscriptionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, id:int):
+
+        try:
+            subscription = Subscription.objects.get(user=id)
+        except Subscription.DoesNotExist:
+            raise Http404
+
+        return subscription
+
+    # Petition GET
+    def get(self, request, id:int, format=None):
+
+        if not validation_token(request, id):
+            return Response({"status": "Unauthorized", "message": "Este token no le pertenece a este usuario"}, status.HTTP_401_UNAUTHORIZED)
+
+        subcription = self.get_object(id)
+        serializer = self.get_serializer(subcription)
+
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)
+
+    # Petition DELETE
+    def delete(self, request, id:int, format=None):
+
+        if not validation_token(request, id):
+            return Response({"status": "Unauthorized", "message": "Este token no le pertenece a este usuario"}, status.HTTP_401_UNAUTHORIZED)
+
+        subscription = self.get_object(id)
+        subscription.delete()
+
+        return Response({"status": "No Content", "message": "La subscripcion se elimino correctamente"},status.HTTP_204_NO_CONTENT)
