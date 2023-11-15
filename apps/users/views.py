@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveDestroyAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveDestroyAPIView, UpdateAPIView
 from django.http import Http404
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -243,3 +243,80 @@ class RetrieveDeleteSubscriptionView(RetrieveDestroyAPIView):
         subscription.delete()
 
         return Response({"status": "No Content", "message": "La subscripcion se elimino correctamente"},status.HTTP_204_NO_CONTENT)
+
+# View for mailing
+class SendEmailView(CreateAPIView):
+
+    serializer_class = MessageSerializer
+
+    # Petition POST
+    def post(self, request, format=None):
+
+        serializer = self.get_serializer(data=request.data) # The data is serialized
+
+        if serializer.is_valid(): # The information is validated
+
+            print(serializer.data)
+            Util.send_email(data=serializer.data) # The method of the util send email class is used
+
+            return Response({"status": "OK", "data": serializer.data, "message": "Email enviado con exito"}, status.HTTP_200_OK)
+
+        return Response({"status": "Bad Request", "data":serializer.errors}, status.HTTP_400_BAD_REQUEST)
+
+# View that changes the user"s password
+class ChangePasswordView(UpdateAPIView):
+    """
+    One end point to change the password
+    """
+    serializer_class = ChangePasswordSerializer
+    model = User
+    permission_classes = [IsAuthenticated]
+
+    # Get the user object
+    def get_object(self, queryset=None):
+
+        object = self.request.user
+        return object
+
+    # Petition PUT
+    def update(self, request, *args, **kwargs):
+
+        self.object = self.get_object() # Is obtained a user
+        serializer = self.get_serializer(data=request.data) # The data is serialized
+
+        if serializer.is_valid(): # The date is validated
+
+            # Check if the password is correct
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response({"old_password": ["Wrong password."]}, status.HTTP_400_BAD_REQUEST)
+
+            # The password that the user will get is encrypted
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save() # The new password is saved
+
+            response = {
+                "status": "success",
+                "code": status.HTTP_200_OK,
+                "message": "Contraseña cambiada con exito"
+            }
+
+            return Response(response)
+
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+@receiver(reset_password_token_created)
+def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+
+    # Email Message
+    email_plaintext_message = "{}?token={}".format(reverse("password_reset:reset-password-request"), reset_password_token.key)
+
+    send_mail(
+        # title:
+        "Password Reset for {title}".format(title="Garden Store"),
+        # message:
+        email_plaintext_message,
+        # from:
+        "noreply@somehost.local",
+        # to:
+        [reset_password_token.user.email]
+    )
