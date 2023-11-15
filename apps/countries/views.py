@@ -1,3 +1,75 @@
-from django.shortcuts import render
+from rest_framework import status
+from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
+from .models import Commune, Province, Region
+from .serializer import (
+    RegionSerializer,
+    ProvinceSerializer,
+    CommuneSerializer)
+from core.messages import (
+    message_response_list,
+    message_response_no_content)
 
-# Create your views here.
+# List Regions View
+class ListRegionsView(ListAPIView):
+
+    serializer_class = RegionSerializer
+    queryset = Region.objects.all()
+
+    # Method GET
+    def get(self, request, format=None):
+
+        regiones = self.get_queryset()
+        serializer = self.get_serializer(regiones, many=True)
+
+        if not regiones.exists():
+
+            return Response(
+                message_response_no_content("regiones"),
+                status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)
+
+# List Provincies View
+class ListProvincesRegionView(ListAPIView):
+
+    serializer_class = ProvinceSerializer
+
+    # Method GET
+    def get(self, request, id:int, format=None):
+
+        provinces = Province.objects.filter(region=id)
+        serializer = self.get_serializer(provinces, many=True)
+
+        if not provinces.exists():
+
+            return Response(
+                message_response_no_content("provincias"),
+                status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)
+
+# List Communes View
+class ListCommuneProvinceView(ListAPIView):
+
+    serializer_class = CommuneSerializer
+
+    # Method GET
+    def get(self, request, id:int, format=None):
+
+        communes = Commune.objects.filter(province=id)
+        serializer = self.get_serializer(communes, many=True)
+
+        if not communes.exists():
+
+            return Response(
+                message_response_no_content("categorias"),
+                status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)

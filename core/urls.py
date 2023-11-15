@@ -4,13 +4,17 @@ from django.contrib import admin
 from django.urls import path, include
 from apps.products.urls import urlsCategories, urlsProducts, urlsOffers
 from apps.users.urls import urlsUsers, urlsSubcriptions
+from apps.countries.urls import urlsRegions, urlsProvincies, urlsCommunes
 
 urls_api =  [
     path("categories/", include(urlsCategories)),
     path("products/", include(urlsProducts)),
     path("offers/", include(urlsOffers)),
     path("users/", include(urlsUsers)),
-    path("subscriptions/", include(urlsSubcriptions))
+    path("subscriptions/", include(urlsSubcriptions)),
+    path("regions/", include(urlsRegions)),
+    path("provinces/", include(urlsProvincies)),
+    path("communes/", include(urlsCommunes))
 ]
 
 urlpatterns = [
