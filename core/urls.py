@@ -5,6 +5,7 @@ from django.urls import path, include
 from apps.products.urls import urlsCategories, urlsProducts, urlsOffers
 from apps.users.urls import urlsUsers, urlsSubcriptions
 from apps.countries.urls import urlsRegions, urlsProvincies, urlsCommunes
+from apps.sales.urls import urlsCarts, urlsOrders
 
 urls_api =  [
     path("categories/", include(urlsCategories)),
@@ -14,7 +15,9 @@ urls_api =  [
     path("subscriptions/", include(urlsSubcriptions)),
     path("regions/", include(urlsRegions)),
     path("provinces/", include(urlsProvincies)),
-    path("communes/", include(urlsCommunes))
+    path("communes/", include(urlsCommunes)),
+    path("carts/", include(urlsCarts)),
+    path("orders/", include(urlsOrders))
 ]
 
 urlpatterns = [

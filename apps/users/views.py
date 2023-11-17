@@ -15,15 +15,12 @@ from apps.sales.models import Cart
 from django.dispatch import receiver
 from django.urls import reverse
 from django_rest_passwordreset.signals import reset_password_token_created
+from django.core.mail import EmailMultiAlternatives
 from rest_framework.authentication import get_authorization_header
-from django.core.mail import send_mail
-from core.validation_token import validation_token
 from core.messages import (
     message_response_list,
     message_response_created,
-    message_response_bad_request,
-    message_response_no_content,
-    message_response_update)
+    message_response_bad_request)
 
 # Register User View
 # Create User in DataBase or System
@@ -44,7 +41,9 @@ class RegisterUserView(CreateAPIView):
 
         serializer.save()
 
-        return Response({"status":"Created", "data":serializer.data, "message":"Se registro el usuario correctamente"}, status.HTTP_201_CREATED)
+        return Response(
+            message_response_created("El usuario", serializer.data),
+            status.HTTP_201_CREATED)
 
 # User Login View
 class LoginView(ObtainAuthToken):
@@ -54,7 +53,7 @@ class LoginView(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data)
 
         if not serializer.is_valid():
-            return Response({"status": "Bad Request", "erros": serializer.errors}, status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "Bad Request", "errors": serializer.errors}, status.HTTP_400_BAD_REQUEST)
 
         # Authenticated User
         user_found = authenticate(
@@ -189,15 +188,13 @@ class CreateSubscriptionView(CreateAPIView):
     # Petition POST
     def post(self, request, format=None):
 
+        request.data["user"] = request.user.id
         serializer = self.get_serializer(data=request.data)
 
         if not serializer.is_valid():
             return Response(
                 message_response_bad_request("la subscripción", serializer.errors, "POST"),
                 status.HTTP_400_BAD_REQUEST)
-
-        if not validation_token(request, request.data["user"]):
-            return Response({"status": "Unauthorized","message": "Este token no le pertenece a este usuario"}, status.HTTP_401_UNAUTHORIZED)
 
         serializer.save()
         return Response(
@@ -223,10 +220,7 @@ class RetrieveDeleteSubscriptionView(RetrieveDestroyAPIView):
     # Petition GET
     def get(self, request, id:int, format=None):
 
-        if not validation_token(request, id):
-            return Response({"status": "Unauthorized", "message": "Este token no le pertenece a este usuario"}, status.HTTP_401_UNAUTHORIZED)
-
-        subcription = self.get_object(id)
+        subcription = self.get_object(request.user.id)
         serializer = self.get_serializer(subcription)
 
         return Response(
@@ -236,10 +230,7 @@ class RetrieveDeleteSubscriptionView(RetrieveDestroyAPIView):
     # Petition DELETE
     def delete(self, request, id:int, format=None):
 
-        if not validation_token(request, id):
-            return Response({"status": "Unauthorized", "message": "Este token no le pertenece a este usuario"}, status.HTTP_401_UNAUTHORIZED)
-
-        subscription = self.get_object(id)
+        subscription = self.get_object(request.user.id)
         subscription.delete()
 
         return Response({"status": "No Content", "message": "La subscripcion se elimino correctamente"},status.HTTP_204_NO_CONTENT)
@@ -295,7 +286,7 @@ class ChangePasswordView(UpdateAPIView):
             self.object.save() # The new password is saved
 
             response = {
-                "status": "success",
+                "status": "OK",
                 "code": status.HTTP_200_OK,
                 "message": "Contraseña cambiada con exito"
             }
@@ -307,16 +298,16 @@ class ChangePasswordView(UpdateAPIView):
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
 
-    # Email Message
-    email_plaintext_message = "{}?token={}".format(reverse("password_reset:reset-password-request"), reset_password_token.key)
-
-    send_mail(
+    msg = EmailMultiAlternatives(
         # title:
         "Password Reset for {title}".format(title="Garden Store"),
         # message:
-        email_plaintext_message,
+        "{}?token={}".format(
+            instance.request.build_absolute_uri(reverse('password_reset:reset-password-confirm')),
+            reset_password_token.key),
         # from:
         "noreply@somehost.local",
         # to:
         [reset_password_token.user.email]
     )
+    msg.send()

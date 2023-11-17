@@ -48,7 +48,7 @@ class Authentication(object):
 
                 return super().dispatch(request, *args, **kwargs)
 
-        response = Response({"message": "No se a enviado las credenciales"}, status.HTTP_400_BAD_REQUEST)
+        response = Response({"message": "Las credenciales de autenticación no se proveyeron."}, status.HTTP_400_BAD_REQUEST)
         response.accepted_renderer = JSONRenderer()
         response.accepted_media_type = 'application/json'
         response.renderer_context = {}

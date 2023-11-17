@@ -8,7 +8,7 @@ def message_response_created(object:str, data):
 
 def message_response_bad_request(object:str, errors, method:str):
 
-    if method == "PUT":
+    if method == "PUT" or method == "PATCH":
         return {"status": "Bad Request", "errors": errors, "message": f"Error, {object} no se actualizo"}
     elif method == "POST":
         return {"status": "Bad Request", "errors": errors, "message": f"Error, {object} no se creo"}
