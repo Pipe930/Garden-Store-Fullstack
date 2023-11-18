@@ -10,6 +10,8 @@ from core.messages import (
     message_response_list,
     message_response_no_content)
 
+# ----------------------------- REGION VIEWS --------------------------------
+
 # List Regions View
 class ListRegionsView(ListAPIView):
 
@@ -32,6 +34,8 @@ class ListRegionsView(ListAPIView):
             message_response_list(serializer.data),
             status.HTTP_200_OK)
 
+# ----------------------------- PROVINCE VIEWS --------------------------------
+
 # List Provincies View
 class ListProvincesRegionView(ListAPIView):
 
@@ -52,6 +56,8 @@ class ListProvincesRegionView(ListAPIView):
         return Response(
             message_response_list(serializer.data),
             status.HTTP_200_OK)
+
+# ----------------------------- COMMUNE VIEWS --------------------------------
 
 # List Communes View
 class ListCommuneProvinceView(ListAPIView):

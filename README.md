@@ -6,10 +6,10 @@ Esta es una aplicación web fullstack llamado garden store para vender productos
 
 # Tecnologías ⚙️
 - Python v3.10.9
-- Django v4.2.3
+- Django v4.2.7
 - Rest Framework v3.14.0
 - Base de Datos Relacional MySQL
-- Angular 15
+- Angular 16
 - Node JS v18.17.0
 - HTML
 - SASS

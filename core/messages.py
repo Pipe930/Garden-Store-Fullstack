@@ -18,3 +18,6 @@ def message_response_no_content(object:str):
 
 def message_response_update(object:str, data):
     return {"status": "Reset Content", "data": data, "message": f"Se actualizo {object} con exito"}
+
+def validator_errors_message(message):
+    return {"status": "Bad Request", "message": message}

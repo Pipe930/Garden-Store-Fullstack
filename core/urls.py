@@ -6,6 +6,7 @@ from apps.products.urls import urlsCategories, urlsProducts, urlsOffers, urlsSto
 from apps.users.urls import urlsUsers, urlsSubcriptions
 from apps.countries.urls import urlsRegions, urlsProvincies, urlsCommunes
 from apps.sales.urls import urlsCarts, urlsVouchers
+from apps.orders.urls import urlsDispatchGuides, urlsBills
 
 urls_api =  [
     path("categories/", include(urlsCategories)),
@@ -18,7 +19,9 @@ urls_api =  [
     path("communes/", include(urlsCommunes)),
     path("carts/", include(urlsCarts)),
     path("vouchers/", include(urlsVouchers)),
-    path("stores/", include(urlsStore))
+    path("stores/", include(urlsStore)),
+    path("dispatch-guides/", include(urlsDispatchGuides)),
+    path("bills/", include(urlsBills))
 ]
 
 urlpatterns = [

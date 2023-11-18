@@ -27,6 +27,9 @@ from core.messages import (
     message_response_created,
     message_response_bad_request)
 
+
+# ----------------------------- USER VIEWS --------------------------------
+
 # Register User View
 # Create User in DataBase or System
 class RegisterUserView(CreateAPIView):
@@ -185,6 +188,9 @@ class RefreshTokenView(RetrieveAPIView):
                 "error": "Credenciales enviadas incorrectas"
             }, status.HTTP_400_BAD_REQUEST)
 
+# ----------------------------- SUBCRIPTION VIEWS --------------------------------
+
+# Create Substription View
 class CreateSubscriptionView(CreateAPIView):
 
     serializer_class = CreateSubscriptionSerializer
@@ -238,6 +244,8 @@ class RetrieveDeleteSubscriptionView(RetrieveDestroyAPIView):
         subscription.delete()
 
         return Response({"status": "No Content", "message": "La subscripcion se elimino correctamente"},status.HTTP_204_NO_CONTENT)
+
+# ----------------------------- OTHER USER VIEWS --------------------------------
 
 # View for mailing
 class SendEmailView(CreateAPIView):

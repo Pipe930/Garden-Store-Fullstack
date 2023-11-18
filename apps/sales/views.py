@@ -27,6 +27,8 @@ from core.messages import (
 
 instance_cart = CalculateCart()
 
+# ----------------------------- CART VIEWS --------------------------------
+
 # Cart User View
 class CartUserView(RetrieveAPIView):
 
@@ -161,6 +163,8 @@ class ClearCartItemsView(DestroyAPIView):
             return Response({"status":"No Content", "message": "El carrito se a limpiado con exito"}, status.HTTP_204_NO_CONTENT)
 
         return Response({"status":"No Content", "message": "Tu carrito esta vacio"}, status.HTTP_204_NO_CONTENT)
+
+# ----------------------------- VOUCHER VIEWS --------------------------------
 
 # List and Create Voucher View
 class ListCreateVoucherView(ListCreateAPIView):
