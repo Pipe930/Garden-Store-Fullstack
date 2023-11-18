@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, ValidationError, StringRelatedField, SerializerMethodField, IntegerField
-from .models import Cart, Items, Order, OrderItem
+from .models import Cart, Items, Voucher, VoucherItem
 from apps.users.models import Subscription
 from apps.products.models import Product
 from django.http import Http404
@@ -9,11 +9,11 @@ from .discount_stock import DiscountStock
 
 instance_calulate_cart = CalculateCart()
 
-class CreateOrderSerializer(ModelSerializer):
+class CreateVoucherSerializer(ModelSerializer):
 
     class Meta:
 
-        model = Order
+        model = Voucher
         fields = [
             "total_price",
             "quantity_products",
@@ -58,7 +58,7 @@ class CreateOrderSerializer(ModelSerializer):
         iva_price = instance_calulate_cart.calculate_iva_price(cart.id_cart)
 
         try:
-          order = Order.objects.create(
+          voucher = Voucher.objects.create(
               **validated_data,
               net_mount = value_net,
               iva_price = iva_price
@@ -70,9 +70,9 @@ class CreateOrderSerializer(ModelSerializer):
             try:
                 product = Product.objects.get(id_product = item.product.id_product)
 
-                OrderItem.objects.create(
+                VoucherItem.objects.create(
                     product = product,
-                    order = order,
+                    voucher = voucher,
                     name_product = product.name_product,
                     price = item.product.price,
                     quantity = item.quantity
@@ -84,9 +84,9 @@ class CreateOrderSerializer(ModelSerializer):
 
         instance_calulate_cart.cart_total(cart)
 
-        return order
+        return voucher
 
-class ListOrderSerializer(ModelSerializer):
+class ListVouchersSerializer(ModelSerializer):
 
     user = StringRelatedField()
     branch = StringRelatedField()
@@ -94,10 +94,15 @@ class ListOrderSerializer(ModelSerializer):
 
     class Meta:
 
-        model = Order
+        model = Voucher
         fields = [
+            "code_uuid",
+            "state",
+            "net_mount",
+            "iva_price",
             "total_price",
             "quantity_products",
+            "condition",
             "withdrawal",
             "direction",
             "num_deparment",
@@ -105,16 +110,16 @@ class ListOrderSerializer(ModelSerializer):
             "commune",
             "branch"]
 
-class CancelOrderSerializer(ModelSerializer):
+class CancelVoucherSerializer(ModelSerializer):
 
     class Meta:
 
-        model = Order
-        fields = ["status"]
+        model = Voucher
+        fields = ["state"]
 
     def update(self, instance, validated_data):
 
-        instance.status = validated_data.get('status', instance.status)
+        instance.state = validated_data.get('state', instance.state)
 
         instance.save()
 
@@ -263,7 +268,7 @@ class AddCartItemSerializer(ModelSerializer):
 
             product2 = Product.objects.get(id_product=int(product.id_product))
 
-            if product2.stock > quantity:
+            if product2.stock >= quantity:
 
                 newPrice = product2.price * quantity
 

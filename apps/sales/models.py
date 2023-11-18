@@ -38,7 +38,7 @@ class Items(models.Model):
         verbose_name = "item"
         verbose_name_plural = "items"
 
-class Order(models.Model):
+class Voucher(models.Model):
 
     class OrderWithdrawal(models.TextChoices):
 
@@ -52,7 +52,7 @@ class Order(models.Model):
         canceled = "CA"
         delivered = "ET"
 
-    id_order = models.BigAutoField(primary_key=True)
+    id_voucher = models.BigAutoField(primary_key=True)
     code_uuid = models.UUIDField(default=uuid4, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     state = models.BooleanField(default=True)
@@ -70,18 +70,18 @@ class Order(models.Model):
 
     class Meta:
 
-        db_table = "order"
-        verbose_name = "order"
-        verbose_name_plural = "orders"
+        db_table = "voucher"
+        verbose_name = "voucher"
+        verbose_name_plural = "vouchers"
 
     def __str__(self) -> str:
         return str(self.code)
 
-class OrderItem(models.Model):
+class VoucherItem(models.Model):
 
-    id_order_item = models.BigAutoField(primary_key=True)
+    id_voucher_item = models.BigAutoField(primary_key=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
     name_product = models.CharField(max_length=255)
     price = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField()
@@ -89,9 +89,9 @@ class OrderItem(models.Model):
 
     class Meta:
 
-        db_table = "ordenitem"
-        verbose_name = "ordenitem"
-        verbose_name_plural = "ordenitems"
+        db_table = "voucheritem"
+        verbose_name = "voucheritem"
+        verbose_name_plural = "voucheritems"
 
 class Warranty(models.Model):
 
@@ -99,7 +99,7 @@ class Warranty(models.Model):
     code_uuid = models.UUIDField(default=uuid4, unique=True)
     created = models.DateField(auto_now_add=True)
     state = models.BooleanField(default=True)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     class Meta:

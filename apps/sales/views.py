@@ -1,15 +1,21 @@
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, DestroyAPIView, RetrieveAPIView, ListCreateAPIView
+from rest_framework.generics import (
+    CreateAPIView,
+    DestroyAPIView,
+    RetrieveAPIView,
+    ListCreateAPIView,
+    UpdateAPIView)
 from rest_framework.response import Response
-from .models import Cart, Items, Order
+from .models import Cart, Items, Voucher, VoucherItem
 from apps.products.models import Product
 from django.http import Http404
 from .serializer import (
     CartSerializer,
     AddCartItemSerializer,
     SubtractCartItemSerializer,
-    CreateOrderSerializer,
-    ListOrderSerializer)
+    CreateVoucherSerializer,
+    ListVouchersSerializer,
+    CancelVoucherSerializer)
 from rest_framework.permissions import IsAuthenticated
 from .cart_total import CalculateCart
 from apps.users.authentication_mixins import Authentication
@@ -151,14 +157,14 @@ class ClearCartItemsView(DestroyAPIView):
 
         return Response({"status":"No Content", "message": "Tu carrito esta vacio"}, status.HTTP_204_NO_CONTENT)
 
-class CreateOrderView(ListCreateAPIView):
+class ListCreateVoucherView(ListCreateAPIView):
 
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
 
-        ordens = Order.objects.filter(user=request.user.id)
-        serializer = ListOrderSerializer(ordens, many=True)
+        ordens = Voucher.objects.filter(user=request.user.id)
+        serializer = ListVouchersSerializer(ordens, many=True)
 
         if not ordens.exists():
             return Response({"status": "No Content", "message": "No tienes ordenes registradas"}, status.HTTP_204_NO_CONTENT)
@@ -170,7 +176,7 @@ class CreateOrderView(ListCreateAPIView):
     def post(self, request, format=None):
 
         request.data["user"] = request.user.id
-        serializer = CreateOrderSerializer(data=request.data)
+        serializer = CreateVoucherSerializer(data=request.data)
 
         if not serializer.is_valid():
 
@@ -184,55 +190,43 @@ class CreateOrderView(ListCreateAPIView):
             message_response_created("La orden", serializer.data),
             status.HTTP_201_CREATED)
 
-# class CancelPurchaseView(generics.UpdateAPIView):
+class CancelVoucherView(UpdateAPIView):
 
-#     serializer_class = CancelVoucherSerializer
-#     parser_classes = [JSONParser]
-#     permission_classes = [IsAuthenticated]
-#     authentication_classes = [TokenAuthentication]
+    serializer_class = CancelVoucherSerializer
+    permission_classes = [IsAuthenticated]
 
-#     def get_object(self, id:int):
+    def get_object(self, id_voucher:int, id_user:int):
 
-#         try:
-#             voucher = Voucher.objects.get(id_voucher=id)
-#         except Voucher.DoesNotExist:
-#             raise Http404
+        try:
+            voucher = Voucher.objects.filter(user=id_user, id_voucher=id_voucher).first()
+        except Voucher.DoesNotExist:
+            raise Http404
 
-#         return voucher
+        return voucher
 
-#     def put(self, request, id:int):
+    def put(self, request, id:int):
 
-#         voucher = self.get_object(id)
-#         serializer = self.get_serializer(voucher, data=request.data)
+        request.data["state"] = False
+        voucher = self.get_object(id, request.user.id)
+        serializer = self.get_serializer(voucher, data=request.data)
 
-#         if serializer.is_valid():
+        if not serializer.is_valid():
+            return Response({"status": "Bad Request", "errors": serializer.errors}, status.HTTP_400_BAD_REQUEST)
 
-#             if not token_validated(request, request.user.id):
-#                 return Response({"status": "Unauthorized", "message": "Este token no le pertenece a este usuario"}, status.HTTP_401_UNAUTHORIZED)
+        if not voucher.state:
+            return Response({"status": "Not Acceptable", "message": "Esta compra esta cancelada"}, status.HTTP_406_NOT_ACCEPTABLE)
 
-#             data = serializer.validated_data
+        products = VoucherItem.objects.filter(voucher=voucher)
 
-#             if data["state"]:
-#                 data["state"] = False
+        for product in products:
 
-#             if not voucher.state:
-#                 return Response({"status": "Not Acceptable", "message": "Esta compra esta cancelada"}, status.HTTP_406_NOT_ACCEPTABLE)
+            product_query = Product.objects.get(id_product=product.product.id_product)
 
-#             products = voucher.products
-#             items = products["items"]
+            new_stock = product_query.stock + product.quantity
 
-#             for item in items:
+            product_query.stock = new_stock
+            product_query.save()
 
-#                 id = item["id"]
-#                 quantity = item["quantity"]
-#                 product = Product.objects.get(id=id)
+        serializer.save()
+        return Response({"status": "OK", "message": "Se a cancelado la compra con exito"}, status.HTTP_200_OK)
 
-#                 new_stock = product.stock + quantity
-
-#                 product.stock = new_stock
-#                 product.save()
-
-#             serializer.save()
-#             return Response({"status": "OK", "message": "Se a cancelado la compra con exito"}, status.HTTP_200_OK)
-
-#         return Response({"status": "Bad Request", "errors": serializer.errors}, status.HTTP_400_BAD_REQUEST)

@@ -9,6 +9,7 @@ urlsCarts = [
     path("cart/clear", views.ClearCartItemsView.as_view(), name="cartclear")
 ]
 
-urlsOrders = [
-    path("", views.CreateOrderView.as_view(), name="createdorder")
+urlsVouchers = [
+    path("", views.ListCreateVoucherView.as_view(), name="listcreatedorder"),
+    path("cancel/<int:id>", views.CancelVoucherView.as_view(), name="cancelvoucher")
 ]
