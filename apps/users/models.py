@@ -1,14 +1,17 @@
 from typing import Tuple
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from apps.sales.models import Cart
 
 # Class to create users
 class UserManager(BaseUserManager):
 
-    def _create_user(self, username, email, password, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, first_name, last_name, username, email, password, is_staff, is_superuser, **extra_fields):
 
         #The user model is instantiated
         user = self.model(
+            last_name=last_name,
+            first_name=first_name,
             username = username,
             email = self.normalize_email(email),
             is_staff = is_staff,
@@ -22,20 +25,26 @@ class UserManager(BaseUserManager):
         return user
 
     # Method of creating a user
-    def create_user(self, username, email, password=None, **extra_fields):
-        return self._create_user(username, email, password, False, False, **extra_fields)
+    def create_user(self, first_name, last_name, username, email, password=None, **extra_fields):
+
+        user = self._create_user(first_name, last_name, username, email, password, False, False, **extra_fields)
+
+        cart = Cart.objects.create(user=user)
+        cart.save()
+
+        return user
 
     # Method of creating a superuser
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        return self._create_user(username, email, password, True, True, **extra_fields)
+    def create_superuser(self, first_name, last_name, username, email, password=None, **extra_fields):
+        return self._create_user(first_name, last_name, username, email, password, True, True, **extra_fields)
 
 # User Model
 class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(max_length=255, unique=True)
-    first_name = models.CharField(max_length=20, blank=True, null=True, default="(without first name)")
-    last_name = models.CharField(max_length=20, blank=True, null=True, default="(without last name)")
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
     date_joined = models.DateTimeField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -48,7 +57,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "users"
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
+
+    def get_full_name(self):
+        return self.first_name + ' ' + self.last_name
+
+    def get_short_name(self):
+        return self.first_name
 
     def natural_key(self) -> Tuple[str]:
         return (self.username,)

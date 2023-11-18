@@ -1,9 +1,10 @@
 from django.db import models
-from apps.users.models import User
 from apps.products.models import Product
 from apps.countries.models import Commune
 from apps.branchs.models import Branch
 from uuid import uuid4
+from django.conf import settings
+User = settings.AUTH_USER_MODEL
 
 # Cart Model
 class Cart(models.Model):

@@ -12,8 +12,7 @@ from .serializer import (
     CreateStockStoreSerializer,
     StockStoreSerializer)
 from .models import Category, Product, Offer, Store, StoreProduct
-from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView
+from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.parsers import FormParser, MultiPartParser
 from core.messages import (
@@ -26,16 +25,9 @@ from core.messages import (
 # ----------------------------- CATEGORY VIEWS --------------------------------
 
 # Create and List Category View
-class ListCreateCategoryView(ListCreateAPIView):
+class ListCreateCategoryView(generics.ListCreateAPIView):
 
     queryset = Category.objects.all().order_by("name_category")
-
-    def get_permissions(self):
-
-        if self.request.method == 'POST':
-            return [IsAuthenticated(), IsAdminUser()]
-
-        return super().get_permissions()
 
     def get(self, request, format=None):
 
@@ -67,7 +59,7 @@ class ListCreateCategoryView(ListCreateAPIView):
             status.HTTP_201_CREATED)
 
 # Update a obtain category View
-class UpdateRetrieveCategoryView(RetrieveUpdateAPIView):
+class UpdateRetrieveCategoryView(generics.RetrieveUpdateAPIView):
 
     permission_classes = [IsAuthenticated, IsAdminUser]
 
@@ -108,10 +100,10 @@ class UpdateRetrieveCategoryView(RetrieveUpdateAPIView):
 # ----------------------------- PRODUCT VIEWS --------------------------------
 
 # Create and List Product View
-class ListCreateProductView(ListCreateAPIView):
+class ListCreateProductView(generics.ListCreateAPIView):
 
     queryset = Product.objects.all().order_by("created")
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    # permission_classes = [IsAuthenticated, IsAdminUser]
     parser_classes = [FormParser, MultiPartParser]
 
     def get(self, request, format=None):
@@ -144,7 +136,7 @@ class ListCreateProductView(ListCreateAPIView):
             status.HTTP_201_CREATED)
 
 # Update a obtain product View
-class UpdateRetrieveProductView(RetrieveUpdateAPIView):
+class UpdateRetrieveProductView(generics.RetrieveUpdateAPIView):
 
     parser_classes = [FormParser, MultiPartParser]
 
@@ -190,7 +182,7 @@ class UpdateRetrieveProductView(RetrieveUpdateAPIView):
             status.HTTP_200_OK)
 
 # List Product a Clients View
-class ListProductClientView(ListAPIView):
+class ListProductClientView(generics.ListAPIView):
 
     queryset = Product.objects.filter(aviable=True).order_by("name_product")
 
@@ -211,7 +203,7 @@ class ListProductClientView(ListAPIView):
 # ----------------------------- OFFER VIEWS --------------------------------
 
 # Create and List Offers View
-class ListCreateOfferView(ListCreateAPIView):
+class ListCreateOfferView(generics.ListCreateAPIView):
 
     queryset = Offer.objects.all().order_by("start_date")
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -246,7 +238,7 @@ class ListCreateOfferView(ListCreateAPIView):
             status.HTTP_201_CREATED)
 
 # Update a obtain offer View
-class UpdateRetrieveOfferView(RetrieveUpdateAPIView):
+class UpdateRetrieveOfferView(generics.RetrieveUpdateAPIView):
 
     permission_classes = [IsAuthenticated, IsAdminUser]
 
@@ -287,7 +279,7 @@ class UpdateRetrieveOfferView(RetrieveUpdateAPIView):
 # ----------------------------- STORE VIEWS --------------------------------
 
 # List and Create Store View
-class ListCreateStoreView(ListCreateAPIView):
+class ListCreateStoreView(generics.ListCreateAPIView):
 
     queryset = Store.objects.all().order_by("name_store")
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -323,7 +315,7 @@ class ListCreateStoreView(ListCreateAPIView):
             status.HTTP_201_CREATED)
 
 # A Store View
-class StoreView(RetrieveAPIView):
+class StoreView(generics.RetrieveAPIView):
 
     serializer_class = StockStoreSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -354,7 +346,7 @@ class StoreView(RetrieveAPIView):
                 }, status=status.HTTP_200_OK)
 
 # View Add Stock Store
-class CreateStockStoreView(CreateAPIView):
+class CreateStockStoreView(generics.CreateAPIView):
 
     serializer_class = CreateStockStoreSerializer
     permission_classes = [IsAuthenticated]

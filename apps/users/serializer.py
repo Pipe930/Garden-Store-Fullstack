@@ -1,11 +1,10 @@
-from rest_framework.serializers import ModelSerializer, CharField, EmailField, Serializer, StringRelatedField
+from rest_framework.serializers import ModelSerializer, StringRelatedField
 from .models import User, Subscription
+from djoser.serializers import UserCreateSerializer
 
 # Serialized User Model
-class CreateUserSerializer(ModelSerializer):
-
-    class Meta:
-
+class UserCreateSerializer(UserCreateSerializer):
+    class Meta(UserCreateSerializer.Meta):
         model = User
         fields = (
             "id",
@@ -13,17 +12,8 @@ class CreateUserSerializer(ModelSerializer):
             "last_name",
             "username",
             "email",
-            "password",
-            "is_active",
-            "is_staff",
+            "is_active"
         )
-        extra_kwargs = {"password": {"write_only": True, "min_length": 8, "max_length": 16}}
-
-    def create(self, validated_data):
-
-        user = User.objects.create_user(**validated_data)
-
-        return user
 
 # Serialized Subscription Model
 class CreateSubscriptionSerializer(ModelSerializer):
@@ -47,22 +37,3 @@ class ListSubscriptionSerializer(ModelSerializer):
 
         model = Subscription
         fields = ["id_subscription", "created", "status", "mount", "user"]
-
-# Send mail serializer
-class MessageSerializer(Serializer):
-
-    # Required attributes
-    full_name = CharField(max_length=60)
-    email = EmailField()
-    message = CharField(max_length=255)
-
-# Change Password Serializer
-class ChangePasswordSerializer(Serializer):
-
-    model = User
-
-    """
-    Serializer for password change endpoint.
-    """
-    old_password = CharField(required=True)
-    new_password = CharField(required=True)

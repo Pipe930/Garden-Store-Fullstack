@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from apps.products.urls import urlsCategories, urlsProducts, urlsOffers, urlsStore
-from apps.users.urls import urlsUsers, urlsSubcriptions
+from apps.users.urls import urlsSubcriptions
 from apps.countries.urls import urlsRegions, urlsProvincies, urlsCommunes
 from apps.sales.urls import urlsCarts, urlsVouchers
 from apps.orders.urls import urlsDispatchGuides, urlsBills
@@ -12,7 +12,6 @@ urls_api =  [
     path("categories/", include(urlsCategories)),
     path("products/", include(urlsProducts)),
     path("offers/", include(urlsOffers)),
-    path("users/", include(urlsUsers)),
     path("subscriptions/", include(urlsSubcriptions)),
     path("regions/", include(urlsRegions)),
     path("provinces/", include(urlsProvincies)),
@@ -21,7 +20,9 @@ urls_api =  [
     path("vouchers/", include(urlsVouchers)),
     path("stores/", include(urlsStore)),
     path("dispatch-guides/", include(urlsDispatchGuides)),
-    path("bills/", include(urlsBills))
+    path("bills/", include(urlsBills)),
+    path("auth/", include("djoser.urls")),
+    path("auth/", include("djoser.urls.jwt"))
 ]
 
 urlpatterns = [

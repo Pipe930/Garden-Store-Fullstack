@@ -18,7 +18,6 @@ from .serializer import (
     CancelVoucherSerializer)
 from rest_framework.permissions import IsAuthenticated
 from .cart_total import CalculateCart
-from apps.users.authentication_mixins import Authentication
 from core.messages import (
     message_response_list,
     message_response_created,
