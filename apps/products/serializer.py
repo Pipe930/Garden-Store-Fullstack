@@ -1,5 +1,6 @@
-from rest_framework.serializers import ModelSerializer, StringRelatedField
-from .models import Category, Product, Offer
+from rest_framework.serializers import ModelSerializer, StringRelatedField, ValidationError
+from rest_framework import status
+from .models import Category, Product, Offer, Store, StoreProduct
 from .discount import discount
 
 # List Categories Serializer
@@ -138,3 +139,87 @@ class CreateUpdateOfferSerializer(ModelSerializer):
         instance.save()
 
         return instance
+
+# List Store Serializer
+class ListStoreSerializer(ModelSerializer):
+
+    class Meta:
+
+        model = Store
+        fields = ["id_store","name_store", "direction", "temperature", "capacity", "ocupied_capacity"]
+
+# Create Store Serializer
+class CreateStoreSerializer(ModelSerializer):
+
+    class Meta:
+
+        model = Store
+        fields = ["name_store", "direction", "temperature", "capacity"]
+
+    def create(self, validated_data):
+
+        store = Store.objects.create(**validated_data)
+
+        return store
+
+# Stock Store Serializer
+class StockStoreSerializer(ModelSerializer):
+
+    product = StringRelatedField()
+    store = StringRelatedField()
+
+    class Meta:
+
+        model = StoreProduct
+        fields = ["quantity", "product", "store"]
+
+# Create Stock Store Serializer
+class CreateStockStoreSerializer(ModelSerializer):
+
+    class Meta:
+
+        model = StoreProduct
+        fields = ["quantity", "store", "product"]
+
+    def save(self, **kwargs):
+
+        id_store = self.data["store"]
+        quantity = self.validated_data["quantity"]
+        id_product = self.validated_data["product"]
+
+        store = Store.objects.get(id_store=id_store)
+
+        try:
+            product = StoreProduct.objects.get(product=id_product, store=id_store)
+
+            sum_stock = product.quantity + quantity
+            product.quantity = sum_stock
+            new_stock = quantity + store.ocupied_capacity
+
+            if store.capacity > new_stock:
+
+                store.ocupied_capacity = new_stock
+
+                store.save()
+                product.save()
+
+                self.instance = product
+
+                return self.instance
+
+            raise ValidationError({"status": "Conflict", "message": "La capacidad ocupa de la bodega supera a la capacidad maxima de la bodega"}, status.HTTP_409_CONFLICT)
+
+        except StoreProduct.DoesNotExist:
+
+            new_stock = quantity + store.ocupied_capacity
+
+            if store.capacity > new_stock:
+
+                store.ocupied_capacity = new_stock
+                store.save()
+
+                self.instance = StoreProduct.objects.create(**self.validated_data)
+
+                return self.instance
+
+            raise ValidationError({"status": "Conflict", "message": "La capacidad ocupa de la bodega supera a la capacidad maxima de la bodega"}, status.HTTP_409_CONFLICT)

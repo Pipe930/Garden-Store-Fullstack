@@ -16,3 +16,9 @@ urlsOffers = [
     path("", views.ListCreateOfferView.as_view(), name="listcreateoffer"),
     path("offer/<int:id>", views.UpdateRetrieveOfferView.as_view(), name="updateretrieveoffer")
 ]
+
+urlsStore = [
+    path("", views.ListCreateStoreView.as_view(), name="listcreatestore"),
+    path("store/product/add", views.CreateStockStoreView.as_view(), name="productaddstock"),
+    path("store/<int:id>", views.StoreView.as_view(), name="viewstore")
+]

@@ -14,7 +14,7 @@ def message_response_bad_request(object:str, errors, method:str):
         return {"status": "Bad Request", "errors": errors, "message": f"Error, {object} no se creo"}
 
 def message_response_no_content(object:str):
-    return {"status": "No Content", "message": f"No tenemos {object}"}
+    return {"status": "No Content", "message": f"No tenemos {object} registradas"}
 
 def message_response_update(object:str, data):
     return {"status": "Reset Content", "data": data, "message": f"Se actualizo {object} con exito"}

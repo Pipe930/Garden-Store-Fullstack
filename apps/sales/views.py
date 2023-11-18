@@ -27,6 +27,7 @@ from core.messages import (
 
 instance_cart = CalculateCart()
 
+# Cart User View
 class CartUserView(RetrieveAPIView):
 
     serializer_class = CartSerializer
@@ -50,6 +51,7 @@ class CartUserView(RetrieveAPIView):
             message_response_list(serializer.data),
             status.HTTP_200_OK)
 
+# Cart Add Item View
 class AddCartItemView(CreateAPIView):
 
     serializer_class = AddCartItemSerializer
@@ -83,6 +85,7 @@ class AddCartItemView(CreateAPIView):
 
         return Response({"status": "Bad Request", "message": "La cantidad supera el stock disponible"}, status.HTTP_400_BAD_REQUEST)
 
+# Cart Delete Item View
 class DeleteProductCartView(DestroyAPIView):
 
     permission_classes = [IsAuthenticated]
@@ -108,6 +111,7 @@ class DeleteProductCartView(DestroyAPIView):
 
         return Response({"status": "OK", "message": "Producto Eliminado"}, status.HTTP_200_OK)
 
+# Cart Subtract Item View
 class SubtractCartItemView(CreateAPIView):
 
     serializer_class = SubtractCartItemSerializer
@@ -125,6 +129,7 @@ class SubtractCartItemView(CreateAPIView):
 
         return Response({"status": "OK", "message": "Se resto el producto"}, status.HTTP_200_OK)
 
+# Clear Cart Items View
 class ClearCartItemsView(DestroyAPIView):
 
     permission_classes = [IsAuthenticated]
@@ -157,6 +162,7 @@ class ClearCartItemsView(DestroyAPIView):
 
         return Response({"status":"No Content", "message": "Tu carrito esta vacio"}, status.HTTP_204_NO_CONTENT)
 
+# List and Create Voucher View
 class ListCreateVoucherView(ListCreateAPIView):
 
     permission_classes = [IsAuthenticated]
@@ -190,6 +196,7 @@ class ListCreateVoucherView(ListCreateAPIView):
             message_response_created("La orden", serializer.data),
             status.HTTP_201_CREATED)
 
+# Cancel Voucher View
 class CancelVoucherView(UpdateAPIView):
 
     serializer_class = CancelVoucherSerializer

@@ -6,10 +6,14 @@ from .serializer import (
     ListProductsSerializer,
     CreateUpdateProductSerializer,
     ListOfferSerializer,
-    CreateUpdateOfferSerializer)
-from .models import Category, Product, Offer
+    CreateUpdateOfferSerializer,
+    ListStoreSerializer,
+    CreateStoreSerializer,
+    CreateStockStoreSerializer,
+    StockStoreSerializer)
+from .models import Category, Product, Offer, Store, StoreProduct
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.parsers import FormParser, MultiPartParser
 from core.messages import (
@@ -279,3 +283,88 @@ class UpdateRetrieveOfferView(RetrieveUpdateAPIView):
         return Response(
             message_response_list(serializer.data),
             status.HTTP_200_OK)
+
+# List and Create Store View
+class ListCreateStoreView(ListCreateAPIView):
+
+    queryset = Store.objects.all().order_by("name_store")
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get(self, request, format=None):
+
+        stores = self.get_queryset()
+        serializer = ListStoreSerializer(stores, many=True)
+
+        if not stores.exists():
+
+            return Response(
+                message_response_no_content("bodegas"),
+                status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            message_response_list(serializer.data),
+            status.HTTP_200_OK)
+
+    def post(self, request, format=None):
+
+        serializer = CreateStoreSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(
+                message_response_bad_request("La bodega", serializer.errors, "POST"),
+                status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+
+        return Response(
+            message_response_created("La bodega", serializer.data),
+            status.HTTP_201_CREATED)
+
+# A Store View
+class StoreView(RetrieveAPIView):
+
+    serializer_class = StockStoreSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get_object(self, id:int):
+
+        try:
+            store = Store.objects.get(id_store=id)
+        except Store.DoesNotExist:
+            return Http404
+
+        return store
+
+    def get(self, request, id:int):
+
+        product_store = StoreProduct.objects.filter(store=id)
+        serializer = self.get_serializer(product_store, many=True)
+        store = self.get_object(id)
+
+        return Response(
+            {
+                "status": "OK",
+                "Bodega": store.name_store,
+                "Temperature": store.temperature,
+                "Capacity": store.capacity,
+                "Ocupied Capacity": store.ocupied_capacity,
+                "Productos":serializer.data
+                }, status=status.HTTP_200_OK)
+
+# View Add Stock Store
+class CreateStockStoreView(CreateAPIView):
+
+    serializer_class = CreateStockStoreSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+
+        serializer = self.get_serializer(data=request.data)
+
+        if not serializer.is_valid():
+
+            return Response({"status": "Bad Request", "errors": serializer.errors, "message": "No se cargo los productos a la bodega"}, status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+
+        return Response({"status": "Created", "data": serializer.data, "message": "Se cargo los productos a la bodega"}, status.HTTP_201_CREATED)

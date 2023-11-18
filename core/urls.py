@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from apps.products.urls import urlsCategories, urlsProducts, urlsOffers
+from apps.products.urls import urlsCategories, urlsProducts, urlsOffers, urlsStore
 from apps.users.urls import urlsUsers, urlsSubcriptions
 from apps.countries.urls import urlsRegions, urlsProvincies, urlsCommunes
 from apps.sales.urls import urlsCarts, urlsVouchers
@@ -17,12 +17,13 @@ urls_api =  [
     path("provinces/", include(urlsProvincies)),
     path("communes/", include(urlsCommunes)),
     path("carts/", include(urlsCarts)),
-    path("vouchers/", include(urlsVouchers))
+    path("vouchers/", include(urlsVouchers)),
+    path("stores/", include(urlsStore))
 ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/v1.0/", include(urls_api)),
+    path("api/v1.0/", include(urls_api))
 ]
 
 if settings.DEBUG:

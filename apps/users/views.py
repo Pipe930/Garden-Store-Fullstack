@@ -7,7 +7,12 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate, login, logout
 from .models import User, Subscription
-from .serializer import CreateUserSerializer, CreateSubscriptionSerializer, ListSubscriptionSerializer, MessageSerializer, ChangePasswordSerializer
+from .serializer import (
+    CreateUserSerializer,
+    CreateSubscriptionSerializer,
+    ListSubscriptionSerializer,
+    MessageSerializer,
+    ChangePasswordSerializer)
 from django.contrib.sessions.models import Session
 from datetime import datetime
 from .util import Util
@@ -182,7 +187,6 @@ class RefreshTokenView(RetrieveAPIView):
 
 class CreateSubscriptionView(CreateAPIView):
 
-    permission_classes = [IsAuthenticated]
     serializer_class = CreateSubscriptionSerializer
 
     # Petition POST
