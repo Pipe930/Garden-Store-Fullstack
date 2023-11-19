@@ -56,8 +56,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = "user"
         verbose_name_plural = "users"
 
-    USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
     def get_full_name(self):
         return self.first_name + ' ' + self.last_name
