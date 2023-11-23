@@ -29,6 +29,13 @@ class ListCreateCategoryView(generics.ListCreateAPIView):
 
     queryset = Category.objects.all().order_by("name_category")
 
+    def get_permissions(self):
+
+        if self.request.method == 'POST':
+            return (IsAuthenticated(), IsAdminUser())
+
+        return super().get_permissions()
+
     def get(self, request, format=None):
 
         categories = self.get_queryset()
@@ -61,7 +68,7 @@ class ListCreateCategoryView(generics.ListCreateAPIView):
 # Update a obtain category View
 class UpdateRetrieveCategoryView(generics.RetrieveUpdateAPIView):
 
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get_object(self, id:int):
 
@@ -103,8 +110,8 @@ class UpdateRetrieveCategoryView(generics.RetrieveUpdateAPIView):
 class ListCreateProductView(generics.ListCreateAPIView):
 
     queryset = Product.objects.all().order_by("created")
-    # permission_classes = [IsAuthenticated, IsAdminUser]
-    parser_classes = [FormParser, MultiPartParser]
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    parser_classes = (FormParser, MultiPartParser)
 
     def get(self, request, format=None):
 
@@ -138,12 +145,12 @@ class ListCreateProductView(generics.ListCreateAPIView):
 # Update a obtain product View
 class UpdateRetrieveProductView(generics.RetrieveUpdateAPIView):
 
-    parser_classes = [FormParser, MultiPartParser]
+    parser_classes = (FormParser, MultiPartParser)
 
     def get_permissions(self):
 
         if self.request.method == 'PUT':
-            return [IsAuthenticated(), IsAdminUser()]
+            return (IsAuthenticated(), IsAdminUser())
 
         return super().get_permissions()
 
@@ -206,7 +213,7 @@ class ListProductClientView(generics.ListAPIView):
 class ListCreateOfferView(generics.ListCreateAPIView):
 
     queryset = Offer.objects.all().order_by("start_date")
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get(self, request, format=None):
 
@@ -240,7 +247,7 @@ class ListCreateOfferView(generics.ListCreateAPIView):
 # Update a obtain offer View
 class UpdateRetrieveOfferView(generics.RetrieveUpdateAPIView):
 
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get_object(self, id:int):
 
@@ -282,7 +289,7 @@ class UpdateRetrieveOfferView(generics.RetrieveUpdateAPIView):
 class ListCreateStoreView(generics.ListCreateAPIView):
 
     queryset = Store.objects.all().order_by("name_store")
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get(self, request, format=None):
 
@@ -318,7 +325,7 @@ class ListCreateStoreView(generics.ListCreateAPIView):
 class StoreView(generics.RetrieveAPIView):
 
     serializer_class = StockStoreSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get_object(self, id:int):
 
@@ -349,7 +356,7 @@ class StoreView(generics.RetrieveAPIView):
 class CreateStockStoreView(generics.CreateAPIView):
 
     serializer_class = CreateStockStoreSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def post(self, request, format=None):
 

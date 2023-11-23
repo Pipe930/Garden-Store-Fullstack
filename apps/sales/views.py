@@ -32,7 +32,7 @@ instance_cart = CalculateCart()
 class CartUserView(RetrieveAPIView):
 
     serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, id:int):
 
@@ -56,7 +56,7 @@ class CartUserView(RetrieveAPIView):
 class AddCartItemView(CreateAPIView):
 
     serializer_class = AddCartItemSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, id:int):
 
@@ -89,7 +89,7 @@ class AddCartItemView(CreateAPIView):
 # Cart Delete Item View
 class DeleteProductCartView(DestroyAPIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, id_user:int, id_product:int):
 
@@ -116,7 +116,7 @@ class DeleteProductCartView(DestroyAPIView):
 class SubtractCartItemView(CreateAPIView):
 
     serializer_class = SubtractCartItemSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def create(self, request, *args, **kwargs):
 
@@ -133,7 +133,7 @@ class SubtractCartItemView(CreateAPIView):
 # Clear Cart Items View
 class ClearCartItemsView(DestroyAPIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, id:int):
 
@@ -168,7 +168,7 @@ class ClearCartItemsView(DestroyAPIView):
 # List and Create Voucher View
 class ListCreateVoucherView(ListCreateAPIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
 
@@ -203,7 +203,7 @@ class ListCreateVoucherView(ListCreateAPIView):
 class CancelVoucherView(UpdateAPIView):
 
     serializer_class = CancelVoucherSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, id_voucher:int, id_user:int):
 

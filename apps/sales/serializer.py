@@ -14,7 +14,7 @@ class CreateVoucherSerializer(ModelSerializer):
     class Meta:
 
         model = Voucher
-        fields = [
+        fields = (
             "total_price",
             "quantity_products",
             "withdrawal",
@@ -22,7 +22,7 @@ class CreateVoucherSerializer(ModelSerializer):
             "num_deparment",
             "user",
             "commune",
-            "branch"]
+            "branch")
 
     def validate(self, attrs):
 
@@ -95,7 +95,7 @@ class ListVouchersSerializer(ModelSerializer):
     class Meta:
 
         model = Voucher
-        fields = [
+        fields = (
             "code_uuid",
             "state",
             "net_mount",
@@ -108,14 +108,14 @@ class ListVouchersSerializer(ModelSerializer):
             "num_deparment",
             "user",
             "commune",
-            "branch"]
+            "branch")
 
 class CancelVoucherSerializer(ModelSerializer):
 
     class Meta:
 
         model = Voucher
-        fields = ["state"]
+        fields = ("state",)
 
     def update(self, instance, validated_data):
 
@@ -131,7 +131,7 @@ class SimpleProductSerializer(ModelSerializer):
     class Meta:
 
         model = Product
-        fields = ["id_product", "name_product", "price"]
+        fields = ("id_product", "name_product", "price")
 
 # Cart items serializer
 class CartItemsSerializer(ModelSerializer):
@@ -142,7 +142,7 @@ class CartItemsSerializer(ModelSerializer):
     class Meta:
 
         model = Items
-        fields = ["product", "quantity", "price"]
+        fields = ("product", "quantity", "price")
 
     # Method to calculate the total price
     def total(self, cartItem: Items):
@@ -172,7 +172,7 @@ class CartSerializer(ModelSerializer):
     class Meta:
 
         model = Cart
-        fields = ["id_cart", "items", "total", "user", "total_quantity", "total_products"]
+        fields = ("id_cart", "items", "total", "user", "total_quantity", "total_products")
 
     def calculate_total_quantity(self, cart: Cart):
 
@@ -230,7 +230,7 @@ class AddCartItemSerializer(ModelSerializer):
     class Meta:
 
         model = Items
-        fields = ["product", "quantity", "user"]
+        fields = ("product", "quantity", "user")
 
     def save(self, **kwargs):
 
@@ -291,7 +291,7 @@ class DeleteProductCart(ModelSerializer):
     class Meta:
 
         model = Items
-        fields = ["id_cart", "product"]
+        fields = ("id_cart", "product")
 
 # Substract Cart serializer
 class SubtractCartItemSerializer(ModelSerializer):
@@ -300,7 +300,7 @@ class SubtractCartItemSerializer(ModelSerializer):
 
     class Meta:
         model = Items
-        fields = ["product", "user"]
+        fields = ("product", "user")
 
     def save(self, **kwargs):
         try:

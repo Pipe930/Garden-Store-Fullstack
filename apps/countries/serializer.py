@@ -7,7 +7,7 @@ class RegionSerializer(ModelSerializer):
     class Meta:
 
         model = Region
-        fields = ["id_region", "name_region", "initials"]
+        fields = ("id_region", "name_region", "initials")
 
 # List Province Serializer
 class ProvinceSerializer(ModelSerializer):
@@ -17,7 +17,7 @@ class ProvinceSerializer(ModelSerializer):
     class Meta:
 
         model = Province
-        fields = ["id_province", "name_province", "region"]
+        fields = ("id_province", "name_province", "region")
 
 # List Commune Serializer
 class CommuneSerializer(ModelSerializer):
@@ -27,4 +27,4 @@ class CommuneSerializer(ModelSerializer):
     class Meta:
 
         model = Commune
-        fields = ["id_commune", "name_commune", "province"]
+        fields = ("id_commune", "name_commune", "province")

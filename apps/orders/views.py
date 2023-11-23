@@ -20,7 +20,7 @@ from core.messages import (
 class ListCreateDispatchGuideView(ListCreateAPIView):
 
     queryset = DispatchGuide.objects.all().order_by("created")
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get(self, request, format=None):
 
@@ -55,7 +55,7 @@ class ListCreateDispatchGuideView(ListCreateAPIView):
 class UpdateDispatchGuideView(generics.UpdateAPIView):
 
     serializer_class = UpdateDispatchGuideSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get_object(self, id:int):
 
@@ -86,7 +86,7 @@ class UpdateDispatchGuideView(generics.UpdateAPIView):
 class ListCreateBillView(ListCreateAPIView):
 
     queryset = Bill.objects.all().order_by("created")
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get(self, request, format=None):
 

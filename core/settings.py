@@ -49,8 +49,7 @@ THIRD_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'djoser',
     'corsheaders',
-    'django_filters',
-    'django_rest_passwordreset',
+    'django_filters'
 ]
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
@@ -172,11 +171,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser'
     ],
-    'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata'
+    'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
+    'EXCEPTION_HANDLER': 'utils.exceptions_handlers.custom_exception_handler'
 }
 
 SIMPLE_JWT = {

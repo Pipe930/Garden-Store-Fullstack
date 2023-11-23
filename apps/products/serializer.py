@@ -8,14 +8,14 @@ class ListCategorySerializer(ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ["id_category", "name_category"]
+        fields = ("id_category", "name_category")
 
 # Create and Update Categories Serializer
 class CreateUpdateCategorySerializer(ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ["name_category"]
+        fields = ("name_category",)
 
     def create(self, validated_data):
 
@@ -35,7 +35,7 @@ class OfferSerializer(ModelSerializer):
     class Meta:
 
         model = Offer
-        fields = ["id_offer", "name_offer", "percentage_discount"]
+        fields = ("id_offer", "name_offer", "percentage_discount")
 
 # List Products Serializer
 class ListProductsSerializer(ModelSerializer):
@@ -46,7 +46,7 @@ class ListProductsSerializer(ModelSerializer):
     class Meta:
 
         model = Product
-        fields = [
+        fields = (
             "id_product",
             "name_product",
             "price",
@@ -58,7 +58,7 @@ class ListProductsSerializer(ModelSerializer):
             "created",
             "description",
             "category",
-            "offer"]
+            "offer")
 
 # Create and Update Products Serializer
 class CreateUpdateProductSerializer(ModelSerializer):
@@ -115,14 +115,14 @@ class ListOfferSerializer(ModelSerializer):
 
     class Meta:
         model = Offer
-        fields = ["id_offer", "name_offer", "state", "start_date", "end_date", "percentage_discount"]
+        fields = ("id_offer", "name_offer", "state", "start_date", "end_date", "percentage_discount")
 
 # Create and Update Offer Serializer
 class CreateUpdateOfferSerializer(ModelSerializer):
 
     class Meta:
         model = Offer
-        fields = ["name_offer", "end_date", "percentage_discount"]
+        fields = ("name_offer", "end_date", "percentage_discount")
 
     def create(self, validated_data):
 
@@ -146,7 +146,7 @@ class ListStoreSerializer(ModelSerializer):
     class Meta:
 
         model = Store
-        fields = ["id_store","name_store", "direction", "temperature", "capacity", "ocupied_capacity"]
+        fields = ("id_store","name_store", "direction", "temperature", "capacity", "ocupied_capacity")
 
 # Create Store Serializer
 class CreateStoreSerializer(ModelSerializer):
@@ -154,7 +154,7 @@ class CreateStoreSerializer(ModelSerializer):
     class Meta:
 
         model = Store
-        fields = ["name_store", "direction", "temperature", "capacity"]
+        fields = ("name_store", "direction", "temperature", "capacity")
 
     def create(self, validated_data):
 
@@ -171,7 +171,7 @@ class StockStoreSerializer(ModelSerializer):
     class Meta:
 
         model = StoreProduct
-        fields = ["quantity", "product", "store"]
+        fields = ("quantity", "product", "store")
 
 # Create Stock Store Serializer
 class CreateStockStoreSerializer(ModelSerializer):
@@ -179,7 +179,7 @@ class CreateStockStoreSerializer(ModelSerializer):
     class Meta:
 
         model = StoreProduct
-        fields = ["quantity", "store", "product"]
+        fields = ("quantity", "store", "product")
 
     def save(self, **kwargs):
 

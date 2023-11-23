@@ -10,20 +10,20 @@ class ListDispatchGuideSerializer(ModelSerializer):
     class Meta:
 
         model = DispatchGuide
-        fields = [
+        fields = (
             "code_uuid",
             "dispatch_date",
             "deliver_date",
             "created",
             "state",
             "destination",
-            "grocer"]
+            "grocer")
 
 class ProductDispatchGuideSerializer(ModelSerializer):
 
     class Meta:
         model = GuieProduct
-        fields = ["product", "quantity"]
+        fields = ("product", "quantity")
 
 class CreateDispatchGuieSerializer(ModelSerializer):
 
@@ -32,7 +32,7 @@ class CreateDispatchGuieSerializer(ModelSerializer):
     class Meta:
 
         model = DispatchGuide
-        fields = ["destination", "grocer", "products"]
+        fields = ("destination", "grocer", "products")
 
     def validate(self, attrs):
 
@@ -80,7 +80,7 @@ class UpdateDispatchGuideSerializer(ModelSerializer):
     class Meta:
 
         model = DispatchGuide
-        fields = ["dispatch_date", "deliver_date", "state"]
+        fields = ("dispatch_date", "deliver_date", "state")
 
     def update(self, instance, validated_data):
 
@@ -100,7 +100,7 @@ class ListBillSerializer(ModelSerializer):
     class Meta:
 
         model = Bill
-        fields = [
+        fields = (
             "code_uuid",
             "created",
             "active",
@@ -108,14 +108,14 @@ class ListBillSerializer(ModelSerializer):
             "products",
             "total_quantity",
             "supplier",
-            "grocer"]
+            "grocer")
 
 class CreateBillSerializer(ModelSerializer):
 
     class Meta:
 
         model = Bill
-        fields = ["products", "supplier", "grocer"]
+        fields = ("products", "supplier", "grocer")
 
     def validate(self, attrs):
 

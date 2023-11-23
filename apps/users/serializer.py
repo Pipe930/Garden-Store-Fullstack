@@ -21,7 +21,7 @@ class CreateSubscriptionSerializer(ModelSerializer):
     class Meta:
 
         model = Subscription
-        fields = ["mount", "user"]
+        fields = ("mount", "user")
 
     def create(self, validated_data):
 
@@ -36,4 +36,4 @@ class ListSubscriptionSerializer(ModelSerializer):
     class Meta:
 
         model = Subscription
-        fields = ["id_subscription", "created", "status", "mount", "user"]
+        fields = ("id_subscription", "created", "status", "mount", "user")

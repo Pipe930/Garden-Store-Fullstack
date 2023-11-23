@@ -18,6 +18,7 @@ from core.messages import (
 class CreateSubscriptionView(CreateAPIView):
 
     serializer_class = CreateSubscriptionSerializer
+    permission_classes = (IsAuthenticated,)
 
     # Petition POST
     def post(self, request, format=None):
@@ -40,7 +41,7 @@ class CreateSubscriptionView(CreateAPIView):
 class RetrieveDeleteSubscriptionView(RetrieveDestroyAPIView):
 
     serializer_class = ListSubscriptionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, id:int):
 
