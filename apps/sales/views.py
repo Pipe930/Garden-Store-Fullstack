@@ -11,8 +11,8 @@ from apps.products.models import Product
 from django.http import Http404
 from .serializer import (
     CartSerializer,
-    AddCartItemSerializer,
-    SubtractCartItemSerializer,
+    AddItemCartSerializer,
+    SubtractItemCartSerializer,
     CreateVoucherSerializer,
     ListVouchersSerializer,
     CancelVoucherSerializer)
@@ -21,8 +21,7 @@ from .cart_total import CalculateCart
 from core.messages import (
     message_response_list,
     message_response_created,
-    message_response_bad_request,
-    message_response_no_content)
+    message_response_bad_request)
 
 instance_cart = CalculateCart()
 
@@ -55,7 +54,7 @@ class CartUserView(RetrieveAPIView):
 # Cart Add Item View
 class AddCartItemView(CreateAPIView):
 
-    serializer_class = AddCartItemSerializer
+    serializer_class = AddItemCartSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, id:int):
@@ -79,12 +78,11 @@ class AddCartItemView(CreateAPIView):
         data = serializer.data
         product = self.get_object(data["product"])
 
-        if product.stock >= data["quantity"]:
+        if not product.stock >= data["quantity"]:
+            return Response({"status": "Bad Request", "message": "La cantidad supera el stock disponible"}, status.HTTP_400_BAD_REQUEST)
 
-            serializer.save()
-            return Response({"status": "OK", "data": serializer.data, "message": "Agregado al carrito con exito"}, status.HTTP_201_CREATED)
-
-        return Response({"status": "Bad Request", "message": "La cantidad supera el stock disponible"}, status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response({"status": "OK", "data": serializer.data, "message": "Agregado al carrito con exito"}, status.HTTP_201_CREATED)
 
 # Cart Delete Item View
 class DeleteProductCartView(DestroyAPIView):
@@ -115,7 +113,7 @@ class DeleteProductCartView(DestroyAPIView):
 # Cart Subtract Item View
 class SubtractCartItemView(CreateAPIView):
 
-    serializer_class = SubtractCartItemSerializer
+    serializer_class = SubtractItemCartSerializer
     permission_classes = (IsAuthenticated,)
 
     def create(self, request, *args, **kwargs):
@@ -150,18 +148,17 @@ class ClearCartItemsView(DestroyAPIView):
 
         items = Items.objects.filter(cart = cart.id_cart)
 
-        if len(items):
+        if not len(items):
+            return Response({"status":"No Content", "message": "Tu carrito esta vacio"}, status.HTTP_204_NO_CONTENT)
 
-            for item in items:
-                item.delete()
+        for item in items:
+            item.delete()
 
-            instance_cart.cart_total(cart)
-            instance_cart.calculate_total_products(cart.id_cart)
-            instance_cart.calculate_total_quality(cart.id_cart)
+        instance_cart.cart_total(cart)
+        instance_cart.calculate_total_products(cart.id_cart)
+        instance_cart.calculate_total_quality(cart.id_cart)
 
-            return Response({"status":"No Content", "message": "El carrito se a limpiado con exito"}, status.HTTP_204_NO_CONTENT)
-
-        return Response({"status":"No Content", "message": "Tu carrito esta vacio"}, status.HTTP_204_NO_CONTENT)
+        return Response({"status":"No Content", "message": "El carrito se a limpiado con exito"}, status.HTTP_204_NO_CONTENT)
 
 # ----------------------------- VOUCHER VIEWS --------------------------------
 

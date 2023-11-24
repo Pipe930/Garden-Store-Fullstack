@@ -91,3 +91,12 @@ class CalculateCart:
         iva_prive = cart.total - net_mount
 
         return iva_prive
+
+    def obtain_cart_user(id_user:int):
+
+        try:
+            cart_user = Cart.objects.get(user=id_user)
+        except Cart.DoesNotExist:
+            return None
+
+        return cart_user

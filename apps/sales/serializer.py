@@ -7,7 +7,7 @@ from apps.products.discount import discount
 from .cart_total import CalculateCart
 from .discount_stock import DiscountStock
 
-instance_calulate_cart = CalculateCart()
+calulate_cart = CalculateCart()
 
 class CreateVoucherSerializer(ModelSerializer):
 
@@ -41,7 +41,7 @@ class CreateVoucherSerializer(ModelSerializer):
 
 
         id_user = self.validated_data["user"]
-        cart = obtain_cart_user(id_user)
+        cart = calulate_cart.obtain_cart_user(id_user)
 
         if cart is None:
             raise ValidationError({"status": "Bad Request", "message": "Este usuario no tiene carrito"})
@@ -54,8 +54,8 @@ class CreateVoucherSerializer(ModelSerializer):
 
         items = Items.objects.filter(cart=cart)
 
-        value_net = instance_calulate_cart.calculate_net_mount(items)
-        iva_price = instance_calulate_cart.calculate_iva_price(cart.id_cart)
+        value_net = calulate_cart.calculate_net_mount(items)
+        iva_price = calulate_cart.calculate_iva_price(cart.id_cart)
 
         try:
           voucher = Voucher.objects.create(
@@ -82,7 +82,7 @@ class CreateVoucherSerializer(ModelSerializer):
 
         discount_stock.clean_cart(cart.id_cart)
 
-        instance_calulate_cart.cart_total(cart)
+        calulate_cart.cart_total(cart)
 
         return voucher
 
@@ -176,20 +176,20 @@ class CartSerializer(ModelSerializer):
 
     def calculate_total_quantity(self, cart: Cart):
 
-        total_quantity = instance_calulate_cart.calculate_total_quality(cart.id_cart)
+        total_quantity = calulate_cart.calculate_total_quality(cart.id_cart)
 
         return total_quantity
 
     def calculate_total_products(self, cart: Cart):
 
-        quality_products = instance_calulate_cart.calculate_total_products(cart.id_cart)
+        quality_products = calulate_cart.calculate_total_products(cart.id_cart)
 
         return quality_products
 
     def main_total(self, cart: Cart):
 
         items = cart.items.all()
-        total = instance_calulate_cart.calculate_total_price(items)
+        total = calulate_cart.calculate_total_price(items)
 
         if get_subscription(cart.user):
 
@@ -223,7 +223,7 @@ def get_subscription(id_user):
 
 
 # Add Cart serializer
-class AddCartItemSerializer(ModelSerializer):
+class AddItemCartSerializer(ModelSerializer):
 
     user = IntegerField()
 
@@ -238,7 +238,7 @@ class AddCartItemSerializer(ModelSerializer):
         quantity = self.validated_data["quantity"]
         id_user = self.validated_data["user"]
 
-        cart = obtain_cart_user(id_user)
+        cart = calulate_cart.obtain_cart_user(id_user)
 
         if cart is None:
             raise ValidationError("Carrito no encontrado")
@@ -258,9 +258,9 @@ class AddCartItemSerializer(ModelSerializer):
 
                 cartitem.save()
 
-                instance_calulate_cart.cart_total(cart)
-                instance_calulate_cart.calculate_total_quality(cart.id_cart)
-                instance_calulate_cart.calculate_total_products(cart.id_cart)
+                calulate_cart.cart_total(cart)
+                calulate_cart.calculate_total_quality(cart.id_cart)
+                calulate_cart.calculate_total_products(cart.id_cart)
 
                 self.instance = cartitem
 
@@ -279,9 +279,9 @@ class AddCartItemSerializer(ModelSerializer):
                     price=newPrice
                     )
 
-                instance_calulate_cart.cart_total(cart)
-                instance_calulate_cart.calculate_total_products(cart.id_cart)
-                instance_calulate_cart.calculate_total_quality(cart.id_cart)
+                calulate_cart.cart_total(cart)
+                calulate_cart.calculate_total_products(cart.id_cart)
+                calulate_cart.calculate_total_quality(cart.id_cart)
 
         return self.instance
 
@@ -294,7 +294,7 @@ class DeleteProductCart(ModelSerializer):
         fields = ("id_cart", "product")
 
 # Substract Cart serializer
-class SubtractCartItemSerializer(ModelSerializer):
+class SubtractItemCartSerializer(ModelSerializer):
 
     user = IntegerField()
 
@@ -308,7 +308,7 @@ class SubtractCartItemSerializer(ModelSerializer):
             product = self.validated_data["product"]
             id_user = self.validated_data["user"]
 
-            cart = obtain_cart_user(id_user)
+            cart = calulate_cart.obtain_cart_user(id_user)
 
             if cart is None:
                 raise ValidationError("Carrito no encontrado")
@@ -327,9 +327,9 @@ class SubtractCartItemSerializer(ModelSerializer):
 
             cartitem.delete()
 
-            instance_calulate_cart.cart_total(cartitem.cart)
-            instance_calulate_cart.calculate_total_products(cartitem.cart.id_cart)
-            instance_calulate_cart.calculate_total_quality(cartitem.cart.id_cart)
+            calulate_cart.cart_total(cartitem.cart)
+            calulate_cart.calculate_total_products(cartitem.cart.id_cart)
+            calulate_cart.calculate_total_quality(cartitem.cart.id_cart)
 
             return self.instance
 
@@ -337,17 +337,8 @@ class SubtractCartItemSerializer(ModelSerializer):
         cartitem.price = cartitem.quantity * cartitem.product.price
         cartitem.save()
 
-        instance_calulate_cart.cart_total(cartitem.cart)
-        instance_calulate_cart.calculate_total_products(cartitem.cart.id_cart)
-        instance_calulate_cart.calculate_total_quality(cartitem.cart.id_cart)
+        calulate_cart.cart_total(cartitem.cart)
+        calulate_cart.calculate_total_products(cartitem.cart.id_cart)
+        calulate_cart.calculate_total_quality(cartitem.cart.id_cart)
 
         return self.instance
-
-def obtain_cart_user(id_user:int):
-
-    try:
-        cart_user = Cart.objects.get(user=id_user)
-    except Cart.DoesNotExist:
-        return None
-
-    return cart_user

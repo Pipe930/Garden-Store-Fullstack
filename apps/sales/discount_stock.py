@@ -2,7 +2,7 @@ from apps.products.models import Product
 from .models import Items
 
 # Class Discount Stock
-class DiscountStock(object):
+class DiscountStock:
 
     model = Items
 
