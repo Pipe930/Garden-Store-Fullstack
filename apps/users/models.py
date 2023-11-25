@@ -106,20 +106,3 @@ class Profile(models.Model):
 
     def __str__(self) -> str:
         return self.user.username
-
-# Person Model
-class Person(models.Model):
-
-    id_person = models.BigAutoField(primary_key=True)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    email = models.EmailField(unique=True)
-    run = models.PositiveIntegerField(unique=True)
-    dv = models.CharField(max_length=1)
-    phone = models.CharField(max_length=12, unique=True)
-
-    class Meta:
-
-        db_table = "person"
-        verbose_name = "person"
-        verbose_name_plural = "people"

@@ -2,11 +2,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from apps.products.urls import urlsCategories, urlsProducts, urlsOffers, urlsStore
+from apps.products.urls import urlsCategories, urlsProducts, urlsOffers
 from apps.users.urls import urlsSubcriptions
 from apps.countries.urls import urlsRegions, urlsProvincies, urlsCommunes
 from apps.sales.urls import urlsCarts, urlsVouchers
-from apps.orders.urls import urlsDispatchGuides, urlsBills
 
 urls_api =  [
     path("categories/", include(urlsCategories)),
@@ -18,9 +17,6 @@ urls_api =  [
     path("communes/", include(urlsCommunes)),
     path("carts/", include(urlsCarts)),
     path("vouchers/", include(urlsVouchers)),
-    path("stores/", include(urlsStore)),
-    path("dispatch-guides/", include(urlsDispatchGuides)),
-    path("bills/", include(urlsBills)),
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt"))
 ]

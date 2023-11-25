@@ -38,7 +38,6 @@ LOCAL_APPS = [
     'apps.users.apps.UsersConfig',
     'apps.products.apps.ProductsConfig',
     'apps.sales.apps.SalesConfig',
-    'apps.orders.apps.OrdersConfig',
     'apps.countries.apps.CountriesConfig',
     'apps.branchs.apps.BranchsConfig'
 ]

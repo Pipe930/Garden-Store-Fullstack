@@ -53,13 +53,14 @@ class Product(models.Model):
     name_product = models.CharField(max_length=255, unique=True)
     price = models.PositiveIntegerField()
     discount_price = models.PositiveIntegerField()
+    sold = models.PositiveIntegerField(default=0)
     stock = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to=nameImage)
     slug = models.SlugField(unique=True)
     aviable = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     description = models.TextField(null=True, blank=True, default="(Sin Descripcion)")
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     offer = models.ForeignKey(Offer, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
@@ -82,37 +83,3 @@ def set_slug(sender, instance, *args, **kwargs):
     ))
 
 pre_save.connect(set_slug, sender = Product)
-
-# Store Model
-class Store(models.Model):
-
-    id_store = models.BigAutoField(primary_key=True)
-    name_store = models.CharField(max_length=255, unique=True)
-    direction = models.CharField(max_length=255)
-    temperature = models.SmallIntegerField()
-    capacity = models.PositiveBigIntegerField()
-    ocupied_capacity = models.PositiveBigIntegerField(default=0)
-
-    class Meta:
-
-        db_table = "store"
-        verbose_name = "store"
-        verbose_name_plural = "cellars"
-
-    def __str__(self) -> str:
-        return self.name_store
-
-# Product Store Model
-class StoreProduct(models.Model):
-
-    id_store_product = models.BigAutoField(primary_key=True)
-    quantity = models.PositiveBigIntegerField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
-
-    class Meta:
-
-        db_table = "storeproduct"
-        verbose_name = "storeproduct"
-        verbose_name_plural = "storeproducts"
-

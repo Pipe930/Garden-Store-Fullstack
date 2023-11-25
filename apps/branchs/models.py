@@ -33,18 +33,3 @@ class ProductBranch(models.Model):
         db_table = "productbranch"
         verbose_name = "productbranch"
         verbose_name_plural = "productbranchoffices"
-
-# Post Model
-class Post(models.Model):
-
-    id_post = models.BigAutoField(primary_key=True)
-    name_post = models.CharField(max_length=60)
-
-    class Meta:
-
-        db_table = "post"
-        verbose_name = "post"
-        verbose_name_plural = "posts"
-
-    def __str__(self) -> str:
-        return self.name_post
