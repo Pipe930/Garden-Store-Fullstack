@@ -4,7 +4,7 @@ CREATE DATABASE gardenstore;
 
 USE gardenstore;
 
--- Creation of Tables
+-- CREATION OF TABLES
 
 CREATE TABLE CATEGORY(
 
@@ -18,9 +18,9 @@ CREATE TABLE OFFER(
 
     id_offer BIGINT NOT NULL AUTO_INCREMENT,
     name_offer VARCHAR(255) NOT NULL,
-    start_date DATE DEFAULT (SYSDATE()) NOT NULL,
+    start_date DATE DEFAULT (CURDATE()) NOT NULL,
     end_date DATE NOT NULL,
-    discount INT(3) NOT NULL CHECK(discount BETWEEN 100 AND 1),
+    discount SMALLINT NOT NULL CHECK(discount <= 100 AND discount >= 1),
 
     CONSTRAINT pk_offer PRIMARY KEY (id_offer)
 );
@@ -34,8 +34,8 @@ CREATE TABLE USER(
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
     last_login TIMESTAMP NULL,
-    is_staff CHAR(1) NOT NULL,
-    is_superuser CHAR(1) NOT NULL,
+    is_staff BIT NOT NULL,
+    is_superuser BIT NOT NULL,
 
     CONSTRAINT pk_user PRIMARY KEY (id_user)
 );
@@ -73,6 +73,9 @@ CREATE TABLE BRANCH(
 
     id_branch BIGINT NOT NULL AUTO_INCREMENT,
     name_branch VARCHAR(255) NOT NULL UNIQUE,
+    capacity INT NOT NULL CHECK(capacity > 100),
+    capacity_ocuped INT DEFAULT 0 NOT NULL,
+    phone VARCHAR(12) NOT NULL CHECK(length(phone) = 12),
     direction TEXT NOT NULL,
     bussiness_name VARCHAR(255) NOT NULL UNIQUE,
     id_commune BIGINT NOT NULL,
@@ -86,8 +89,8 @@ CREATE TABLE SUBSCRIPTION(
 
     id_subcription BIGINT NOT NULL AUTO_INCREMENT,
     created TIMESTAMP DEFAULT (NOW()) NOT NULL,
-    state CHAR(1) DEFAULT 1 NOT NULL,
-    mount INT(6) NOT NULL CHECK(mount >= 5000),
+    state BIT DEFAULT 1 NOT NULL,
+    mount SMALLINT NOT NULL CHECK(mount >= 5000),
     id_user BIGINT NOT NULL,
 
     CONSTRAINT pk_subcription PRIMARY KEY (id_subcription),
@@ -97,9 +100,9 @@ CREATE TABLE SUBSCRIPTION(
 CREATE TABLE CART(
 
     id_cart BIGINT NOT NULL AUTO_INCREMENT,
-    total INT(10) DEFAULT 0 NOT NULL,
-    total_quantity INT(10) DEFAULT 0 NOT NULL,
-    total_products INT(10) DEFAULT 0 NOT NULL,
+    total INT DEFAULT 0 NOT NULL,
+    total_quantity INT DEFAULT 0 NOT NULL,
+    total_products INT DEFAULT 0 NOT NULL,
     id_user BIGINT NOT NULL,
 
     CONSTRAINT pk_cart PRIMARY KEY (id_cart),
@@ -110,14 +113,14 @@ CREATE TABLE PRODUCT(
 
     id_product BIGINT NOT NULL AUTO_INCREMENT,
     name_product VARCHAR(255) NOT NULL UNIQUE,
-    price INT(10) NOT NULL CHECK(price > 1000),
-    stock INT(10) NOT NULL DEFAULT 0,
-    sold INT(10) NOT NULL DEFAULT 0,
+    price INT NOT NULL CHECK(price > 1000),
+    stock INT NOT NULL DEFAULT 0,
+    sold INT NOT NULL DEFAULT 0,
     image BLOB NOT NULL,
-    aviable CHAR(1) NOT NULL DEFAULT 0 CHECK(aviable BETWEEN 0 AND 1),
+    aviable BIT NOT NULL DEFAULT 0,
     slug VARCHAR(100) NOT NULL UNIQUE,
     created TIMESTAMP DEFAULT (NOW()) NOT NULL,
-    description TEXT DEFAULT '(sin descripcion)' NULL,
+    description TEXT NULL,
     id_category BIGINT NOT NULL,
     id_offer BIGINT NULL,
 
@@ -129,7 +132,7 @@ CREATE TABLE PRODUCT(
 CREATE TABLE BRANCH_PRODUCT(
 
     id_branch_product BIGINT NOT NULL AUTO_INCREMENT,
-    quantity INT(10) NOT NULL CHECK(quantity > 0),
+    quantity INT NOT NULL CHECK(quantity > 0),
     id_branch BIGINT NOT NULL,
     id_product BIGINT NOT NULL,
 
@@ -141,8 +144,8 @@ CREATE TABLE BRANCH_PRODUCT(
 CREATE TABLE ITEMS(
 
     id_items BIGINT NOT NULL AUTO_INCREMENT,
-    quantity INT(10) NOT NULL CHECK(quantity > 0),
-    price INT(10) NOT NULL CHECK(price > 1000),
+    quantity INT NOT NULL CHECK(quantity > 0),
+    price INT NOT NULL CHECK(price > 1000),
     id_cart BIGINT NOT NULL,
     id_product BIGINT NOT NULL,
 
@@ -164,11 +167,12 @@ CREATE TABLE EMPLOYEE(
   	id_employee BIGINT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(20) NOT NULL,
     last_name VARCHAR(20) NOT NULL,
-    username VARCHAR(60) NOT NULL UNIQUE,
+    gender VARCHAR(20) NOT NULL CHECK(gender = 'masculino' OR gender = 'femenino' OR gender = 'otro'),
     email VARCHAR(255) NOT NULL UNIQUE,
     phone VARCHAR(12) NOT NULL UNIQUE,
-    date_contrat DATE DEFAULT (NOW()) NOT NULL,
-    salary INT(10) NOT NULL CHECK(salary >= 400000),
+    birthday DATE NOT NULL,
+    date_contrat DATE DEFAULT (CURDATE()) NOT NULL,
+    salary INT NOT NULL CHECK(salary >= 100000),
     id_branch BIGINT NOT NULL,
     id_post BIGINT NOT NULL,
 
@@ -183,15 +187,15 @@ CREATE TABLE PURCHASE(
     id_purchase BIGINT NOT NULL AUTO_INCREMENT,
     code_uuid VARCHAR(32) NOT NULL UNIQUE CHECK(length(code_uuid) = 32),
     created TIMESTAMP DEFAULT (NOW()) NOT NULL,
-    state CHAR(1) DEFAULT 1 NOT NULL CHECK(state BETWEEN 0 AND 1),
-    net_mount INT(10) NOT NULL CHECK(net_mount >= 180),
-    iva_price INT(10) NOT NULL CHECK(iva_price >= 180),
-    total_price INT(10) NOT NULL CHECK(net_mount >= 1000),
-    quantity_products INT(10) NOT NULL CHECK(quantity_products > 0),
-    conditions VARCHAR(20) DEFAULT 'PR' NOT NULL,
-    withdrawal VARCHAR(20) DEFAULT 'Retiro en Tienda' NOT NULL,
+    state BIT DEFAULT 1 NOT NULL,
+    net_mount INT NOT NULL CHECK(net_mount >= 180),
+    iva_price INT NOT NULL CHECK(iva_price >= 180),
+    total_price INT NOT NULL CHECK(total_price >= 1000),
+    quantity_products INT NOT NULL CHECK(quantity_products > 0),
+    conditions VARCHAR(2) DEFAULT 'PR' NOT NULL,
+    withdrawal VARCHAR(20) NOT NULL CHECK(withdrawal = 'retiro en tienda' OR withdrawal = 'envio a domicilio'),
     direction TEXT NULL,
-    num_deparment INT(6) NULL,
+    num_deparment INT NULL,
     id_commune BIGINT NULL,
     id_branch BIGINT NULL,
     id_user BIGINT NOT NULL,
@@ -206,9 +210,8 @@ CREATE TABLE PURCHASE_ITEMS(
 
 	  id_purchase_items BIGINT NOT NULL AUTO_INCREMENT,
     name_product VARCHAR(255) NOT NULL UNIQUE,
-    price INT(10) NOT NULL CHECK(price > 1000),
-    quantity INT(10) NOT NULL CHECK(quantity > 0),
-    date_added DATE DEFAULT (NOW()) NOT NULL,
+    price INT NOT NULL CHECK(price > 1000),
+    quantity INT NOT NULL CHECK(quantity > 0),
     id_purchase BIGINT NOT NULL,
     id_product BIGINT NOT NULL,
 
@@ -222,7 +225,7 @@ CREATE TABLE WARRANTY(
 	  id_warranty BIGINT NOT NULL AUTO_INCREMENT,
     code_uuid VARCHAR(32) NOT NULL UNIQUE CHECK(length(code_uuid) = 32),
     created TIMESTAMP DEFAULT (NOW()) NOT NULL,
-    state CHAR(1) NOT NULL DEFAULT 1 CHECK(state BETWEEN 1 AND 0),
+    state BIT NOT NULL DEFAULT 1,
     id_product BIGINT NOT NULL,
     id_purchase BIGINT NOT NULL,
 
@@ -242,7 +245,7 @@ CREATE TABLE NEWSLETTER_USER(
 
 CREATE TABLE NEWSLETTER(
 
-	  id_newsletter BIGINT NOT NULL AUTO_INCREMENT,
+    id_newsletter BIGINT NOT NULL AUTO_INCREMENT,
     name_newsletter VARCHAR(255) NOT NULL,
     subject_newsletter VARCHAR(255) NOT NULL,
     body TEXT NULL,
@@ -253,8 +256,17 @@ CREATE TABLE NEWSLETTER(
     CONSTRAINT fk_newsletter_newsletter_user FOREIGN KEY (id_newsletter_user) REFERENCES NEWSLETTER_USER(id_newsletter_user)
 );
 
-CREATE TRIGGER ins_sum BEFORE INSERT ON OFFER
-       FOR EACH ROW SET @sum = @sum + NEW.amount;
+-- TRIGGERS
+
+delimiter //
+CREATE TRIGGER TR_CHECK_END_DATE BEFORE INSERT ON OFFER
+    FOR EACH ROW BEGIN
+        IF DATEDIFF(NEW.end_date, (CURDATE())) > 0 THEN
+            SET NEW.end_date = NEW.end_date;
+        ELSEIF DATEDIFF(NEW.end_date, (CURDATE())) <= 0 THEN
+            SET NEW.end_date = CURDATE() + 1;
+        END IF;
+    END; //
 
 -- Regiones de Chile
 
@@ -752,8 +764,3 @@ INSERT INTO commune VALUES(344, "Timaukel", 55);
 
 INSERT INTO commune VALUES(345, "Natales", 53);
 INSERT INTO commune VALUES(346, "Torres del Paine", 53);
-
--- INSERT INTO person (first_name, last_name, email, run, dv, phone) VALUES("nicolas", "cisterna", "nicolas.cistena@gmail.com", 21345678, "1", 987562345);
--- INSERT INTO grocer (person_ptr_id, store_id) VALUES(1, 1);
--- INSERT INTO person (first_name, last_name, email, run, dv, phone) VALUES("nestor", "aviles", "nestor.aviles@gmail.com", 23756849, "k", 974382938);
--- INSERT INTO supplier (person_ptr_id) VALUES(2);
