@@ -1,5 +1,4 @@
 from rest_framework.serializers import ModelSerializer, StringRelatedField
-from rest_framework import status
 from .models import Category, Product, Offer
 from .discount import discount
 
@@ -66,7 +65,7 @@ class CreateUpdateProductSerializer(ModelSerializer):
     class Meta:
 
         model = Product
-        exclude = ("id_product", "slug", "created", "aviable", "discount_price")
+        exclude = ("id_product", "sold", "slug", "created", "aviable", "discount_price", "stock")
 
     def create(self, validated_data):
 
@@ -100,14 +99,9 @@ class CreateUpdateProductSerializer(ModelSerializer):
 
         instance.name_product = validated_data.get("name_product", instance.name_product)
         instance.price = validated_data.get("price", instance.price)
-        instance.stock = validated_data.get("stock", instance.stock)
-        instance.aviable = validated_data.get("aviable", instance.aviable)
         instance.image = validated_data.get("image", instance.image)
         instance.description = validated_data.get("description", instance.description)
         instance.category = validated_data.get("category", instance.category)
-
-        if instance.stock == 0:
-            instance.aviable = False
 
         instance.save()
 

@@ -75,7 +75,7 @@ CREATE TABLE BRANCH(
     name_branch VARCHAR(255) NOT NULL UNIQUE,
     capacity INT NOT NULL CHECK(capacity > 100),
     capacity_ocuped INT DEFAULT 0 NOT NULL,
-    phone VARCHAR(12) NOT NULL CHECK(length(phone) = 12),
+    phone VARCHAR(12) NOT NULL UNIQUE CHECK(length(phone) = 12),
     direction TEXT NOT NULL,
     bussiness_name VARCHAR(255) NOT NULL UNIQUE,
     id_commune BIGINT NOT NULL,

@@ -6,6 +6,7 @@ from apps.products.urls import urlsCategories, urlsProducts, urlsOffers
 from apps.users.urls import urlsSubcriptions
 from apps.countries.urls import urlsRegions, urlsProvincies, urlsCommunes
 from apps.sales.urls import urlsCarts, urlsVouchers
+from apps.branchs.urls import urlsBranchs
 
 urls_api =  [
     path("categories/", include(urlsCategories)),
@@ -17,6 +18,7 @@ urls_api =  [
     path("communes/", include(urlsCommunes)),
     path("carts/", include(urlsCarts)),
     path("vouchers/", include(urlsVouchers)),
+    path("branchs/", include(urlsBranchs)),
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt"))
 ]

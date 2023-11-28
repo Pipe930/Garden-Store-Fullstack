@@ -38,7 +38,7 @@ class CreateSubscriptionView(CreateAPIView):
 
 
 # View that gets a subscription by id
-class RetrieveDeleteSubscriptionView(RetrieveDestroyAPIView):
+class DeleteDetailSubscriptionView(RetrieveDestroyAPIView):
 
     serializer_class = ListSubscriptionSerializer
     permission_classes = (IsAuthenticated,)

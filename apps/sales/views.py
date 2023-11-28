@@ -52,7 +52,7 @@ class CartUserView(RetrieveAPIView):
             status.HTTP_200_OK)
 
 # Cart Add Item View
-class AddCartItemView(CreateAPIView):
+class AddItemCartView(CreateAPIView):
 
     serializer_class = AddItemCartSerializer
     permission_classes = (IsAuthenticated,)
@@ -111,7 +111,7 @@ class DeleteProductCartView(DestroyAPIView):
         return Response({"status": "OK", "message": "Producto Eliminado"}, status.HTTP_200_OK)
 
 # Cart Subtract Item View
-class SubtractCartItemView(CreateAPIView):
+class SubtractItemCartView(CreateAPIView):
 
     serializer_class = SubtractItemCartSerializer
     permission_classes = (IsAuthenticated,)
@@ -129,7 +129,7 @@ class SubtractCartItemView(CreateAPIView):
         return Response({"status": "OK", "message": "Se resto el producto"}, status.HTTP_200_OK)
 
 # Clear Cart Items View
-class ClearCartItemsView(DestroyAPIView):
+class ClearItemsCartView(DestroyAPIView):
 
     permission_classes = (IsAuthenticated,)
 

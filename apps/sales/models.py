@@ -50,6 +50,7 @@ class Voucher(models.Model):
 
         preparation = "PR"
         retire = "RE"
+        shipped = "EV"
         canceled = "CA"
         delivered = "ET"
 
@@ -81,12 +82,11 @@ class Voucher(models.Model):
 class VoucherItem(models.Model):
 
     id_voucher_item = models.BigAutoField(primary_key=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
     name_product = models.CharField(max_length=255)
     price = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField()
-    date_added = models.DateTimeField(auto_now_add=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
 
     class Meta:
 

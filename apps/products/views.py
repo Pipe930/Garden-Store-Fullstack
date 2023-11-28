@@ -62,7 +62,7 @@ class ListCreateCategoryView(generics.ListCreateAPIView):
             status.HTTP_201_CREATED)
 
 # Update a obtain category View
-class UpdateRetrieveCategoryView(generics.RetrieveUpdateAPIView):
+class UpdateDetailCategoryView(generics.RetrieveUpdateAPIView):
 
     permission_classes = (IsAuthenticated, IsAdminUser)
 
@@ -139,7 +139,7 @@ class ListCreateProductView(generics.ListCreateAPIView):
             status.HTTP_201_CREATED)
 
 # Update a obtain product View
-class UpdateRetrieveProductView(generics.RetrieveUpdateAPIView):
+class UpdateDetailProductView(generics.RetrieveUpdateAPIView):
 
     parser_classes = (FormParser, MultiPartParser)
 
@@ -241,7 +241,7 @@ class ListCreateOfferView(generics.ListCreateAPIView):
             status.HTTP_201_CREATED)
 
 # Update a obtain offer View
-class UpdateRetrieveOfferView(generics.RetrieveUpdateAPIView):
+class UpdateDetailOfferView(generics.RetrieveUpdateAPIView):
 
     permission_classes = (IsAuthenticated, IsAdminUser)
 

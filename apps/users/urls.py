@@ -3,5 +3,5 @@ from . import views
 
 urlsSubcriptions = [
     path("created", views.CreateSubscriptionView.as_view(), name="createdsubscription"),
-    path("subscription/<int:id>", views.RetrieveDeleteSubscriptionView.as_view(), name="retrievedeletesubscription")
+    path("subscription/<int:id>", views.DeleteDetailSubscriptionView.as_view(), name="retrievedeletesubscription")
 ]
