@@ -13,9 +13,8 @@ class CalculateCart:
         cart = self.model.objects.get(id_cart=int(id_cart.id_cart))
 
         items = cart.items.all()
-        total = sum([item.quantity * item.product.price for item in items])
+        cart.total = sum([item.quantity * item.product.price for item in items])
 
-        cart.total = total
         cart.save()
 
     # Method calculate total price
@@ -92,10 +91,11 @@ class CalculateCart:
 
         return iva_prive
 
-    def obtain_cart_user(id_user:int):
+    def obtain_cart_user(self, user):
 
         try:
-            cart_user = Cart.objects.get(user=id_user)
+            cart_user = Cart.objects.get(user=user)
+            print(cart_user)
         except Cart.DoesNotExist:
             return None
 

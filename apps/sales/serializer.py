@@ -1,11 +1,10 @@
-from rest_framework.serializers import ModelSerializer, ValidationError, StringRelatedField, SerializerMethodField, IntegerField
+from rest_framework.serializers import ModelSerializer, ValidationError, StringRelatedField, SerializerMethodField, IntegerField, ModelField
 from .models import Cart, Items, Voucher, VoucherItem
 from apps.users.models import Subscription
 from apps.products.models import Product
 from django.http import Http404
 from apps.products.discount import discount
 from .cart_total import CalculateCart
-from .discount_stock import DiscountStock
 
 calulate_cart = CalculateCart()
 
@@ -15,8 +14,6 @@ class CreateVoucherSerializer(ModelSerializer):
 
         model = Voucher
         fields = (
-            "total_price",
-            "quantity_products",
             "withdrawal",
             "direction",
             "num_deparment",
@@ -49,9 +46,6 @@ class CreateVoucherSerializer(ModelSerializer):
         if not Items.objects.filter(cart=cart).exists():
             raise ValidationError({"status": "Bad Request","message": "Este carrito esta vacio"})
 
-        discount_stock = DiscountStock() # We instantiate the object DiscountStock
-        discount_stock.discount_stock_product(cart.id_cart)
-
         items = Items.objects.filter(cart=cart)
 
         value_net = calulate_cart.calculate_net_mount(items)
@@ -60,6 +54,8 @@ class CreateVoucherSerializer(ModelSerializer):
         try:
           voucher = Voucher.objects.create(
               **validated_data,
+              quantity_products = cart.total_quantity,
+              total_price = cart.total,
               net_mount = value_net,
               iva_price = iva_price
               )
@@ -80,7 +76,7 @@ class CreateVoucherSerializer(ModelSerializer):
             except:
                 raise ValidationError({"status": "Bad Request", "message":"El producto no fue encontrado"})
 
-        discount_stock.clean_cart(cart.id_cart)
+        Items.objects.filter(cart=cart.id_cart).delete()
 
         calulate_cart.cart_total(cart)
 
@@ -110,6 +106,7 @@ class ListVouchersSerializer(ModelSerializer):
             "commune",
             "branch")
 
+# Cancel Voucher serializer
 class CancelVoucherSerializer(ModelSerializer):
 
     class Meta:
@@ -120,6 +117,21 @@ class CancelVoucherSerializer(ModelSerializer):
     def update(self, instance, validated_data):
 
         instance.state = validated_data.get('state', instance.state)
+        instance.condition = "CA"
+
+        instance.save()
+
+        return instance
+
+class UpdateVoucherSerializer(ModelSerializer):
+
+    class Meta:
+        model = Voucher
+        fields = ("condition",)
+
+    def update(self, instance, validated_data):
+
+        instance.condition = validated_data.get('condition', instance.condition)
 
         instance.save()
 
@@ -243,12 +255,9 @@ class AddItemCartSerializer(ModelSerializer):
         if cart is None:
             raise ValidationError("Carrito no encontrado")
 
-        id_cart = cart.id_cart
-
         try:
 
-            cartitem = Items.objects.get(product=product, cart=id_cart)
-
+            cartitem = Items.objects.get(product=product, cart=cart.id_cart)
             quantity_total = cartitem.quantity + quantity
 
             if cartitem.product.stock >= quantity_total:
@@ -313,13 +322,11 @@ class SubtractItemCartSerializer(ModelSerializer):
             if cart is None:
                 raise ValidationError("Carrito no encontrado")
 
-            id_cart = cart.id_cart
-
         except KeyError:
             raise Http404
 
         try:
-            cartitem = Items.objects.get(product=product, cart=id_cart)
+            cartitem = Items.objects.get(product=product, cart=cart.id_cart)
         except Items.DoesNotExist:
             raise ValidationError("Items no encontrado")
 

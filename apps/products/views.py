@@ -142,13 +142,7 @@ class ListCreateProductView(generics.ListCreateAPIView):
 class UpdateDetailProductView(generics.RetrieveUpdateAPIView):
 
     parser_classes = (FormParser, MultiPartParser)
-
-    def get_permissions(self):
-
-        if self.request.method == 'PUT':
-            return (IsAuthenticated(), IsAdminUser())
-
-        return super().get_permissions()
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get_object(self, id:int):
 

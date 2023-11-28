@@ -11,5 +11,6 @@ urlsCarts = [
 
 urlsVouchers = [
     path("", views.ListCreateVoucherView.as_view(), name="listcreatedorder"),
-    path("cancel/<int:id>", views.CancelVoucherView.as_view(), name="cancelvoucher")
+    path("cancel/<int:id>", views.CancelVoucherView.as_view(), name="cancelvoucher"),
+    path("voucher/<int:id>", views.UpdateVoucherView.as_view(), name="updatevoucher")
 ]

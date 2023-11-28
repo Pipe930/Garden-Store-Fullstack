@@ -1,10 +1,10 @@
 from apps.products.models import Product
-from .models import Items
+from .models import VoucherItem
 
 # Class Discount Stock
 class DiscountStock:
 
-    model = Items
+    model = VoucherItem
 
     # Method Obtain a Object Product
     def get_object(self, id_product:int):
@@ -17,25 +17,18 @@ class DiscountStock:
         return product
 
     # Method of discounting stock of a product
-    def discount_stock_product(self, id_cart:int):
+    def discount_stock_product(self, voucher):
 
         # Query to get the items from the user's cart
-        cartitems_user = self.model.objects.filter(cart=id_cart)
+        items = self.model.objects.filter(voucher=voucher)
 
-        for items in cartitems_user:
+        for item in items:
 
-            quantity_item = items.quantity
-            product_stock = items.product.stock
+            new_stock = item.product.stock - item.quantity
 
-            new_stock = product_stock - quantity_item
+            product = self.get_object(item.product.id_product)
 
-            product = self.get_object(items.product.id_product)
-
+            product.sold = item.quantity
             product.stock = new_stock
 
             product.save()
-
-    # Method Clean Cart
-    def clean_cart(self, id_cart:int):
-
-        self.model.objects.filter(cart=id_cart).delete()

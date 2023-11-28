@@ -15,13 +15,16 @@ from .serializer import (
     SubtractItemCartSerializer,
     CreateVoucherSerializer,
     ListVouchersSerializer,
-    CancelVoucherSerializer)
-from rest_framework.permissions import IsAuthenticated
+    CancelVoucherSerializer,
+    UpdateVoucherSerializer)
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .cart_total import CalculateCart
+from .discount_stock import DiscountStock
 from core.messages import (
     message_response_list,
     message_response_created,
-    message_response_bad_request)
+    message_response_bad_request,
+    message_response_update)
 
 instance_cart = CalculateCart()
 
@@ -151,8 +154,7 @@ class ClearItemsCartView(DestroyAPIView):
         if not len(items):
             return Response({"status":"No Content", "message": "Tu carrito esta vacio"}, status.HTTP_204_NO_CONTENT)
 
-        for item in items:
-            item.delete()
+        items.delete()
 
         instance_cart.cart_total(cart)
         instance_cart.calculate_total_products(cart.id_cart)
@@ -195,6 +197,44 @@ class ListCreateVoucherView(ListCreateAPIView):
         return Response(
             message_response_created("La orden", serializer.data),
             status.HTTP_201_CREATED)
+
+class UpdateVoucherView(UpdateAPIView):
+
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    serializer_class = UpdateVoucherSerializer
+
+    def get_object(self, id:int):
+
+        try:
+            voucher = Voucher.objects.get(id_voucher= id)
+        except Voucher.DoesNotExist:
+            raise Http404
+
+        return voucher
+
+    def put(self, request, id:int, format=None):
+
+        voucher = self.get_object(id)
+        serializer = self.get_serializer(voucher, data=request.data)
+
+        if not serializer.is_valid():
+
+            return Response(
+                message_response_bad_request("la compra", serializer.errors, "PUT"),
+                status.HTTP_400_BAD_REQUEST)
+
+        if serializer.validated_data["condition"] == "ET":
+
+            discount_stock = DiscountStock()
+            discount_stock.discount_stock_product(voucher)
+            voucher.state = False
+            voucher.save()
+
+        serializer.save()
+
+        return Response(
+            message_response_update("la compra", serializer.data),
+            status.HTTP_205_RESET_CONTENT)
 
 # Cancel Voucher View
 class CancelVoucherView(UpdateAPIView):
