@@ -24,7 +24,8 @@ from core.messages import (
     message_response_list,
     message_response_created,
     message_response_bad_request,
-    message_response_update)
+    message_response_update,
+    message_response_detail)
 
 instance_cart = CalculateCart()
 
@@ -51,7 +52,7 @@ class CartUserView(RetrieveAPIView):
         serializer = self.get_serializer(cart)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_detail(serializer.data),
             status.HTTP_200_OK)
 
 # Cart Add Item View
@@ -104,11 +105,11 @@ class DeleteProductCartView(DestroyAPIView):
         except Items.DoesNotExist:
             raise Http404
 
-        return product, cart
+        return product
 
     def delete(self, request, id:int):
 
-        product, cart = self.get_object(request.user.id, id)
+        product = self.get_object(request.user.id, id)
         product.delete()
 
         return Response({"status": "OK", "message": "Producto Eliminado"}, status.HTTP_200_OK)
@@ -171,14 +172,14 @@ class ListCreateVoucherView(ListCreateAPIView):
 
     def get(self, request, format=None):
 
-        ordens = Voucher.objects.filter(user=request.user.id)
-        serializer = ListVouchersSerializer(ordens, many=True)
+        orders = Voucher.objects.filter(user=request.user.id)
+        serializer = ListVouchersSerializer(orders, many=True)
 
-        if not ordens.exists():
+        if not orders.exists():
             return Response({"status": "No Content", "message": "No tienes ordenes registradas"}, status.HTTP_204_NO_CONTENT)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_list(serializer.data, orders.count()),
             status.HTTP_200_OK)
 
     def post(self, request, format=None):
@@ -198,6 +199,7 @@ class ListCreateVoucherView(ListCreateAPIView):
             message_response_created("La orden", serializer.data),
             status.HTTP_201_CREATED)
 
+# Update Voucher View
 class UpdateVoucherView(UpdateAPIView):
 
     permission_classes = (IsAuthenticated, IsAdminUser)

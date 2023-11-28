@@ -36,7 +36,7 @@ class ListCreateBranchView(ListCreateAPIView):
                 status.HTTP_204_NO_CONTENT)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_list(serializer.data, branchs.count()),
             status.HTTP_200_OK)
 
     def post(self, request, format=None):

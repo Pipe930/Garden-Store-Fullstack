@@ -1,6 +1,9 @@
 
 # Function message response a view
-def message_response_list(data):
+def message_response_list(data, count):
+    return {"status": "OK", "count": count, "data": data}
+
+def message_response_detail(data):
     return {"status": "OK", "data": data}
 
 def message_response_created(object:str, data):

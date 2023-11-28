@@ -8,9 +8,9 @@ from .serializer import (
     CreateSubscriptionSerializer,
     ListSubscriptionSerializer)
 from core.messages import (
-    message_response_list,
     message_response_created,
-    message_response_bad_request)
+    message_response_bad_request,
+    message_response_detail)
 
 # ----------------------------- SUBCRIPTION VIEWS --------------------------------
 
@@ -59,7 +59,7 @@ class DeleteDetailSubscriptionView(RetrieveDestroyAPIView):
         serializer = self.get_serializer(subcription)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_detail(serializer.data),
             status.HTTP_200_OK)
 
     # Petition DELETE

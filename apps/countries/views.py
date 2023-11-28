@@ -21,17 +21,17 @@ class ListRegionsView(ListAPIView):
     # Method GET
     def get(self, request, format=None):
 
-        regiones = self.get_queryset()
-        serializer = self.get_serializer(regiones, many=True)
+        regions = self.get_queryset()
+        serializer = self.get_serializer(regions, many=True)
 
-        if not regiones.exists():
+        if not regions.exists():
 
             return Response(
                 message_response_no_content("regiones"),
                 status.HTTP_204_NO_CONTENT)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_list(serializer.data, regions.count()),
             status.HTTP_200_OK)
 
 # ----------------------------- PROVINCE VIEWS --------------------------------
@@ -54,7 +54,7 @@ class ListProvincesRegionView(ListAPIView):
                 status.HTTP_204_NO_CONTENT)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_list(serializer.data, provinces.count()),
             status.HTTP_200_OK)
 
 # ----------------------------- COMMUNE VIEWS --------------------------------
@@ -77,5 +77,5 @@ class ListCommuneProvinceView(ListAPIView):
                 status.HTTP_204_NO_CONTENT)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_list(serializer.data, communes.count()),
             status.HTTP_200_OK)

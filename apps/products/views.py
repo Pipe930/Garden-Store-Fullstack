@@ -16,7 +16,8 @@ from core.messages import (
     message_response_created,
     message_response_bad_request,
     message_response_no_content,
-    message_response_update)
+    message_response_update,
+    message_response_detail)
 
 # ----------------------------- CATEGORY VIEWS --------------------------------
 
@@ -43,7 +44,7 @@ class ListCreateCategoryView(generics.ListCreateAPIView):
                 status.HTTP_204_NO_CONTENT)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_list(serializer.data, categories.count()),
             status.HTTP_200_OK)
 
     def post(self, request, format=None):
@@ -97,7 +98,7 @@ class UpdateDetailCategoryView(generics.RetrieveUpdateAPIView):
         serializer = ListCategorySerializer(category)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_detail(serializer.data),
             status.HTTP_200_OK)
 
 # ----------------------------- PRODUCT VIEWS --------------------------------
@@ -120,7 +121,7 @@ class ListCreateProductView(generics.ListCreateAPIView):
                 status.HTTP_204_NO_CONTENT)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_list(serializer.data, products.count()),
             status.HTTP_200_OK)
 
     def post(self, request, format=None):
@@ -175,7 +176,7 @@ class UpdateDetailProductView(generics.RetrieveUpdateAPIView):
         serializer = ListProductsSerializer(product)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_detail(serializer.data),
             status.HTTP_200_OK)
 
 # List Product a Clients View
@@ -194,7 +195,7 @@ class ListProductClientView(generics.ListAPIView):
                 status.HTTP_204_NO_CONTENT)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_list(serializer.data, products.count()),
             status.HTTP_200_OK)
 
 # ----------------------------- OFFER VIEWS --------------------------------
@@ -216,7 +217,7 @@ class ListCreateOfferView(generics.ListCreateAPIView):
                 status.HTTP_204_NO_CONTENT)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_list(serializer.data, offers.count()),
             status.HTTP_200_OK)
 
     def post(self, request, format=None):
@@ -270,5 +271,5 @@ class UpdateDetailOfferView(generics.RetrieveUpdateAPIView):
         serializer = ListOfferSerializer(offer)
 
         return Response(
-            message_response_list(serializer.data),
+            message_response_detail(serializer.data),
             status.HTTP_200_OK)

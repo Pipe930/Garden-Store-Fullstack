@@ -8,6 +8,7 @@ from .cart_total import CalculateCart
 
 calulate_cart = CalculateCart()
 
+# Create Voucher Serializer
 class CreateVoucherSerializer(ModelSerializer):
 
     class Meta:
@@ -76,12 +77,12 @@ class CreateVoucherSerializer(ModelSerializer):
             except:
                 raise ValidationError({"status": "Bad Request", "message":"El producto no fue encontrado"})
 
-        Items.objects.filter(cart=cart.id_cart).delete()
-
+        items.delete()
         calulate_cart.cart_total(cart)
 
         return voucher
 
+# List Vouchers Serializer
 class ListVouchersSerializer(ModelSerializer):
 
     user = StringRelatedField()
@@ -123,6 +124,7 @@ class CancelVoucherSerializer(ModelSerializer):
 
         return instance
 
+# Update Voucher Serializer
 class UpdateVoucherSerializer(ModelSerializer):
 
     class Meta:
@@ -205,9 +207,7 @@ class CartSerializer(ModelSerializer):
 
         if get_subscription(cart.user):
 
-            discount_total = total * 0.05
-
-            price_total_discount = total - discount_total
+            price_total_discount = total - total * 0.05
 
             cart.total = price_total_discount
             cart.save()
@@ -224,6 +224,7 @@ class CartSerializer(ModelSerializer):
         cart = Cart.objects.create(**validated_data)
         return cart
 
+# Fuction Get Subscription
 def get_subscription(id_user):
 
     try:
@@ -232,7 +233,6 @@ def get_subscription(id_user):
         return False
 
     return True
-
 
 # Add Cart serializer
 class AddItemCartSerializer(ModelSerializer):
@@ -293,14 +293,6 @@ class AddItemCartSerializer(ModelSerializer):
                 calulate_cart.calculate_total_quality(cart.id_cart)
 
         return self.instance
-
-# Delete Product Cart
-class DeleteProductCart(ModelSerializer):
-
-    class Meta:
-
-        model = Items
-        fields = ("id_cart", "product")
 
 # Substract Cart serializer
 class SubtractItemCartSerializer(ModelSerializer):

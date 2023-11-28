@@ -79,7 +79,7 @@ def set_slug(sender, instance, *args, **kwargs):
 
     id = str(uuid.uuid4())
     instance.slug = slugify("{}-{}".format(
-        instance.name_product, id[:8]
+        instance.name_product, id
     ))
 
 pre_save.connect(set_slug, sender = Product)
