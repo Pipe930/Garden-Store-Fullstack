@@ -55,7 +55,7 @@ class Post(models.Model):
 # Employee Model
 class Employee(models.Model):
 
-    class OrderWithdrawal(models.TextChoices):
+    class EmployeeGender(models.TextChoices):
 
         male = "masculino"
         female = "femenino"
@@ -64,7 +64,7 @@ class Employee(models.Model):
     id_employee = models.BigAutoField(primary_key=True)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
-    gender = models.CharField(max_length=20)
+    gender = models.CharField(max_length=20, choices=EmployeeGender.choices)
     email = models.EmailField(unique=True, max_length=255)
     phone = models.CharField(max_length=20)
     run = models.PositiveIntegerField(unique=True)

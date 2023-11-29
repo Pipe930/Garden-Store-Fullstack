@@ -26,13 +26,6 @@ class ListCreateCategoryView(generics.ListCreateAPIView):
 
     queryset = Category.objects.all().order_by("name_category")
 
-    def get_permissions(self):
-
-        if self.request.method == 'POST':
-            return (IsAuthenticated(), IsAdminUser())
-
-        return super().get_permissions()
-
     def get(self, request, format=None):
 
         categories = self.get_queryset()
@@ -65,7 +58,7 @@ class ListCreateCategoryView(generics.ListCreateAPIView):
 # Update a obtain category View
 class UpdateDetailCategoryView(generics.RetrieveUpdateAPIView):
 
-    permission_classes = (IsAuthenticated, IsAdminUser)
+    # permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get_object(self, id:int):
 

@@ -23,12 +23,6 @@ class CreateSubscriptionSerializer(ModelSerializer):
         model = Subscription
         fields = ("mount", "user")
 
-    def create(self, validated_data):
-
-        subscription = Subscription.objects.create(**validated_data)
-
-        return subscription
-
 class ListSubscriptionSerializer(ModelSerializer):
 
     user = StringRelatedField()

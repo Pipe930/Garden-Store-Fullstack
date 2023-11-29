@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, ValidationError, StringRelatedField, SerializerMethodField, IntegerField, ModelField
+from rest_framework.serializers import ModelSerializer, ValidationError, StringRelatedField, SerializerMethodField, IntegerField
 from .models import Cart, Items, Voucher, VoucherItem
 from apps.users.models import Subscription
 from apps.products.models import Product
@@ -131,14 +131,6 @@ class UpdateVoucherSerializer(ModelSerializer):
         model = Voucher
         fields = ("condition",)
 
-    def update(self, instance, validated_data):
-
-        instance.condition = validated_data.get('condition', instance.condition)
-
-        instance.save()
-
-        return instance
-
 # Simple product serializer
 class SimpleProductSerializer(ModelSerializer):
 
@@ -175,8 +167,8 @@ class CartItemsSerializer(ModelSerializer):
 
         return result
 
-# Cart serializer
-class CartSerializer(ModelSerializer):
+# Create and Detail Cart serializer
+class CreateListCartSerializer(ModelSerializer):
 
     items = CartItemsSerializer(many=True, read_only=True)
     total = SerializerMethodField(method_name="main_total")
@@ -218,11 +210,6 @@ class CartSerializer(ModelSerializer):
         cart.save()
 
         return int(total)
-
-    def create(self, validated_data):
-
-        cart = Cart.objects.create(**validated_data)
-        return cart
 
 # Fuction Get Subscription
 def get_subscription(id_user):

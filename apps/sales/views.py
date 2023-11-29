@@ -10,7 +10,7 @@ from .models import Cart, Items, Voucher, VoucherItem
 from apps.products.models import Product
 from django.http import Http404
 from .serializer import (
-    CartSerializer,
+    CreateListCartSerializer,
     AddItemCartSerializer,
     SubtractItemCartSerializer,
     CreateVoucherSerializer,
@@ -34,7 +34,7 @@ instance_cart = CalculateCart()
 # Cart User View
 class CartUserView(RetrieveAPIView):
 
-    serializer_class = CartSerializer
+    serializer_class = CreateListCartSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, id:int):

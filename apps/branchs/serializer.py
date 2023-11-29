@@ -20,23 +20,6 @@ class CreateUpdateSerializer(ModelSerializer):
         model = Branch
         fields = ("name_branch", "direction", "capacity", "phone", "business_name", "commune")
 
-    def create(self, validated_data):
-
-        branch = Branch.objects.create(**validated_data)
-
-        return branch
-
-    def update(self, instance, validated_data):
-
-        instance.name_branch = validated_data.get("name_branch", instance.name_branch)
-        instance.direction = validated_data.get("direction", instance.direction)
-        instance.business_name = validated_data.get("business_name", instance.business_name)
-        instance.commune = validated_data.get("commune", instance.commune)
-
-        instance.save()
-
-        return instance
-
 class ListProductBranchSerializer(ModelSerializer):
 
     class Meta:
@@ -51,12 +34,6 @@ class CreateProductBranchSerializer(ModelSerializer):
 
         model = ProductBranch
         fields = ("quantity", "product", "branch")
-
-    def create(self, validated_data):
-
-        branch = Branch.objects.create(**validated_data)
-
-        return branch
 
     def save(self, **kwargs):
 

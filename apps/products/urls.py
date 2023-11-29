@@ -3,7 +3,7 @@ from . import views
 
 urlsCategories = [
     path("", views.ListCreateCategoryView.as_view(), name="listcreatecategory"),
-    path("category/<int:id>", views.UpdateDetailProductView.as_view(), name="updatedetailcategory")
+    path("category/<int:id>", views.UpdateDetailCategoryView.as_view(), name="updatedetailcategory")
 ]
 
 urlsProducts = [

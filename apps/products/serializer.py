@@ -16,19 +16,6 @@ class CreateUpdateCategorySerializer(ModelSerializer):
         model = Category
         fields = ("name_category",)
 
-    def create(self, validated_data):
-
-        category = Category.objects.create(**validated_data)
-
-        return category
-
-    def update(self, instance, validated_data):
-
-        instance.name_category = validated_data.get("name_category", instance.name_category)
-        instance.save()
-
-        return instance
-
 class OfferSerializer(ModelSerializer):
 
     class Meta:
@@ -120,19 +107,3 @@ class CreateUpdateOfferSerializer(ModelSerializer):
     class Meta:
         model = Offer
         fields = ("name_offer", "end_date", "percentage_discount")
-
-    def create(self, validated_data):
-
-        offer = Offer.objects.create(**validated_data)
-
-        return offer
-
-    def update(self, instance, validated_data):
-
-        instance.name_offer = validated_data.get("name_offer", instance.name_offer)
-        instance.end_date = validated_data.get("end_date", instance.end_date)
-        instance.percentage_discount = validated_data.get("percentage_discount", instance.percentage_discount)
-
-        instance.save()
-
-        return instance
