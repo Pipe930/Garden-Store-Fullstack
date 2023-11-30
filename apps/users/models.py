@@ -65,7 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         return self.first_name
 
-    def natural_key(self) -> Tuple[str]:
+    def natural_key(self):
         return (self.username,)
 
     def __str__(self) -> str:
@@ -89,21 +89,36 @@ class Subscription(models.Model):
     def __str__(self) -> str:
         return self.username
 
-# Profile Model
-class Profile(models.Model):
+class NewsLetterUser(models.Model):
 
-    id_profile = models.BigAutoField(primary_key=True)
-    run = models.PositiveIntegerField()
-    dv = models.CharField(max_length=1)
-    phone = models.PositiveIntegerField()
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    id_newsletter_user = models.BigAutoField(primary_key=True, editable=False)
+    email = models.EmailField(unique=True, max_length=255)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
 
-        db_table = "profile"
-        verbose_name = "profile"
-        verbose_name_plural = "profiles"
+        db_table = "newsletteruser"
+        verbose_name = "newsletteruser"
+        verbose_name_plural = "newsletterusers"
 
     def __str__(self) -> str:
-        return self.user.username
+        return self.email
+
+class NewsLetter(models.Model):
+
+    id_newsletter = models.BigAutoField(primary_key=True)
+    name_newsletter = models.CharField(max_length=255)
+    subject_newsletter = models.CharField(max_length=255)
+    body = models.TextField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    id_newsletter_user = models.ManyToManyField(NewsLetterUser)
+
+    class Meta:
+
+        db_table = "newsletter"
+        verbose_name = "newsletter"
+        verbose_name_plural = "newsletters"
+
+    def __str__(self) -> str:
+        return self.name_newsletter
 

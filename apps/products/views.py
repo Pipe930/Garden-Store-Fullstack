@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.db.models import Q
 from rest_framework.response import Response
 from .serializer import (
     ListCategorySerializer,
@@ -9,7 +10,7 @@ from .serializer import (
     CreateUpdateOfferSerializer)
 from .models import Category, Product, Offer
 from rest_framework import status, generics
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.parsers import FormParser, MultiPartParser
 from core.messages import (
     message_response_list,
@@ -100,7 +101,7 @@ class UpdateDetailCategoryView(generics.RetrieveUpdateAPIView):
 class ListCreateProductView(generics.ListCreateAPIView):
 
     queryset = Product.objects.all().order_by("created")
-    permission_classes = (IsAuthenticated, IsAdminUser)
+    permission_classes = (AllowAny,)
     parser_classes = (FormParser, MultiPartParser)
 
     def get(self, request, format=None):
@@ -190,6 +191,26 @@ class ListProductClientView(generics.ListAPIView):
         return Response(
             message_response_list(serializer.data, products.count()),
             status.HTTP_200_OK)
+
+class SearchProductView(generics.ListAPIView):
+
+    serializer_class = ListProductsSerializer
+
+    def get(self, request, format=None):
+
+        name_product = request.query_params.get("name_product")
+        category = request.query_params.get("category")
+
+        try:
+            queryset = Product.objects.filter(Q(name_product__icontains=name_product) | Q(category__name_category__icontains=category)).order_by("name_product")
+
+        except ValueError:
+
+            queryset = Product.objects.order_by("name_product").all()
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response({"data": serializer.data}, status.HTTP_200_OK)
 
 # ----------------------------- OFFER VIEWS --------------------------------
 

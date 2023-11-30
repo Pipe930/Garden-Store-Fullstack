@@ -170,6 +170,8 @@ CREATE TABLE EMPLOYEE(
     gender VARCHAR(20) NOT NULL CHECK(gender = 'masculino' OR gender = 'femenino' OR gender = 'otro'),
     email VARCHAR(255) NOT NULL UNIQUE,
     phone VARCHAR(12) NOT NULL UNIQUE,
+    run INT NOT NULL UNIQUE CHECK(LENGTH(CAST(run AS VARCHAR)) = 7 OR LENGTH(CAST(run AS VARCHAR)) = 8),
+    dv CHAR(1) NOT NULL,
     birthday DATE NOT NULL,
     date_contrat DATE DEFAULT (CURDATE()) NOT NULL,
     salary INT NOT NULL CHECK(salary >= 100000),
@@ -182,9 +184,9 @@ CREATE TABLE EMPLOYEE(
 
 );
 
-CREATE TABLE PURCHASE(
+CREATE TABLE VOUCHER(
 
-    id_purchase BIGINT NOT NULL AUTO_INCREMENT,
+    id_voucher BIGINT NOT NULL AUTO_INCREMENT,
     code_uuid VARCHAR(32) NOT NULL UNIQUE CHECK(length(code_uuid) = 32),
     created TIMESTAMP DEFAULT (NOW()) NOT NULL,
     state BIT DEFAULT 1 NOT NULL,
@@ -200,24 +202,24 @@ CREATE TABLE PURCHASE(
     id_branch BIGINT NULL,
     id_user BIGINT NOT NULL,
 
-    CONSTRAINT pk_purchase PRIMARY KEY (id_purchase),
-    CONSTRAINT fk_purchase_commune FOREIGN KEY (id_commune) REFERENCES COMMUNE(id_commune),
-    CONSTRAINT fk_purchase_branch FOREIGN KEY (id_branch) REFERENCES BRANCH(id_branch),
-    CONSTRAINT fk_purchase_user FOREIGN KEY (id_user) REFERENCES USER(id_user)
+    CONSTRAINT pk_voucher PRIMARY KEY (id_voucher),
+    CONSTRAINT fk_voucher_commune FOREIGN KEY (id_commune) REFERENCES COMMUNE(id_commune),
+    CONSTRAINT fk_voucher_branch FOREIGN KEY (id_branch) REFERENCES BRANCH(id_branch),
+    CONSTRAINT fk_voucher_user FOREIGN KEY (id_user) REFERENCES USER(id_user)
 );
 
-CREATE TABLE PURCHASE_ITEMS(
+CREATE TABLE VOUCHER_ITEMS(
 
-	  id_purchase_items BIGINT NOT NULL AUTO_INCREMENT,
+	  id_voucher_items BIGINT NOT NULL AUTO_INCREMENT,
     name_product VARCHAR(255) NOT NULL UNIQUE,
     price INT NOT NULL CHECK(price > 1000),
     quantity INT NOT NULL CHECK(quantity > 0),
-    id_purchase BIGINT NOT NULL,
+    id_voucher BIGINT NOT NULL,
     id_product BIGINT NOT NULL,
 
-    CONSTRAINT pk_purchase_items PRIMARY KEY (id_purchase_items),
-    CONSTRAINT fk_purchase_items_purchase FOREIGN KEY (id_purchase) REFERENCES PURCHASE(id_purchase),
-    CONSTRAINT fk_purchase_items_product FOREIGN KEY (id_product) REFERENCES PRODUCT(id_product)
+    CONSTRAINT pk_voucher_items PRIMARY KEY (id_voucher_items),
+    CONSTRAINT fk_voucher_items_voucher FOREIGN KEY (id_voucher) REFERENCES voucher(id_voucher),
+    CONSTRAINT fk_voucher_items_product FOREIGN KEY (id_product) REFERENCES PRODUCT(id_product)
 );
 
 CREATE TABLE WARRANTY(
@@ -227,11 +229,11 @@ CREATE TABLE WARRANTY(
     created TIMESTAMP DEFAULT (NOW()) NOT NULL,
     state BIT NOT NULL DEFAULT 1,
     id_product BIGINT NOT NULL,
-    id_purchase BIGINT NOT NULL,
+    id_voucher BIGINT NOT NULL,
 
     CONSTRAINT pk_warranty PRIMARY KEY (id_warranty),
     CONSTRAINT fk_warranty_product FOREIGN KEY (id_product) REFERENCES PRODUCT(id_product),
-    CONSTRAINT fk_warranty_purchase FOREIGN KEY (id_purchase) REFERENCES PURCHASE(id_purchase)
+    CONSTRAINT fk_warranty_voucher FOREIGN KEY (id_voucher) REFERENCES voucher(id_voucher)
 );
 
 CREATE TABLE NEWSLETTER_USER(
