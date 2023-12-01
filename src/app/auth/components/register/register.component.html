@@ -1,0 +1,60 @@
+<div class="container__container-fluid">
+  <h2 class="container-fuid__title">Registrarse <i class='bx bx-registered'></i></h2>
+  <form action="" class="container-fuid__form" novalidate [formGroup]="formRegister" (ngSubmit)="register()">
+    <fieldset class="form__control">
+      <input type="text" placeholder="Primer Nombre" class="form__input" formControlName="first_name">
+      <div class="form__container-errors" *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)">
+        <span class="form__errors" *ngIf="first_name.getError('required')">Este campo es requerido</span>
+        <span class="form__errors" *ngIf="first_name.getError('minlength')">Tiene que ser minimo de 4 caracteres</span>
+        <span class="form__errors" *ngIf="first_name.getError('maxlength')">Tiene que ser maximo de 20 caracteres</span>
+      </div>
+    </fieldset>
+    <fieldset class="form__control">
+      <input type="text" placeholder="Segundo Nombre" class="form__input" formControlName="last_name">
+      <div class="form__container-errors" *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)">
+        <span class="form__errors" *ngIf="last_name.getError('required')">Este campo es requerido</span>
+        <span class="form__errors" *ngIf="last_name.getError('minlength')">Tiene que ser minimo de 4 caracteres</span>
+        <span class="form__errors" *ngIf="last_name.getError('maxlength')">Tiene que ser maximo de 20 caracteres</span>
+      </div>
+    </fieldset>
+    <fieldset class="form__control">
+      <input type="text" placeholder="Usuario" class="form__input" formControlName="username">
+      <div class="form__container-errors" *ngIf="username.invalid && (username.dirty || username.touched)">
+        <span class="form__errors" *ngIf="username.getError('required')">Este campo es requerido</span>
+        <span class="form__errors" *ngIf="username.getError('minlength')">Tiene que ser minimo de 4 caracteres</span>
+        <span class="form__errors" *ngIf="username.getError('maxlength')">Tiene que ser maximo de 60 caracteres</span>
+      </div>
+      <!-- <span class="form__errors">{{get_servive.message_error_username}}</span> -->
+    </fieldset>
+    <fieldset class="form__control">
+      <input type="email" placeholder="Correo" class="form__input" formControlName="email">
+      <div class="form__container-errors" *ngIf="email.invalid && (email.dirty || email.touched)">
+        <span class="form__errors" *ngIf="email.getError('invalidEmail')">Tiene que ingresar un correo valido</span>
+        <span class="form__errors" *ngIf="email.getError('maxlength')">Tiene que ser maximo de 255 caracteres</span>
+      </div>
+      <!-- <span class="form__errors">{{get_servive.message_error_email}}</span> -->
+    </fieldset>
+    <fieldset class="form__control">
+      <input type="password" placeholder="Contraseña" class="form__input" formControlName="password">
+      <div class="form__container-errors" *ngIf="password.invalid && (password.dirty || password.touched)">
+        <span class="form__errors" *ngIf="password.getError('required')">Este campo es requerido</span>
+        <span class="form__errors" *ngIf="password.getError('minlength')">Tiene que ser minimo de 8 caracteres</span>
+        <span class="form__errors" *ngIf="password.getError('maxlength')">Tiene que ser maximo de 32 caracteres</span>
+      </div>
+    </fieldset>
+    <fieldset class="form__control">
+      <input type="password" placeholder="Confirmar Contraseña" class="form__input" formControlName="re_password">
+      <div class="form__container-errors" *ngIf="re_password.invalid && (re_password.dirty || re_password.touched)">
+        <span class="form__errors" *ngIf="re_password.getError('required')">Este campo es requerido</span>
+        <span class="form__errors" *ngIf="re_password.getError('minlength')">Tiene que ser minimo de 8 caracteres</span>
+        <span class="form__errors" *ngIf="re_password.getError('maxlength')">Tiene que ser maximo de 32 caracteres</span>
+      </div>
+      <span class="form__errors" *ngIf="formRegister.hasError('passordsDontMatch') && (re_password.dirty || re_password.touched)">Las contraseñas no coinciden</span>
+      <!-- <span *ngFor="let message of get_servive.message_error_password">
+        {{message}}
+      </span> -->
+    </fieldset>
+    <button type="submit" class="form__btn">Registrarse</button>
+    <a href="" [routerLink]="['/auth/login']" class="form__link">Ya tengo una cuenta</a>
+  </form>
+</div>

@@ -1,0 +1,79 @@
+@import '/src/themes/variables.scss';
+
+.container__container-fluid{
+
+  width: 30rem;
+  margin: 4rem 0;
+  padding: 2.4rem;
+  background-color: $color-light;
+  box-shadow: 5px 5px 10px -5px $color-dark;
+
+  .container-fuid__title{
+
+    text-align: center;
+    color: $color-dark;
+    margin-bottom: 0.8rem;
+    font-size: 1.8rem;
+  }
+
+  .container-fuid__form{
+
+    .form__control{
+      margin-top: 2rem;
+
+      .form__input{
+
+        width: 100%;
+        background-color: $color-light;
+        padding: 0.5rem;
+        border: none;
+        border-bottom: 2px solid $color-medium;
+      }
+
+      .form__container-errors{
+
+        .form__errors{
+          margin-top: 0.3rem;
+          color: $color-danger;
+        }
+      }
+      .form__errors{
+        margin-top: 0.3rem;
+        color: $color-danger;
+      }
+    }
+
+    .form__btn{
+
+      padding: 0.6rem 1rem;
+      width: 100%;
+      margin-top: 3rem;
+      background-color: $color-success;
+      color: $color-light;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all .3s ease-in-out;
+    }
+
+    .form__btn:hover{
+      background-color: $color-success-600;
+    }
+
+    .form__btn:active{
+      background-color: $color-success-700;
+    }
+
+    .form__link{
+      margin-top: 1.4rem;
+      text-align: center;
+      text-decoration: underline;
+      transition: all .3s ease-in-out;
+    }
+
+    .form__link:hover{
+      color: $color-success-600;
+    }
+
+  }
+}

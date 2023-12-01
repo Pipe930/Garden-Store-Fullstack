@@ -1,0 +1,87 @@
+@import '/src/themes/variables.scss';
+
+.container__container-fluid{
+
+  width: 30rem;
+  padding: 2.4rem;
+  background-color: $color-light;
+  box-shadow: 5px 5px 10px -5px $color-dark;
+
+  @media screen and (max-width: 530px) {
+    width: 100%;
+  }
+
+  .container-fuid__title{
+
+    text-align: center;
+    color: $color-dark;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+  }
+
+  .container-fuid__form{
+
+    .form__control{
+      margin-top: 2rem;
+
+      .form__input{
+
+        width: 100%;
+        padding: 0.5rem;
+        background-color: $color-light;
+        border: none;
+        border-bottom: 2px solid $color-medium;
+      }
+
+      .form__container-errors{
+
+        .form__errors{
+          margin-top: 0.3rem;
+          color: $color-danger;
+        }
+      }
+
+    }
+
+    .form__buttons{
+
+      .form__link{
+        margin: 1.4rem 0;
+        color: $color-dark;
+        transition: all .3s ease-in-out;
+        text-decoration: underline;
+        display: inline-block;
+      }
+
+      .form__link:hover{
+        color: $color-success-600;
+      }
+
+      .form__parraf{
+        text-align: center;
+      }
+
+      .form__btn{
+
+        padding: 0.6rem 1rem;
+        width: 100%;
+        background-color: $color-success;
+        color: $color-light;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all .3s ease-in-out;
+      }
+
+      .form__btn:hover{
+
+        background-color: $color-success-600;
+      }
+
+      .form__btn:active{
+
+        background-color: $color-success-700;
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="container__container-fluid">
+    <h2 class="container-fuid__title">Iniciar Sesión <i class='bx bx-log-in'></i></h2>
+    <form action="" class="container-fuid__form" novalidate [formGroup]="formLogin" (ngSubmit)="login()">
+      <fieldset class="form__control">
+        <input type="email" placeholder="Correo" class="form__input" id="email_id" formControlName="email">
+        <div class="form__container-errors" *ngIf="email.invalid && (email.dirty || email.touched)">
+          <span class="form__errors" *ngIf="email.getError('invalidEmail')">Tiene que ingresar un correo valido</span>
+          <span class="form__errors" *ngIf="email.getError('maxlength')">Tiene que ser maximo de 255 caracteres</span>
+        </div>
+      </fieldset>
+      <fieldset class="form__control">
+        <input type="password" placeholder="Contraseña" class="form__input" id="password_id" formControlName="password">
+        <div class="form__container-errors" *ngIf="password.invalid && (password.dirty || password.touched)">
+          <span class="form__errors" *ngIf="password.getError('required')">Este campo es requerido</span>
+          <span class="form__errors" *ngIf="password.getError('minlength')">Tiene que ser minimo de 8 caracteres</span>
+          <span class="form__errors" *ngIf="password.getError('maxlength')">Tiene que ser maximo de 32 caracteres</span>
+        </div>
+      </fieldset>
+      <div class="form__buttons">
+        <a href="" [routerLink]="['/auth/reset-password']" class="form__link">Olvide mi contraseña</a>
+        <button type="submit" class="form__btn">Iniciar</button>
+        <p class="form__parraf">¿No tienes cuenta?, <a href="" [routerLink]="['/auth/register']" class="form__link form__link--center">Registrate Aqui</a></p>
+      </div>
+    </form>
+  </div>
+</div>
