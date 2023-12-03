@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -12,7 +12,7 @@ import { ValidatorService } from 'src/app/shared/services/validator.service';
   templateUrl: './reset-password-confirm.component.html',
   styleUrls: ['./reset-password-confirm.component.scss']
 })
-export class ResetPasswordConfirmComponent implements OnInit {
+export class ResetPasswordConfirmComponent {
 
   public formResetPassword: FormGroup;
   private uid: string = "";
@@ -37,10 +37,6 @@ export class ResetPasswordConfirmComponent implements OnInit {
       validators: this.validator.comparePasswords("password", "re_password")
     })
    }
-
-  ngOnInit(): void {
-
-  }
 
   public resetPassword():void{
 

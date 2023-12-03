@@ -13,6 +13,10 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(module => module.AuthModule)
   },
   {
+    path: "",
+    loadChildren: () => import('./pages/pages.module').then(module => module.PagesModule)
+  },
+  {
     path: "**",
     pathMatch: "full",
     component: PageNotFoundComponent

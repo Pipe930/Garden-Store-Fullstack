@@ -1,0 +1,108 @@
+@import '/src/themes/variables.scss';
+
+.navbar{
+
+  width: 100%;
+  padding: 1.2rem 0;
+  background-color: $color-light;
+  box-shadow: 0 10px 10px -8px rgba(0, 0, 0, 0.2);
+
+  .navbar__container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    width: 70rem;
+
+    @media screen and (max-width: 1100px) {
+
+      width: 90%;
+
+    }
+
+    .navbar__container-right{
+
+      .navbar__list{
+        display: flex;
+
+        // @media screen and (max-width: 700px) {
+        //   position: absolute;
+        //   top: 100px;
+        // }
+
+        .navbar__icon{
+          margin-right: 1.2rem;
+        }
+
+        .navbar__item{
+          margin: 0 0.6rem;
+          color: $color-dark;
+          --clippy: polygon(0 0, 0 0, 0 100%, 0% 100%);
+          font-size: 1rem;
+          font-weight: bold;
+
+          .navbar__link{
+
+            display: flex;
+
+            .navbar__item-icon{
+              font-size: 1.4rem;
+            }
+          }
+
+        }
+
+        .navbar__item::after{
+          content: '';
+          display: block;
+          background-color: $color-dark;
+          width: 100%;
+          margin-top: 0.1rem;
+          height: 3px;
+          clip-path: var(--clippy);
+          transition: clip-path .3s;
+        }
+
+        .navbar__item:hover{
+          --clippy: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+      }
+    }
+
+    .navbar__container-left{
+
+      .navbar__container-btns{
+
+        display: flex;
+
+        .navbar__btn-login{
+
+            padding: 0.5rem 1rem;
+            background-color: $color-dark;
+            color: $color-light;
+            cursor: pointer;
+            border-radius: 0.4rem;
+            border: none;
+            font-size: 0.9rem;
+            transition: all .3s ease-in-out;
+        }
+
+        .navbar__btn-login:hover{
+
+          background-color: $color-dark-800;
+        }
+
+        .navbar__btn-theme{
+
+          border: none;
+          background-color: $color-light;
+          display: flex;
+          align-items: center;
+          margin-left: 1.2rem;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+}

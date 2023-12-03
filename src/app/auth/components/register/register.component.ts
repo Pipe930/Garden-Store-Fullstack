@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ValidatorService } from 'src/app/shared/services/validator.service';
 import { AuthService } from '../../services/auth.service';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
   public formRegister: FormGroup;
 
@@ -46,10 +46,6 @@ export class RegisterComponent implements OnInit {
       this.route.navigate(['auth/login']);
 
     }, (error) => this.alert.error("Error Registro", "La cuenta no se registro correctamente"))
-  }
-
-  ngOnInit(): void {
-
   }
 
   get first_name(){

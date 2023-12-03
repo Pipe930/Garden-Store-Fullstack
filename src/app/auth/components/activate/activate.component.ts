@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -9,7 +9,7 @@ import { AlertsService } from 'src/app/shared/services/alerts.service';
   templateUrl: './activate.component.html',
   styleUrls: ['./activate.component.scss']
 })
-export class ActivateComponent implements OnInit {
+export class ActivateComponent {
 
   private uid: string = "";
   private token: string = "";
@@ -25,10 +25,6 @@ export class ActivateComponent implements OnInit {
       this.token = params["token"];
     })
    }
-
-  ngOnInit(): void {
-
-  }
 
   public activateAcount():void{
 

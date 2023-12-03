@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -10,7 +10,7 @@ import { ValidatorService } from 'src/app/shared/services/validator.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   public formLogin: FormGroup;
 
@@ -26,10 +26,6 @@ export class LoginComponent implements OnInit {
       password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
     })
    }
-
-  ngOnInit(): void {
-
-  }
 
   public login():void{
 

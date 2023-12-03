@@ -1,0 +1,27 @@
+<nav class="navbar">
+  <div class="navbar__container">
+    <div class="navbar__container-right">
+      <ul class="navbar__list">
+        <span class="navbar__icon">
+          <a href="" [routerLink]="['home']">Garden Store</a>
+        </span>
+        <li *ngFor="let object of ObjectsNavbar" class="navbar__item">
+          <a href="" [routerLink]="[object.link]" class="navbar__link">
+            <i [class]="object.icon" class="navbar__item-icon"></i>
+            {{object.name}}
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="navbar__container-left">
+      <div class="navbar__container-btns">
+        <button class="navbar__btn-login" [routerLink]="['auth/login']" *ngIf="!sessionActivate">Ingresar</button>
+        <button class="navbar__btn-profile" [routerLink]="" *ngIf="sessionActivate">Perfil</button>
+        <button class="navbar__btn-theme" (click)="themeChange()">
+          <i class='bx bxs-sun bx-sm' *ngIf="!themeNavbar"></i>
+          <i class='bx bxs-moon bx-sm' *ngIf="themeNavbar"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

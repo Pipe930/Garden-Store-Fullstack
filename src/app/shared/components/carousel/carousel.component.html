@@ -1,0 +1,37 @@
+<div class="carousel" *ngIf="images && images.length > 0">
+
+  <div class="carousel__container-title">
+    <h1 class="carousel__title">Bienvenido a Garden Store</h1>
+    <p class="carousel__text">Encontraras los mejores productos de jardinería</p>
+  </div>
+
+  <div class="carousel__container-img">
+    <img
+    [src]="image.src"
+    alt="image carousel"
+    *ngFor="let image of images; let i = index"
+    [ngClass]="{'image-active': selectedIndex === i}"
+    class="carousel__image"
+    >
+  </div>
+
+  <div *ngIf="indicator" class="carousel__btn-container">
+    <button *ngFor="let dot of images; let i = index"
+    class="carousel__btn"
+    [ngClass]="{'active': selectedIndex === i}"
+    (click)="selectedImage(i)"
+    >
+    </button>
+  </div>
+
+  <button
+  class="carousel__btn-prev carousel__btn-prev--position"
+  (click)="prevClick()">
+    <i class='bx bxs-chevron-left bx-lg carousel__btn-icon'></i>
+  </button>
+  <button
+  class="carousel__btn-next carousel__btn-next--position"
+  (click)="nextClick()">
+    <i class='bx bx-chevron-right bx-lg carousel__btn-icon'></i>
+  </button>
+</div>
