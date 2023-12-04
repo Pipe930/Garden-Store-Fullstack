@@ -2,11 +2,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView
 from django.http import Http404
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from .utils import Util
 from .models import Subscription
 from .serializer import (
     CreateSubscriptionSerializer,
-    ListSubscriptionSerializer)
+    ListSubscriptionSerializer,
+    MessageSerializer)
 from core.messages import (
     message_response_created,
     message_response_bad_request,
@@ -69,3 +71,21 @@ class DeleteDetailSubscriptionView(RetrieveDestroyAPIView):
         subscription.delete()
 
         return Response({"status": "No Content", "message": "La subscripcion se elimino correctamente"},status.HTTP_204_NO_CONTENT)
+
+# View for mailing
+class SendEmailView(CreateAPIView):
+
+    serializer_class = MessageSerializer
+    permission_classes = (AllowAny,)
+
+    # Petition POST
+    def post(self, request, format=None):
+
+        serializer = self.get_serializer(data=request.data) # The data is serialized
+
+        if not serializer.is_valid(): # The information is validated
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+        Util.send_email(data=serializer.data) # The method of the util send email class is used
+        return Response({"status": "OK","data": serializer.data, "message": "El correo se a enviado con exito"}, status.HTTP_200_OK)
+

@@ -55,7 +55,11 @@ form, input, select, textarea, button, label{
   color: inherit;
 }
 
-input:focus{
+textarea{
+  resize: none;
+}
+
+input:focus, textarea:focus{
   outline: none;
 }
 

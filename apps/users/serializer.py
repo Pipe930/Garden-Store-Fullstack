@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, StringRelatedField
+from rest_framework.serializers import ModelSerializer, StringRelatedField, Serializer, CharField, EmailField
 from .models import User, Subscription
 from djoser.serializers import UserCreateSerializer
 
@@ -31,3 +31,11 @@ class ListSubscriptionSerializer(ModelSerializer):
 
         model = Subscription
         fields = ("id_subscription", "created", "status", "mount", "user")
+
+# Send mail serializer
+class MessageSerializer(Serializer):
+
+    # Required attributes
+    full_name = CharField(max_length=60)
+    email = EmailField()
+    message = CharField(max_length=255)

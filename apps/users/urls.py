@@ -5,3 +5,7 @@ urlsSubcriptions = [
     path("created", views.CreateSubscriptionView.as_view(), name="createdsubscription"),
     path("subscription/<int:id>", views.DeleteDetailSubscriptionView.as_view(), name="retrievedeletesubscription")
 ]
+
+urlsUsers = [
+    path("sendEmail/", views.SendEmailView.as_view(), name="sendEmail")
+]
