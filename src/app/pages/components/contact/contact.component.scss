@@ -35,7 +35,7 @@
         .form__input,
         .form__textarea{
 
-          width: 50%;
+          width: 70%;
           background-color: $color-light;
           border: 1px solid $color-dark-400;
           padding: 0.5rem;
@@ -75,4 +75,39 @@
       }
     }
   }
+}
+
+@media (max-width: 750px) {
+
+  .container{
+
+    padding: 5rem 1.6rem;
+    .container__container-fluid{
+
+      padding: 2rem;
+
+      .container__title{
+        text-align: center;
+        padding-bottom: 1rem;
+      }
+
+      .container__form{
+
+        .form__control{
+
+          .form__input,
+          .form__textarea{
+
+            width: 100%;
+          }
+        }
+
+        .form__btn{
+
+          width: 100%;
+        }
+      }
+    }
+  }
+
 }

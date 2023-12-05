@@ -14,12 +14,13 @@
     position: absolute;
     z-index: 10;
     inset: 0;
-    top: 13rem;
+    top: 14rem;
     margin: auto;
 
     .carousel__title,
     .carousel__text{
       color: white;
+
     }
 
   }
@@ -135,4 +136,21 @@
     right: 0;
   }
 
+}
+
+@media (max-width: 700px) {
+
+  .carousel{
+
+    .carousel__container-title{
+      padding: 0 1rem;
+
+      .carousel__title{
+        font-size: 1.2rem;
+      }
+      .carousel__text{
+        font-size: 0.8rem;
+      }
+    }
+  }
 }

@@ -1,5 +1,7 @@
 @import '/src/themes/variables.scss';
 
+$screen-size-phone: 750px;
+
 .footer{
   background-color: $color-light;
 
@@ -12,10 +14,28 @@
     justify-content: space-between;
     align-items: center;
 
+    @media (max-width: $screen-size-phone) {
+      display: block;
+      padding: 1.2rem 1rem;
+    }
+
     .container-primary__container-left{
+
 
       .container-left__list{
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        @media (max-width: $screen-size-phone) {
+            margin-top: 2rem;
+            flex-wrap: wrap;
+
+            .list__link{
+                margin: 1rem 0;
+            }
+        }
+
 
         .list__item{
 
@@ -43,10 +63,21 @@
     display: flex;
     justify-content: space-between;
 
+    @media (max-width: $screen-size-phone) {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     .container-secondary__info{
 
       display: flex;
       gap: 5rem;
+
+      @media (max-width: $screen-size-phone) {
+        margin-bottom: 4rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
 
       .container-secondary__client-service,
       .container-secondary__garden-store{
@@ -93,5 +124,11 @@
     width: 90%;
     margin: auto;
     padding-bottom: 2rem;
+
+
+    @media (max-width: $screen-size-phone) {
+      margin-top: 2rem;
+      text-align: center;
+    }
   }
 }

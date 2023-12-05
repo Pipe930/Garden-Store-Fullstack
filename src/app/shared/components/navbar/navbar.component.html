@@ -1,9 +1,15 @@
 <nav class="navbar">
   <div class="navbar__container">
+    <button class="navbar__btn-op-menu" (click)="openNavbar()">
+      <i class='bx bx-menu bx-md'></i>
+    </button>
     <div class="navbar__container-right">
       <ul class="navbar__list">
         <span class="navbar__icon">
           <a href="" [routerLink]="['home']">Garden Store</a>
+          <button (click)="closeNavbar()" class="navbar__btn-cl-menu">
+            <i class='bx bx-x bx-md'></i>
+          </button>
         </span>
         <li *ngFor="let object of ObjectsNavbar" class="navbar__item">
           <a href="" [routerLink]="[object.link]" class="navbar__link">

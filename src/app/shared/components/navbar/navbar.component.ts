@@ -11,13 +11,22 @@ export class NavbarComponent implements OnInit {
   @Input() public sessionActivate: boolean = false;
   @Input() public ObjectsNavbar: Array<Navbar> = [];
   @Output() public eventThemeNavbar = new EventEmitter<boolean>();
-
   public themeNavbar: boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
     this.eventThemeNavbar.emit(this.themeNavbar);
+  }
+
+  public openNavbar():void{
+    let containerNavbar = document.querySelector(".navbar__container-right");
+    containerNavbar?.classList.add("visible");
+  }
+
+  public closeNavbar():void{
+    let containerNavbar = document.querySelector(".navbar__container-right");
+    containerNavbar?.classList.remove("visible");
   }
 
   public themeChange():void{
