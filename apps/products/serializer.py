@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, StringRelatedField
+from rest_framework.serializers import ModelSerializer, StringRelatedField, Serializer, IntegerField, CharField, SerializerMethodField
 from .models import Category, Product, Offer
 from .discount import discount
 
@@ -28,6 +28,7 @@ class ListProductsSerializer(ModelSerializer):
 
     category = StringRelatedField()
     offer = OfferSerializer(many=False)
+    image = SerializerMethodField(method_name="get_image")
 
     class Meta:
 
@@ -45,6 +46,9 @@ class ListProductsSerializer(ModelSerializer):
             "description",
             "category",
             "offer")
+
+    def get_image(self, product: Product):
+        return product.image.url
 
 # Create and Update Products Serializer
 class CreateUpdateProductSerializer(ModelSerializer):
@@ -107,3 +111,8 @@ class CreateUpdateOfferSerializer(ModelSerializer):
     class Meta:
         model = Offer
         fields = ("name_offer", "end_date", "percentage_discount")
+
+class SearchProductSerialzer(Serializer):
+
+    id_category = IntegerField()
+    name_product = CharField(allow_blank=True)

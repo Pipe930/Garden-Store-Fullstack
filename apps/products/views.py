@@ -1,17 +1,21 @@
+import base64
 from django.http import Http404
 from django.db.models import Q
 from rest_framework.response import Response
+from django.core.files.base import ContentFile
 from .serializer import (
     ListCategorySerializer,
     CreateUpdateCategorySerializer,
     ListProductsSerializer,
     CreateUpdateProductSerializer,
     ListOfferSerializer,
-    CreateUpdateOfferSerializer)
+    CreateUpdateOfferSerializer,
+    SearchProductSerialzer)
 from .models import Category, Product, Offer
 from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.pagination import PageNumberPagination
 from core.messages import (
     message_response_list,
     message_response_created,
@@ -59,8 +63,6 @@ class ListCreateCategoryView(generics.ListCreateAPIView):
 # Update a obtain category View
 class UpdateDetailCategoryView(generics.RetrieveUpdateAPIView):
 
-    # permission_classes = (IsAuthenticated, IsAdminUser)
-
     def get_object(self, id:int):
 
         try:
@@ -101,8 +103,7 @@ class UpdateDetailCategoryView(generics.RetrieveUpdateAPIView):
 class ListCreateProductView(generics.ListCreateAPIView):
 
     queryset = Product.objects.all().order_by("created")
-    permission_classes = (AllowAny,)
-    parser_classes = (FormParser, MultiPartParser)
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get(self, request, format=None):
 
@@ -120,6 +121,15 @@ class ListCreateProductView(generics.ListCreateAPIView):
 
     def post(self, request, format=None):
 
+        try:
+            imagen_base64 = request.data["image"]
+            if imagen_base64 != "":
+                format, img = imagen_base64.split(';base64,')
+                ext = format.split('/')[-1]
+                request.data['image'] = ContentFile(base64.b64decode(img), name=f'image_product.{ext}')
+        except KeyError:
+            return Response({"status": "Bad Request", "message": "Tiene que ingresar una imagen"})
+
         serializer = CreateUpdateProductSerializer(data=request.data)
 
         if not serializer.is_valid():
@@ -136,7 +146,6 @@ class ListCreateProductView(generics.ListCreateAPIView):
 # Update a obtain product View
 class UpdateDetailProductView(generics.RetrieveUpdateAPIView):
 
-    parser_classes = (FormParser, MultiPartParser)
     permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get_object(self, id:int):
@@ -149,6 +158,15 @@ class UpdateDetailProductView(generics.RetrieveUpdateAPIView):
         return product
 
     def update(self, request, id:int, format=None):
+
+        try:
+            imagen_base64 = request.data["image"]
+            if imagen_base64 != "":
+                format, img = imagen_base64.split(';base64,')
+                ext = format.split('/')[-1]
+                request.data['image'] = ContentFile(base64.b64decode(img), name=f'image_product.{ext}')
+        except KeyError:
+            return Response({"status": "Bad Request", "message": "Tiene que ingresar una imagen"})
 
         product = self.get_object(id)
         serializer = CreateUpdateProductSerializer(product, data=request.data)
@@ -176,41 +194,58 @@ class UpdateDetailProductView(generics.RetrieveUpdateAPIView):
 # List Product a Clients View
 class ListProductClientView(generics.ListAPIView):
 
-    queryset = Product.objects.filter(aviable=True).order_by("name_product")
+    pagination_class = PageNumberPagination
 
     def get(self, request, format=None):
 
-        products = self.get_queryset()
-        serializer = ListProductsSerializer(products, many=True)
+        products = Product.objects.all().order_by("name_product")
+        page = self.paginate_queryset(products)
+        serializer = ListProductsSerializer(page, many=True)
 
         if not products.exists():
             return Response(
                 message_response_no_content("productos registrados"),
                 status.HTTP_204_NO_CONTENT)
 
-        return Response(
-            message_response_list(serializer.data, products.count()),
-            status.HTTP_200_OK)
+        return self.get_paginated_response(serializer.data)
 
-class SearchProductView(generics.ListAPIView):
+class SearchProductView(generics.CreateAPIView):
 
     serializer_class = ListProductsSerializer
+    pagination_class = PageNumberPagination
+    permission_classes = (AllowAny,)
 
-    def get(self, request, format=None):
+    def post(self, request, format=None):
 
-        name_product = request.query_params.get("name_product")
-        category = request.query_params.get("category")
+        serializer_search = SearchProductSerialzer(data=request.data)
 
-        try:
-            queryset = Product.objects.filter(Q(name_product__icontains=name_product) | Q(category__name_category__icontains=category)).order_by("name_product")
+        if not serializer_search.is_valid():
+            return Response(
+                {"status": "Bad Request", "errors": serializer_search.errors},
+                status.HTTP_400_BAD_REQUEST)
 
-        except ValueError:
+        name_product = serializer_search.validated_data["name_product"]
+        category_id = serializer_search.validated_data["id_category"]
 
-            queryset = Product.objects.order_by("name_product").all()
+        search_products = Product.objects.filter(Q(name_product__icontains=name_product)).order_by("name_product")
 
-        serializer = self.get_serializer(queryset, many=True)
+        if category_id == 0:
 
-        return Response({"data": serializer.data}, status.HTTP_200_OK)
+            page = self.paginate_queryset(search_products)
+            serializer = self.get_serializer(page, many=True)
+
+            return self.get_paginated_response(serializer.data)
+
+        if not Category.objects.filter(id_category=category_id).exists():
+            return Response({"status": "Not Found", "message": "Esta categoria no existe"}, status.HTTP_404_NOT_FOUND)
+
+        category = Category.objects.get(id_category= category_id)
+
+        search_results = search_products.filter(category=category).order_by("name_product")
+        page = self.paginate_queryset(search_results)
+        serializer = self.get_serializer(page, many=True)
+
+        return self.get_paginated_response(serializer.data)
 
 # ----------------------------- OFFER VIEWS --------------------------------
 
