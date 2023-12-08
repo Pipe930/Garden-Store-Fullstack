@@ -1,5 +1,17 @@
 @import '/src/themes/variables.scss';
 
+.modoOscuro{
+
+  background: $color-dark !important;
+  color: $color-light !important;
+}
+
+.modeDarkBtn{
+
+  color: $color-light !important;
+  border: 1px solid $color-light !important;
+}
+
 .navbar{
 
   width: 100%;
@@ -97,6 +109,30 @@
 
           background-color: $color-dark-800;
         }
+        .navbar__container-login{
+
+          display: flex;
+
+          .navbar__btn-profile,
+          .navbar__btn-cart{
+
+            padding: 0.5rem 0;
+            font-weight: 900;
+            border: none;
+            margin-left: 1rem;
+            background-color: $color-light;
+            color: $color-dark;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+
+            i{
+              font-size: 1.4rem;
+            }
+          }
+
+        }
+
 
         .navbar__btn-theme{
 

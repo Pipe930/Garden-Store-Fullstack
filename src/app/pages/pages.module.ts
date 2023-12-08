@@ -9,13 +9,16 @@ import { HomeComponent } from './components/home/home.component';
 import { SharedModule } from '../shared/shared.module';
 import { ContactComponent } from './components/contact/contact.component';
 import { PagesService } from './services/pages.service';
+import { ListProductsComponent } from './components/list-products/list-products.component';
+import { ProductsService } from './services/products.service';
 
 
 @NgModule({
   declarations: [
     PagesComponent,
     HomeComponent,
-    ContactComponent
+    ContactComponent,
+    ListProductsComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +28,8 @@ import { PagesService } from './services/pages.service';
     HttpClientModule
   ],
   providers: [
-    PagesService
+    PagesService,
+    ProductsService
   ]
 })
 export class PagesModule { }

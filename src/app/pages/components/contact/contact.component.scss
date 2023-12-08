@@ -46,6 +46,7 @@
         .form__input:focus, .form__textarea:focus{
 
           border: 1px solid $color-dark-700;
+          box-shadow: 0 0 8px $color-dark-300;
         }
 
         .form__container-errors{

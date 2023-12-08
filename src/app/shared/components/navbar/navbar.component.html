@@ -1,4 +1,6 @@
-<nav class="navbar">
+<nav class="navbar" [ngClass]="{
+  modoOscuro:showClass
+}">
   <div class="navbar__container">
     <button class="navbar__btn-op-menu" (click)="openNavbar()">
       <i class='bx bx-menu bx-md'></i>
@@ -12,7 +14,9 @@
           </button>
         </span>
         <li *ngFor="let object of ObjectsNavbar" class="navbar__item">
-          <a href="" [routerLink]="[object.link]" class="navbar__link">
+          <a href="" [routerLink]="[object.link]" class="navbar__link" [ngClass]="{
+            modoOscuro:showClass
+          }">
             <i [class]="object.icon" class="navbar__item-icon"></i>
             {{object.name}}
           </a>
@@ -21,9 +25,26 @@
     </div>
     <div class="navbar__container-left">
       <div class="navbar__container-btns">
-        <button class="navbar__btn-login" [routerLink]="['auth/login']" *ngIf="!sessionActivate">Ingresar</button>
-        <button class="navbar__btn-profile" [routerLink]="" *ngIf="sessionActivate">Perfil</button>
-        <button class="navbar__btn-theme" (click)="themeChange()">
+        <button class="navbar__btn-login" [routerLink]="['auth/login']" *ngIf="!sessionActivate"[ngClass]="{
+          modeDarkBtn:showClass
+        }">Ingresar</button>
+        <div class="navbar__container-login" *ngIf="sessionActivate">
+          <button class="navbar__btn-profile" [routerLink]="" [ngClass]="{
+            modoOscuro:showClass
+          }">
+            <i class='bx bxs-user'></i>
+            Mi Cuenta
+          </button>
+          <button class="navbar__btn-cart" [routerLink]="" [ngClass]="{
+            modoOscuro:showClass
+          }">
+            <i class='bx bxs-cart'></i>
+            Carrito
+          </button>
+        </div>
+        <button class="navbar__btn-theme" (click)="showClass = !showClass" (click)="themeChange()" [ngClass]="{
+          modoOscuro:showClass
+        }">
           <i class='bx bxs-sun bx-sm' *ngIf="!themeNavbar"></i>
           <i class='bx bxs-moon bx-sm' *ngIf="themeNavbar"></i>
         </button>

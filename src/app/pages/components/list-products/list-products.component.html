@@ -1,0 +1,55 @@
+<main class="container-main">
+  <div class="container-main__continaer-inputs">
+    <div class="contianer-inputs__container-search">
+      <input placeholder="Buscar..." type="search" id="search_product" class="continaer-inputs__search">
+      <button (click)="searchProduct()" class="continaer-inputs__btn-search">
+        <i class='bx bx-search-alt-2'></i>
+      </button>
+    </div>
+    <div class="container-inputs__container-filter">
+      <select name="" id="select_category" class="continaer-inputs__select">
+        <option value="0">Categoria</option>
+        <option [value]="category.id_category" *ngFor="let category of listCategories">{{category.name_category}}</option>
+      </select>
+      <button (click)="searchProduct()" class="continaer-inputs__btn-filter">
+        <i class='bx bxs-filter-alt'></i>
+        Filtrar
+      </button>
+    </div>
+  </div>
+
+  <div class="container-main__container-main-products">
+    <div class="container-main__container-products">
+      <h2 class="container-products__title">Productos</h2>
+      <hr>
+      <div class="container-products__products" *ngIf="listProducts">
+
+        <article *ngFor="let product of listProducts" class="products__product">
+          <picture>
+            <img [src]="urlApi + product.image" alt="imagen de producto">
+          </picture>
+          <div class="product__body">
+            <h2 class="product__title">{{product.name_product}}</h2>
+            <p class="product__price">${{product.price}}</p>
+            <p class="product__description">{{product.description}}</p>
+            <button class="product__btn">
+              Ver
+            </button>
+          </div>
+        </article>
+
+    </div>
+
+    </div>
+    <div class="container-main__container-btn-pages">
+      <button (click)="previousPage()" [disabled]="getService.disablePrevious" class="container-main__btn-previous">
+        <i class='bx bx-left-arrow-alt bx-md'></i>
+      </button>
+      <p class="container-main__page-number">{{pageNumber}}</p>
+      <button (click)="nextPage()" [disabled]="getService.disableNext" class="container-main__btn-next">
+        <i class='bx bx-right-arrow-alt bx-md'></i>
+      </button>
+    </div>
+  </div>
+</main>
+

@@ -12,6 +12,10 @@ export class NavbarComponent implements OnInit {
   @Input() public ObjectsNavbar: Array<Navbar> = [];
   @Output() public eventThemeNavbar = new EventEmitter<boolean>();
   public themeNavbar: boolean = false;
+  public modeOriginal:string = "Normal";
+  public modeDark:string = "Oscuro";
+  public mode:string = this.modeOriginal;
+  public showClass:boolean = false;
 
   constructor() { }
 
@@ -30,6 +34,12 @@ export class NavbarComponent implements OnInit {
   }
 
   public themeChange():void{
+
+    if(this.mode === this.modeOriginal){
+      this.mode = this.modeDark;
+    } else {
+      this.mode = this.modeOriginal;
+    }
 
     if(!this.themeNavbar){
       this.themeNavbar = true;
