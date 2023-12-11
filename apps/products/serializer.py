@@ -35,10 +35,11 @@ class ListProductsSerializer(ModelSerializer):
         model = Product
         fields = (
             "id_product",
-            "name_product",
+            "title",
             "price",
             "discount_price",
             "stock",
+            "brand",
             "image",
             "slug",
             "aviable",
@@ -88,9 +89,10 @@ class CreateUpdateProductSerializer(ModelSerializer):
             instance.offer = None
             discount_price = 0
 
-        instance.name_product = validated_data.get("name_product", instance.name_product)
+        instance.title = validated_data.get("title", instance.title)
         instance.price = validated_data.get("price", instance.price)
         instance.image = validated_data.get("image", instance.image)
+        instance.brand = validated_data.get("brand", instance.brand)
         instance.description = validated_data.get("description", instance.description)
         instance.category = validated_data.get("category", instance.category)
 

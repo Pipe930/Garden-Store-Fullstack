@@ -50,11 +50,12 @@ def nameImage(request, name_image):
 class Product(models.Model):
 
     id_product = models.BigAutoField(primary_key=True)
-    name_product = models.CharField(max_length=255, unique=True)
+    title = models.CharField(max_length=255, unique=True)
     price = models.PositiveIntegerField()
     discount_price = models.PositiveIntegerField()
     sold = models.PositiveIntegerField(default=0)
     stock = models.PositiveIntegerField(default=0)
+    brand = models.CharField(max_length=40)
     image = models.ImageField(upload_to=nameImage)
     slug = models.SlugField(unique=True)
     aviable = models.BooleanField(default=False)

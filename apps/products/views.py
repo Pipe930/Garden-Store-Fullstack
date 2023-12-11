@@ -12,9 +12,9 @@ from .serializer import (
     CreateUpdateOfferSerializer,
     SearchProductSerialzer)
 from .models import Category, Product, Offer
-from rest_framework import status, generics
+from rest_framework import status
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.pagination import PageNumberPagination
 from core.messages import (
     message_response_list,
@@ -27,7 +27,7 @@ from core.messages import (
 # ----------------------------- CATEGORY VIEWS --------------------------------
 
 # Create and List Category View
-class ListCreateCategoryView(generics.ListCreateAPIView):
+class ListCreateCategoryView(ListCreateAPIView):
 
     queryset = Category.objects.all().order_by("name_category")
 
@@ -61,7 +61,7 @@ class ListCreateCategoryView(generics.ListCreateAPIView):
             status.HTTP_201_CREATED)
 
 # Update a obtain category View
-class UpdateDetailCategoryView(generics.RetrieveUpdateAPIView):
+class UpdateDetailCategoryView(RetrieveUpdateAPIView):
 
     def get_object(self, id:int):
 
@@ -100,7 +100,7 @@ class UpdateDetailCategoryView(generics.RetrieveUpdateAPIView):
 # ----------------------------- PRODUCT VIEWS --------------------------------
 
 # Create and List Product View
-class ListCreateProductView(generics.ListCreateAPIView):
+class ListCreateProductView(ListCreateAPIView):
 
     queryset = Product.objects.all().order_by("created")
     permission_classes = (IsAuthenticated, IsAdminUser)
@@ -144,7 +144,7 @@ class ListCreateProductView(generics.ListCreateAPIView):
             status.HTTP_201_CREATED)
 
 # Update a obtain product View
-class UpdateDetailProductView(generics.RetrieveUpdateAPIView):
+class UpdateDetailProductView(RetrieveUpdateAPIView):
 
     permission_classes = (IsAuthenticated, IsAdminUser)
 
@@ -192,13 +192,13 @@ class UpdateDetailProductView(generics.RetrieveUpdateAPIView):
             status.HTTP_200_OK)
 
 # List Product a Clients View
-class ListProductClientView(generics.ListAPIView):
+class ListProductClientView(ListAPIView):
 
     pagination_class = PageNumberPagination
 
     def get(self, request, format=None):
 
-        products = Product.objects.all().order_by("name_product")
+        products = Product.objects.all().order_by("title")
         page = self.paginate_queryset(products)
         serializer = ListProductsSerializer(page, many=True)
 
@@ -209,7 +209,8 @@ class ListProductClientView(generics.ListAPIView):
 
         return self.get_paginated_response(serializer.data)
 
-class SearchProductView(generics.CreateAPIView):
+# Search Product a Clients View
+class SearchProductView(CreateAPIView):
 
     serializer_class = ListProductsSerializer
     pagination_class = PageNumberPagination
@@ -227,7 +228,7 @@ class SearchProductView(generics.CreateAPIView):
         name_product = serializer_search.validated_data["name_product"]
         category_id = serializer_search.validated_data["id_category"]
 
-        search_products = Product.objects.filter(Q(name_product__icontains=name_product)).order_by("name_product")
+        search_products = Product.objects.filter(Q(title__icontains=name_product)).order_by("title")
 
         if category_id == 0:
 
@@ -241,16 +242,39 @@ class SearchProductView(generics.CreateAPIView):
 
         category = Category.objects.get(id_category= category_id)
 
-        search_results = search_products.filter(category=category).order_by("name_product")
+        search_results = search_products.filter(category=category).order_by("title")
         page = self.paginate_queryset(search_results)
         serializer = self.get_serializer(page, many=True)
 
         return self.get_paginated_response(serializer.data)
 
+# Product Detail by Slug
+class DetailProductSlugView(RetrieveAPIView):
+
+    serializer_class = ListProductsSerializer
+
+    def get_object(self, slug:str):
+
+        try:
+            product = Product.objects.get(slug= slug)
+        except Product.DoesNotExist:
+            raise Http404
+
+        return product
+
+    def get(self, request, slug:str, format=None):
+
+        product = self.get_object(slug)
+        serializer = self.get_serializer(product)
+
+        return Response(
+            message_response_detail(serializer.data),
+            status.HTTP_200_OK)
+
 # ----------------------------- OFFER VIEWS --------------------------------
 
 # Create and List Offers View
-class ListCreateOfferView(generics.ListCreateAPIView):
+class ListCreateOfferView(ListCreateAPIView):
 
     queryset = Offer.objects.all().order_by("start_date")
     permission_classes = (IsAuthenticated, IsAdminUser)
@@ -285,7 +309,7 @@ class ListCreateOfferView(generics.ListCreateAPIView):
             status.HTTP_201_CREATED)
 
 # Update a obtain offer View
-class UpdateDetailOfferView(generics.RetrieveUpdateAPIView):
+class UpdateDetailOfferView(RetrieveUpdateAPIView):
 
     permission_classes = (IsAuthenticated, IsAdminUser)
 
