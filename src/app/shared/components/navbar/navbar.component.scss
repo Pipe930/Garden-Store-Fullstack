@@ -33,7 +33,6 @@
     .navbar__btn-op-menu,
     .navbar__btn-cl-menu{
       display: none;
-      cursor: pointer;
       border: none;
       background-color: $color-light;
     }
@@ -98,9 +97,7 @@
             padding: 0.5rem 1rem;
             background-color: $color-dark;
             color: $color-light;
-            cursor: pointer;
             border-radius: 0.4rem;
-            border: none;
             font-size: 0.9rem;
             transition: all .3s ease-in-out;
         }
@@ -118,11 +115,9 @@
 
             padding: 0.5rem 0;
             font-weight: 900;
-            border: none;
             margin-left: 1rem;
             background-color: $color-light;
             color: $color-dark;
-            cursor: pointer;
             display: flex;
             align-items: center;
 

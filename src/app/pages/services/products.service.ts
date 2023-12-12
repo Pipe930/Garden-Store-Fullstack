@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Product, ResponseProducts, SearchProduct } from '../interfaces/product';
+import { Product, ResponseProduct, ResponseProducts, SearchProduct } from '../interfaces/product';
 import { environment } from 'src/environments/environment.development';
-import { Category, ResponseCategories } from '../interfaces/category';
+import { ResponseCategories } from '../interfaces/category';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +23,15 @@ export class ProductsService {
 
     this.http.get<ResponseProducts>(`${this.url}client`).subscribe( result => {
 
-      this.validatedPage(result.next, result.previous);
-      this.listProducts$.next(result.results);
+      if(result != null){
+
+        this.listProducts$.next(result.results);
+      } else {
+
+        this.disableNext = true;
+        this.disablePrevious = true;
+      }
+
     });
   }
 
@@ -47,6 +54,10 @@ export class ProductsService {
       this.validatedPage(result.next, result.previous);
       this.listProducts$.next(result.results);
     })
+  }
+
+  public getProduct(slug: string):Observable<ResponseProduct>{
+    return this.http.get<ResponseProduct>(`${this.url}detail/product/${slug}`);
   }
 
   public getCategories():Observable<ResponseCategories>{

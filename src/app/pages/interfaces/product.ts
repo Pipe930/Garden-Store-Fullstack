@@ -1,11 +1,12 @@
 export interface Product {
 
   id_product: number;
-  name_product: string;
+  title: string;
   price: number;
   discount_price: number;
   stock: number;
   image: string;
+  brand: string;
   slug: string;
   aviable: boolean;
   created: string;
@@ -19,6 +20,11 @@ export interface ResponseProducts {
   next?: string;
   previous?: string;
   results: Array<Product>;
+}
+
+export interface ResponseProduct {
+  status: string;
+  data: Product;
 }
 
 export interface SearchProduct {

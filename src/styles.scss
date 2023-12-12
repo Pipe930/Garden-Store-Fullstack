@@ -55,6 +55,11 @@ form, input, select, textarea, button, label{
   color: inherit;
 }
 
+button{
+  cursor: pointer;
+  border: none;
+}
+
 textarea{
   resize: none;
 }

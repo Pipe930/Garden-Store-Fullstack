@@ -11,6 +11,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { PagesService } from './services/pages.service';
 import { ListProductsComponent } from './components/list-products/list-products.component';
 import { ProductsService } from './services/products.service';
+import { DetailProductComponent } from './components/detail-product/detail-product.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { ProductsService } from './services/products.service';
     PagesComponent,
     HomeComponent,
     ContactComponent,
-    ListProductsComponent
+    ListProductsComponent,
+    DetailProductComponent
   ],
   imports: [
     CommonModule,

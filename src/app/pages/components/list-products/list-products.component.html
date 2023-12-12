@@ -22,23 +22,27 @@
     <div class="container-main__container-products">
       <h2 class="container-products__title">Productos</h2>
       <hr>
-      <div class="container-products__products" *ngIf="listProducts">
+      <div class="container-products__products" *ngIf="listProducts.length > 0">
 
         <article *ngFor="let product of listProducts" class="products__product">
           <picture>
             <img [src]="urlApi + product.image" alt="imagen de producto">
           </picture>
           <div class="product__body">
-            <h2 class="product__title">{{product.name_product}}</h2>
+            <h2 class="product__title">{{product.title}}</h2>
             <p class="product__price">${{product.price}}</p>
             <p class="product__description">{{product.description}}</p>
-            <button class="product__btn">
+            <button class="product__btn" [routerLink]="['/product', product.slug]">
               Ver
             </button>
           </div>
         </article>
 
-    </div>
+      </div>
+
+      <div *ngIf="listProducts.length == 0">
+        <p>No se han encontrado productos</p>
+      </div>
 
     </div>
     <div class="container-main__container-btn-pages">

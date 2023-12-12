@@ -25,11 +25,16 @@ export class ListProductsComponent implements OnInit {
 
     this.service.getProducts();
     this.service.listProducts$.subscribe(result => {
+
       this.listProducts = result;
     })
 
     this.service.getCategories().subscribe(result => {
-      this.listCategories = result.data;
+
+      if(result != null){
+        this.listCategories = result.data;
+      }
+
     })
   }
 

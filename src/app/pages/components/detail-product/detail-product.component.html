@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="container__product">
+
+    <div class="product__primary-info">
+      <div class="product__images">
+        <div class="images__primary-image">
+          <img [src]="urlApi + product.image" alt="imagen del producto">
+        </div>
+        <div class="images__other-images">
+          <ul>
+            <li>
+              <a href=""></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="product__description-product">
+        <h2 class="description-product__title">{{product.title}}</h2>
+        <div class="description-product__stock">
+          <p><strong>ID</strong> {{product.id_product}}</p>
+          <p>Quedan {{product.stock}} unidades</p>
+        </div>
+        <hr>
+        <div class="description-product__info">
+
+          <div class="description-product__prices">
+            <p class="prices__price">$ {{product.price}}</p>
+            <p class="prices__text">Precio de Referencia</p>
+          </div>
+          <div class="description-product__cart">
+            <div class="description-product__container-add-cart">
+              <button class="description-product__btn-add" (click)="sumQuantity()">
+                +
+              </button>
+              <p class="description-product__quantity">{{quantity}}</p>
+              <button class="description-product__btn-substract" (click)="subQuantity()">
+                -
+              </button>
+            </div>
+            <button class="description-product__btn-add-cart">Añadir al Carrito <i class='bx bxs-cart-add bx-sm'></i></button>
+          </div>
+        </div>
+        <div class="description-product__description">
+          <div class="description-product__tab">
+            <button class="description-product__tablinks">Descripción</button>
+            <button class="description-product__tablinks">Despacho</button>
+            <button class="description-product__tablinks">Cambios y Devoluciones</button>
+          </div>
+          <div class="description-product__content">
+            <p>{{product.description}}</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas et cum id omnis ad. Labore, debitis veritatis! Nesciunt a inventore maxime, ratione sunt itaque dolor, cupiditate, doloremque obcaecati non eaque?
+            Aspernatur reprehenderit harum dignissimos, iure saepe quisquam, ducimus quis assumenda laudantium error eos voluptatibus optio consectetur aut odio quam! Qui alias excepturi maiores nisi reiciendis, quibusdam aliquam dolor sapiente repellat?
+            Modi ab accusamus fugiat delectus, expedita libero nobis minus maiores dicta molestiae, placeat explicabo. Corporis corrupti ipsa iste nihil illum fugit nulla, repellendus ipsam temporibus, atque, sequi blanditiis earum necessitatibus!
+            Natus recusandae cumque hic quo repellat quas fugiat! Repudiandae commodi veniam magni, nostrum hic dolor neque blanditiis aspernatur explicabo rerum expedita aperiam in fugit eaque labore soluta amet voluptate dolore?
+            Totam facere animi vitae est in provident minima voluptate itaque? Tempore facere minus vero eius, adipisci quae labore iusto cum reprehenderit officia iste esse perspiciatis corporis cumque est, non quisquam!
+            Quisquam odit, laborum ipsam explicabo facilis pariatur eveniet, nisi ullam qui cum tempore nesciunt impedit, voluptates fugit sapiente quod quasi. Vel voluptatibus quasi laboriosam necessitatibus quibusdam incidunt alias esse tempora.
+            Eligendi repellendus explicabo harum nemo nulla deleniti porro. Quaerat deserunt iusto, accusamus voluptas ad harum commodi corporis eius incidunt non et sunt, animi beatae cumque, facere earum saepe id magni!
+            Similique a minima sit provident dolorem ducimus vel quo, consequatur debitis nesciunt corporis earum. Fuga nemo, quasi ducimus itaque esse pariatur explicabo fugit assumenda architecto quidem, aliquid, voluptates minus vitae.
+            Possimus accusantium debitis aperiam ab voluptas facilis harum vel assumenda sit? Corporis aperiam voluptatum earum rerum officiis ab dignissimos! Aliquid voluptates, aliquam delectus harum id magni minus quam tenetur molestias.
+            Expedita, est minus? Veniam voluptas ex molestiae mollitia rerum. Eum quis temporibus quod? Perspiciatis, odio nobis dolore quis doloribus possimus! Nostrum fugiat iure atque sequi beatae assumenda sint laboriosam dolores.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product__similar-products">
+      <h3>Productos Relacionados</h3>
+      <div class="similar-products__products">
+        <button class="similar-products__btn-previous">Previous</button>
+        <div class="similar-products__container-list">
+
+          <article class="similar-products__product">
+            <img src="" alt="imagen del producto">
+            <div class="product__body">
+              <h2 class="product__title"></h2>
+              <p class="product__price"></p>
+              <p class="product__description"></p>
+            </div>
+          </article>
+        </div>
+        <button class="similar-products__btn-next">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
