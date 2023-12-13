@@ -1,0 +1,22 @@
+<aside class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
+
+  <div class="sidenav__logo-container">
+    <button class="logo-container__logo" (click)="toggleCollapse()">A</button>
+    <div class="logo-container__text" @fadeInOut *ngIf="collapsed">Dashboard</div>
+    <button class="logo-container__btn-close" @rotate *ngIf="collapsed" (click)="closeSidenav()">
+      <i class='bx bx-x close-icon'></i>
+    </button>
+  </div>
+
+  <ul class="sidenav__list">
+    <li class="list__item" *ngFor="let data of navData">
+      <a [routerLink]="[data.routerLink]"
+      class="list__link"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact: true}">
+        <i [class]=" data.icon + ' list__icon'"></i>
+        <span class="list__text" @fadeInOut *ngIf="collapsed">{{data.label}}</span>
+      </a>
+    </li>
+  </ul>
+</aside>

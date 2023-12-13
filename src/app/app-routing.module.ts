@@ -17,6 +17,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/pages.module').then(module => module.PagesModule)
   },
   {
+    path: "",
+    loadChildren: () => import('./admin/admin.module').then(module => module.AdminModule)
+  },
+  {
     path: "**",
     pathMatch: "full",
     component: PageNotFoundComponent

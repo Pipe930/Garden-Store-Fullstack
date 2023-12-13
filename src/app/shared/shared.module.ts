@@ -5,17 +5,22 @@ import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.component';
 
 @NgModule({
   declarations: [
     NavbarComponent,
     FooterComponent,
-    CarouselComponent
+    CarouselComponent,
+    SidenavComponent,
+    SublevelMenuComponent,
   ],
   exports: [
     NavbarComponent,
     FooterComponent,
-    CarouselComponent
+    CarouselComponent,
+    SidenavComponent
   ],
   imports: [
     CommonModule,
