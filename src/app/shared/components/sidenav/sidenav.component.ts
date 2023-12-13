@@ -1,7 +1,8 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { navbarData } from './navbar-data';
-import { SidenavToggle } from '../../interfaces/sidenav';
+import { Sidenav, SidenavToggle } from '../../interfaces/sidenav';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidenav',
@@ -40,6 +41,7 @@ export class SidenavComponent implements OnInit {
   public collapsed: boolean = false;
   public screenWidth: number = 0;
   public navData = navbarData;
+  public multiple: boolean = false;
 
   @HostListener("window:resize", ["$event"])
   onResize(event: any) {
@@ -53,7 +55,9 @@ export class SidenavComponent implements OnInit {
     }
   }
 
-  constructor() { }
+  constructor(
+    private _router: Router
+  ) { }
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
@@ -67,5 +71,24 @@ export class SidenavComponent implements OnInit {
   public closeSidenav():void{
     this.collapsed = false;
     this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+  }
+
+  public handleClick(item: Sidenav):void {
+
+    if(!this.multiple){
+
+      for(let modelItem of this.navData){
+
+        if(item !== modelItem && modelItem.expanded){
+          modelItem.expanded = false;
+        }
+      }
+    }
+
+    item.expanded = !item.expanded;
+  }
+
+  public getActiveClass(data:Sidenav): string{
+    return this._router.url.includes(data.routerLink) ? "active": "";
   }
 }

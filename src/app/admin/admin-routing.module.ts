@@ -5,12 +5,16 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {
-    path: "",
+    path: "administration",
     component: AdminComponent,
     children: [
       {
         path: "dashboard",
         component: DashboardComponent
+      },
+      {
+        path: "categories",
+        loadChildren: () => import('./categories/categories.module').then(module => module.CategoriesModule)
       }
     ]
   }

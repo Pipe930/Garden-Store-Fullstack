@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { PagesModule } from './pages/pages.module';
 import { AdminModule } from './admin/admin.module';
+import { CategoriesModule } from './admin/categories/categories.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AdminModule } from './admin/admin.module';
     BrowserAnimationsModule,
     AuthModule,
     PagesModule,
-    AdminModule
+    AdminModule,
+    CategoriesModule,
   ],
   bootstrap: [AppComponent]
 })

@@ -9,21 +9,36 @@ export const navbarData: Array<Sidenav> = [
   {
     routerLink: "categories",
     icon: "bx bxs-category",
-    label: "Categorias"
+    label: "Categorias",
+    items: [
+      {
+        routerLink: "categories/list",
+        label: "Lista Categorias",
+      },
+      {
+        routerLink: "categories/create",
+        label: "Crear Categoria",
+      }
+    ]
   },
   {
     routerLink: "products",
     icon: "bx bxl-product-hunt",
     label: "Productos",
+    items: [
+      {
+        routerLink: "products/list",
+        label: "Lista Productos",
+      },
+      {
+        routerLink: "products/create",
+        label: "Crear Producto",
+      }
+    ]
   },
   {
     routerLink: "offers",
     icon: "bx bxs-offer",
     label: "Ofertas"
-  },
-  {
-    routerLink: "cuppons",
-    icon: "bx bx-purchase-tag",
-    label: "Cupones",
   }
 ]
