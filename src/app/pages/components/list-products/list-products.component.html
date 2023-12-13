@@ -30,7 +30,7 @@
           </picture>
           <div class="product__body">
             <h2 class="product__title">{{product.title}}</h2>
-            <p class="product__price">${{product.price}}</p>
+            <p class="product__price">{{product.price | currency:'CLP'}}</p>
             <p class="product__description">{{product.description}}</p>
             <button class="product__btn" [routerLink]="['/product', product.slug]">
               Ver

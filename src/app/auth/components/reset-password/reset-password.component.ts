@@ -14,12 +14,12 @@ export class ResetPasswordComponent {
   public formSendEmail: FormGroup;
 
   constructor(
-    private builder: FormBuilder,
-    private service: AuthService,
-    private alert: AlertsService,
-    private router: Router
+    private _builder: FormBuilder,
+    private _authService: AuthService,
+    private _alertService: AlertsService,
+    private _router: Router
   ) {
-    this.formSendEmail = this.builder.group({
+    this.formSendEmail = this._builder.group({
       email: new FormControl("", [Validators.required, Validators.email, Validators.maxLength(255)])
     })
   }
@@ -32,11 +32,11 @@ export class ResetPasswordComponent {
       return;
     }
 
-    this.service.resetPassword(this.formSendEmail.value).subscribe( (result) => {
+    this._authService.resetPassword(this.formSendEmail.value).subscribe( (result) => {
 
-      this.alert.success("Correo Enviado", "Le enviamos un correo con un link para resetear la contraseña");
-      this.router.navigate(['auth/login']);
-    }, (error) => this.alert.error("Error", "Error, no se pudo resetear la contraseña"))
+      this._alertService.success("Correo Enviado", "Le enviamos un correo con un link para resetear la contraseña");
+      this._router.navigate(['auth/login']);
+    }, (error) => this._alertService.error("Error", "Error, no se pudo resetear la contraseña"))
 
   }
 

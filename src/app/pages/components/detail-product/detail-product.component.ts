@@ -17,18 +17,18 @@ export class DetailProductComponent implements OnInit {
   public quantity: number = 1;
 
   constructor(
-    private service: ProductsService,
-    private route: ActivatedRoute
+    private _productsService: ProductsService,
+    private _activated: ActivatedRoute
   ) {
 
-    this.route.params.subscribe(params => {
+    this._activated.params.subscribe(params => {
       this.slug = params["slug"];
     });
   }
 
   ngOnInit(): void {
 
-    this.service.getProduct(this.slug).subscribe(result => {
+    this._productsService.getProduct(this.slug).subscribe(result => {
       this.product = result.data;
     }, error => console.error(error))
   }

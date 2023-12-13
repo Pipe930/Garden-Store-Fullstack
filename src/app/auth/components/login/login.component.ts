@@ -15,14 +15,14 @@ export class LoginComponent {
   public formLogin: FormGroup;
 
   constructor(
-    private builder: FormBuilder,
-    private router: Router,
-    private service: AuthService,
-    private alert: AlertsService,
-    private validator: ValidatorService
+    private _builder: FormBuilder,
+    private _router: Router,
+    private _authService: AuthService,
+    private _alertService: AlertsService,
+    private _validatorService: ValidatorService
   ) {
-    this.formLogin = this.builder.group({
-      email: new FormControl("", [Validators.required, this.validator.emailValidator, Validators.maxLength(255)]),
+    this.formLogin = this._builder.group({
+      email: new FormControl("", [Validators.required, this._validatorService.emailValidator, Validators.maxLength(255)]),
       password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
     })
    }
@@ -35,11 +35,11 @@ export class LoginComponent {
       return;
     }
 
-    this.service.login(this.formLogin.value).subscribe((result) => {
+    this._authService.login(this.formLogin.value).subscribe((result) => {
 
-      this.alert.success("Inicio Exitoso", "Se inicio sesion correctamente");
-      this.router.navigate(['home']);
-    }, (error) => this.alert.error("Error", "No se inicio sesion correctamente"))
+      this._alertService.success("Inicio Exitoso", "Se inicio sesion correctamente");
+      this._router.navigate(['home']);
+    }, (error) => this._alertService.error("Error", "No se inicio sesion correctamente"))
 
   }
 

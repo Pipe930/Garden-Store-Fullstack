@@ -15,15 +15,15 @@ export class ContactComponent {
   public formContact: FormGroup;
 
   constructor(
-    private builder: FormBuilder,
-    private service: PagesService,
-    private alert: AlertsService,
-    private validator: ValidatorService,
-    private router: Router
+    private _builder: FormBuilder,
+    private _pagesService: PagesService,
+    private _alertService: AlertsService,
+    private _validatorService: ValidatorService,
+    private _router: Router
   ) {
-    this.formContact = this.builder.group({
+    this.formContact = this._builder.group({
       full_name: new FormControl("", [Validators.required, Validators.maxLength(40), Validators.minLength(4)]),
-      email: new FormControl("", [Validators.required, this.validator.emailValidator, Validators.maxLength(255)]),
+      email: new FormControl("", [Validators.required, this._validatorService.emailValidator, Validators.maxLength(255)]),
       message: new FormControl("", Validators.maxLength(255))
     })
   }
@@ -36,11 +36,11 @@ export class ContactComponent {
       return;
     }
 
-    this.service.sendEmail(this.formContact.value).subscribe( (result) => {
+    this._pagesService.sendEmail(this.formContact.value).subscribe( (result) => {
 
-      this.alert.success("Correo Enviado", "El correo se a enviado correctamente, te atendermos tu problema");
-      this.router.navigate(['/home']);
-    }, (error) => this.alert.error("Error Envio", "El correo no se a enviado correctamente"))
+      this._alertService.success("Correo Enviado", "El correo se a enviado correctamente, te atendermos tu problema");
+      this._router.navigate(['/home']);
+    }, (error) => this._alertService.error("Error Envio", "El correo no se a enviado correctamente"))
   }
 
   get full_name(){

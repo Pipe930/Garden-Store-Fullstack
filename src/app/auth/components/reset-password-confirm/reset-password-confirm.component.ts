@@ -19,22 +19,22 @@ export class ResetPasswordConfirmComponent {
   private token: string = "";
 
   constructor(
-    private activate: ActivatedRoute,
-    private builder: FormBuilder,
-    private service: AuthService,
-    private alert: AlertsService,
-    private validator: ValidatorService,
-    private router: Router
+    private _activate: ActivatedRoute,
+    private _builder: FormBuilder,
+    private _authService: AuthService,
+    private _alertService: AlertsService,
+    private _validatorService: ValidatorService,
+    private _router: Router
   ) {
-    this.activate.params.subscribe(params =>{
+    this._activate.params.subscribe(params =>{
       this.uid = params["uid"];
       this.token = params["token"];
     });
-    this.formResetPassword = this.builder.group({
+    this.formResetPassword = this._builder.group({
       new_password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
       re_new_password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
     }, {
-      validators: this.validator.comparePasswords("password", "re_password")
+      validators: this._validatorService.comparePasswords("password", "re_password")
     })
    }
 
@@ -54,11 +54,11 @@ export class ResetPasswordConfirmComponent {
       return;
     }
 
-    this.service.resetPasswordConfirm(json).subscribe( (result) => {
+    this._authService.resetPasswordConfirm(json).subscribe( (result) => {
 
-      this.alert.success("Contraseña Cambiada", "La contraseña a sido cambiada con exito");
-      this.router.navigate(['auth/login']);
-    }, (error) => this.alert.error("Error", "No se pudo cambiar la contraseña correctamente"))
+      this._alertService.success("Contraseña Cambiada", "La contraseña a sido cambiada con exito");
+      this._router.navigate(['auth/login']);
+    }, (error) => this._alertService.error("Error", "No se pudo cambiar la contraseña correctamente"))
 
   }
 

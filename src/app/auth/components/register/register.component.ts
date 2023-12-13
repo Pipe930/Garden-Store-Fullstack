@@ -15,21 +15,21 @@ export class RegisterComponent {
   public formRegister: FormGroup;
 
   constructor(
-    private builder: FormBuilder,
-    private route: Router,
-    private validator: ValidatorService,
-    private service: AuthService,
-    private alert: AlertsService
+    private _builder: FormBuilder,
+    private _router: Router,
+    private _validatorService: ValidatorService,
+    private _authService: AuthService,
+    private _alertService: AlertsService
   ) {
-    this.formRegister = this.builder.group({
+    this.formRegister = this._builder.group({
       first_name: new FormControl("", [Validators.required, Validators.maxLength(20), Validators.minLength(4)]),
       last_name: new FormControl("", [Validators.required, Validators.maxLength(20), Validators.minLength(4)]),
       username: new FormControl("", [Validators.required, Validators.maxLength(60), Validators.minLength(4)]),
-      email: new FormControl("", [this.validator.emailValidator, Validators.maxLength(255)]),
+      email: new FormControl("", [this._validatorService.emailValidator, Validators.maxLength(255)]),
       password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
       re_password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
     }, {
-      validators: this.validator.comparePasswords("password", "re_password")
+      validators: this._validatorService.comparePasswords("password", "re_password")
     });
   }
 
@@ -40,12 +40,12 @@ export class RegisterComponent {
       return;
     }
 
-    this.service.register(this.formRegister.value).subscribe( result => {
+    this._authService.register(this.formRegister.value).subscribe( result => {
 
-      this.alert.success("Registro Exitoso", "Su cuenta se a registrado correctamente, le enviamos un correo para activar su cuenta");
-      this.route.navigate(['auth/login']);
+      this._alertService.success("Registro Exitoso", "Su cuenta se a registrado correctamente, le enviamos un correo para activar su cuenta");
+      this._router.navigate(['auth/login']);
 
-    }, (error) => this.alert.error("Error Registro", "La cuenta no se registro correctamente"))
+    }, (error) => this._alertService.error("Error Registro", "La cuenta no se registro correctamente"))
   }
 
   get first_name(){

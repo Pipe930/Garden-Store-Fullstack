@@ -17,19 +17,19 @@ export class ListProductsComponent implements OnInit {
   public urlApi: string = environment.domain;
 
   constructor(
-    private service: ProductsService
+    private _ProductsService: ProductsService
   ) {
   }
 
   ngOnInit(): void {
 
-    this.service.getProducts();
-    this.service.listProducts$.subscribe(result => {
+    this._ProductsService.getProducts();
+    this._ProductsService.listProducts$.subscribe(result => {
 
       this.listProducts = result;
     })
 
-    this.service.getCategories().subscribe(result => {
+    this._ProductsService.getCategories().subscribe(result => {
 
       if(result != null){
         this.listCategories = result.data;
@@ -41,12 +41,12 @@ export class ListProductsComponent implements OnInit {
   public nextPage():void{
 
     this.pageNumber += 1;
-    this.service.getProductsPage(this.pageNumber);
+    this._ProductsService.getProductsPage(this.pageNumber);
   }
   public previousPage():void{
 
     this.pageNumber -= 1;
-    this.service.getProductsPage(this.pageNumber);
+    this._ProductsService.getProductsPage(this.pageNumber);
   }
 
   public searchProduct():void {
@@ -59,11 +59,11 @@ export class ListProductsComponent implements OnInit {
       name_product: search.value
     }
 
-    this.service.searchProduct(searchProduct);
+    this._ProductsService.searchProduct(searchProduct);
   }
 
   get getService(){
-    return this.service
+    return this._ProductsService;
   }
 
 }
