@@ -6,11 +6,18 @@ export interface Category {
   name_category: string;
 }
 
-export interface ResponseCategory {
+export interface ResponseListCategory {
 
   status: string;
   count: number;
   data: Array<Category>;
+}
+
+export interface ReponseCategory {
+
+  status: string;
+  data: Category;
+  message: string;
 }
 
 

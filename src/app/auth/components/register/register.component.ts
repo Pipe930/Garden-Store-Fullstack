@@ -12,26 +12,23 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent {
 
-  public formRegister: FormGroup;
-
   private _router = inject(Router);
   private _builder = inject(FormBuilder);
   private _authService = inject(AuthService);
   private _alertService = inject(AlertsService);
   private _validatorService = inject(ValidatorService);
 
-  constructor() {
-    this.formRegister = this._builder.group({
-      first_name: new FormControl("", [Validators.required, Validators.maxLength(20), Validators.minLength(4)]),
-      last_name: new FormControl("", [Validators.required, Validators.maxLength(20), Validators.minLength(4)]),
-      username: new FormControl("", [Validators.required, Validators.maxLength(60), Validators.minLength(4)]),
-      email: new FormControl("", [this._validatorService.emailValidator, Validators.maxLength(255)]),
-      password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
-      re_password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
-    }, {
-      validators: this._validatorService.comparePasswords("password", "re_password")
-    });
-  }
+  public messagePassword: Array<string> = [];
+  public formRegister: FormGroup = this._builder.group({
+    first_name: new FormControl("", [Validators.required, Validators.maxLength(20), Validators.minLength(4)]),
+    last_name: new FormControl("", [Validators.required, Validators.maxLength(20), Validators.minLength(4)]),
+    username: new FormControl("", [Validators.required, Validators.maxLength(60), Validators.minLength(4)]),
+    email: new FormControl("", [this._validatorService.emailValidator, Validators.maxLength(255)]),
+    password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
+    re_password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
+  }, {
+    validators: this._validatorService.comparePasswords("password", "re_password")
+  });
 
   public register():void{
 
@@ -45,7 +42,15 @@ export class RegisterComponent {
       this._alertService.success("Registro Exitoso", "Su cuenta se a registrado correctamente, le enviamos un correo para activar su cuenta");
       this._router.navigate(['auth/login']);
 
-    }, (error) => this._alertService.error("Error Registro", "La cuenta no se registro correctamente"))
+    }, (error) => {
+
+      if(error.error["password"]){
+
+        this.messagePassword = error.error["password"];
+      }
+
+      this._alertService.error("Error Registro", "La cuenta no se registro correctamente")
+    })
   }
 
   get first_name(){

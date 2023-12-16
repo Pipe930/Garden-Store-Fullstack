@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseCategory } from '../interfaces/category';
+import { Category, ResponseListCategory, ReponseCategory } from '../interfaces/category';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
@@ -13,7 +13,15 @@ export class CategoryService {
 
   private _http = inject(HttpClient);
 
-  public getAllCategories():Observable<ResponseCategory>{
-    return this._http.get<ResponseCategory>(this.urlApi);
+  public getAllCategories():Observable<ResponseListCategory>{
+    return this._http.get<ResponseListCategory>(this.urlApi);
+  }
+
+  public createCategory(category: Category):Observable<ReponseCategory>{
+    return this._http.post<ReponseCategory>(`${this.urlApi}`, category, {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      })
+    })
   }
 }

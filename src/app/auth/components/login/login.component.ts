@@ -12,20 +12,16 @@ import { ValidatorService } from 'src/app/shared/services/validator.service';
 })
 export class LoginComponent {
 
-  public formLogin: FormGroup;
-
   private _router = inject(Router);
   private _builder = inject(FormBuilder);
   private _authService = inject(AuthService);
   private _alertService = inject(AlertsService);
   private _validatorService = inject(ValidatorService);
 
-  constructor() {
-    this.formLogin = this._builder.group({
-      email: new FormControl("", [Validators.required, this._validatorService.emailValidator, Validators.maxLength(255)]),
-      password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
-    })
-   }
+  public formLogin: FormGroup = this._builder.group({
+    email: new FormControl("", [Validators.required, this._validatorService.emailValidator, Validators.maxLength(255)]),
+    password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
+  });
 
   public login():void{
 

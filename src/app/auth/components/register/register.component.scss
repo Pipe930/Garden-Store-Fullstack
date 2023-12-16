@@ -31,14 +31,14 @@
       }
 
       .form__container-errors{
+        margin-top: .1rem;
 
         .form__errors{
-          margin-top: 0.3rem;
           color: $color-danger;
         }
       }
       .form__errors{
-        margin-top: 0.3rem;
+        margin-top: 2rem;
         color: $color-danger;
       }
     }

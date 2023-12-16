@@ -11,18 +11,14 @@ import { Router } from '@angular/router';
 })
 export class ResetPasswordComponent {
 
-  public formSendEmail: FormGroup;
-
   private _router = inject(Router);
   private _builder = inject(FormBuilder);
   private _authService = inject(AuthService);
   private _alertService = inject(AlertsService);
 
-  constructor() {
-    this.formSendEmail = this._builder.group({
-      email: new FormControl("", [Validators.required, Validators.email, Validators.maxLength(255)])
-    })
-  }
+  public formSendEmail: FormGroup = this._builder.group({
+    email: new FormControl("", [Validators.required, Validators.email, Validators.maxLength(255)])
+  });
 
   public sendEmail():void{
 

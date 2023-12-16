@@ -50,9 +50,9 @@
         <span class="form__errors" *ngIf="re_password.getError('maxlength')">Tiene que ser maximo de 32 caracteres</span>
       </div>
       <span class="form__errors" *ngIf="formRegister.hasError('passordsDontMatch') && (re_password.dirty || re_password.touched)">Las contraseñas no coinciden</span>
-      <!-- <span *ngFor="let message of get_servive.message_error_password">
-        {{message}}
-      </span> -->
+      <span *ngFor="let message of messagePassword" class="form__errors">
+        {{message}} <br>
+      </span>
     </fieldset>
     <button type="submit" class="form__btn">Registrarse</button>
     <a href="" [routerLink]="['/auth/login']" class="form__link">Ya tengo una cuenta</a>

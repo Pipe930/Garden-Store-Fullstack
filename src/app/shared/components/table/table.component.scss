@@ -45,7 +45,13 @@
               background-color: $color-primary-400;
               padding: 0.5rem 1rem;
               color: $color-light;
+              transition: background .3s ease-in;
 
+            }
+
+            .table__btn-detail:hover{
+
+              background-color: $color-primary;
             }
           }
         }

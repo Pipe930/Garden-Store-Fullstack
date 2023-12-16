@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -12,9 +12,8 @@ import { ValidatorService } from 'src/app/shared/services/validator.service';
   templateUrl: './reset-password-confirm.component.html',
   styleUrls: ['./reset-password-confirm.component.scss']
 })
-export class ResetPasswordConfirmComponent {
+export class ResetPasswordConfirmComponent implements OnInit {
 
-  public formResetPassword: FormGroup;
   private uid: string = "";
   private token: string = "";
 
@@ -25,17 +24,19 @@ export class ResetPasswordConfirmComponent {
   private _alertService = inject(AlertsService);
   private _validatorService = inject(ValidatorService);
 
-  constructor() {
+  public messagePassword: Array<string> = [];
+  public formResetPassword: FormGroup = this._builder.group({
+    new_password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
+    re_new_password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
+  }, {
+    validators: this._validatorService.comparePasswords("password", "re_password")
+  });
+
+   ngOnInit(): void {
     this._activate.params.subscribe(params =>{
       this.uid = params["uid"];
       this.token = params["token"];
     });
-    this.formResetPassword = this._builder.group({
-      new_password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
-      re_new_password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
-    }, {
-      validators: this._validatorService.comparePasswords("password", "re_password")
-    })
    }
 
   public resetPassword():void{
@@ -58,7 +59,15 @@ export class ResetPasswordConfirmComponent {
 
       this._alertService.success("Contraseña Cambiada", "La contraseña a sido cambiada con exito");
       this._router.navigate(['auth/login']);
-    }, (error) => this._alertService.error("Error", "No se pudo cambiar la contraseña correctamente"))
+    }, (error) => {
+
+      if(error.error["password"]){
+
+        this.messagePassword = error.error["password"];
+      }
+
+      this._alertService.error("Error", "No se pudo cambiar la contraseña correctamente")
+    })
 
   }
 
