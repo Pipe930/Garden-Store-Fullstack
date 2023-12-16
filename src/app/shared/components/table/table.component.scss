@@ -1,0 +1,85 @@
+@import '/src/themes/variables.scss';
+
+.container{
+
+  .container__table{
+    width: 100%;
+    border-collapse: collapse;
+
+    .table__header{
+
+      background-color: $color-dark-700;
+
+      tr{
+
+        color: $color-light;
+
+        .table__header-text{
+
+          padding: 1rem 0;
+        }
+      }
+    }
+
+    .table__body{
+
+      tr:nth-child(even){
+
+        background-color: $color-dark-100;
+      }
+
+      tr{
+
+        .table__body-text{
+
+          padding: 1rem 1rem;
+          text-align: center;
+
+          div{
+
+            display: flex;
+            justify-content: center;
+
+            .table__btn-detail{
+
+              background-color: $color-primary-400;
+              padding: 0.5rem 1rem;
+              color: $color-light;
+
+            }
+          }
+        }
+      }
+
+    }
+
+    .table__footer{
+
+      .table__footer-text{
+
+        .table__btns-pages{
+          display: flex;
+          justify-content: center;
+          padding: 1rem 0;
+
+          .table__btn-pre,
+          .table__btn-next{
+
+            padding: 0.4rem 1rem;
+            background-color: $color-success;
+            color: $color-light;
+              transition: background .3s ease-out;
+
+          }
+
+          .table__btn-pre:hover,
+          .table__btn-next:hover{
+
+            background-color: $color-success-600;
+          }
+        }
+      }
+
+    }
+  }
+}

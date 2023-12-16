@@ -1,0 +1,42 @@
+<div class="container">
+  <table class="container__table">
+    <thead class="table__header">
+      <tr>
+        <th class="table__header-text">ID</th>
+        <th *ngFor="let column of tableColumns">
+          {{column.header}}
+        </th>
+      </tr>
+    </thead>
+
+    <tbody class="table__body">
+      <tr *ngFor="let object of dataRows; let id=index">
+        <td class="table__body-text">
+          {{id+1}}
+        </td>
+        <td *ngFor="let column of tableColumns" class="table__body-text">
+          <div *ngIf="column.fieldName == 'action' && showActionButton">
+            <button class="table__btn-detail">
+              Detalle
+            </button>
+          </div>
+          <div *ngIf="column.fieldName !== 'action'">
+            {{object[column.fieldName]}}
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <tfoot class="table__footer">
+      <tr>
+        <td class="table__footer-text" colspan="3">
+          <div class="table__btns-pages">
+            <button class="table__btn-pre">Previous</button>
+            <button class="table__btn-next">Next</button>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+

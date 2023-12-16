@@ -17,8 +17,6 @@ export class NavbarComponent implements OnInit {
   public mode:string = this.modeOriginal;
   public showClass:boolean = false;
 
-  constructor() { }
-
   ngOnInit(): void {
     this.eventThemeNavbar.emit(this.themeNavbar);
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -9,22 +9,23 @@ import { AlertsService } from 'src/app/shared/services/alerts.service';
   templateUrl: './activate.component.html',
   styleUrls: ['./activate.component.scss']
 })
-export class ActivateComponent {
+export class ActivateComponent implements OnInit {
 
   private uid: string = "";
   private token: string = "";
 
-  constructor(
-    private _activate: ActivatedRoute,
-    private _authService: AuthService,
-    private _router: Router,
-    private _alertService: AlertsService
-  ) {
+  private _activate = inject(ActivatedRoute);
+  private _authService = inject(AuthService);
+  private _router = inject(Router);
+  private _alertService = inject(AlertsService);
+
+  ngOnInit(): void {
+
     this._activate.params.subscribe(params =>{
       this.uid = params["uid"];
       this.token = params["token"];
     })
-   }
+  }
 
   public activateAcount():void{
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { AlertsService } from 'src/app/shared/services/alerts.service';
@@ -13,12 +13,12 @@ export class ResetPasswordComponent {
 
   public formSendEmail: FormGroup;
 
-  constructor(
-    private _builder: FormBuilder,
-    private _authService: AuthService,
-    private _alertService: AlertsService,
-    private _router: Router
-  ) {
+  private _router = inject(Router);
+  private _builder = inject(FormBuilder);
+  private _authService = inject(AuthService);
+  private _alertService = inject(AlertsService);
+
+  constructor() {
     this.formSendEmail = this._builder.group({
       email: new FormControl("", [Validators.required, Validators.email, Validators.maxLength(255)])
     })

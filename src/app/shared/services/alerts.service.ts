@@ -6,8 +6,6 @@ import Swal from 'sweetalert2';
 })
 export class AlertsService {
 
-  constructor() { }
-
   public success(title: string, text: string):void{
 
     Swal.fire({

@@ -7,6 +7,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.component';
+import { TableComponent } from './components/table/table.component';
 
 @NgModule({
   declarations: [
@@ -15,12 +16,14 @@ import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.compon
     CarouselComponent,
     SidenavComponent,
     SublevelMenuComponent,
+    TableComponent,
   ],
   exports: [
     NavbarComponent,
     FooterComponent,
     CarouselComponent,
-    SidenavComponent
+    SidenavComponent,
+    TableComponent
   ],
   imports: [
     CommonModule,

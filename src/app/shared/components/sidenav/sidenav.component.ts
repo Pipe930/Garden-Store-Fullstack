@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output, inject } from '@angular/core';
 import { navbarData } from './navbar-data';
 import { Sidenav, SidenavToggle } from '../../interfaces/sidenav';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
@@ -43,6 +43,8 @@ export class SidenavComponent implements OnInit {
   public navData = navbarData;
   public multiple: boolean = false;
 
+  private _router = inject(Router);
+
   @HostListener("window:resize", ["$event"])
   onResize(event: any) {
 
@@ -54,10 +56,6 @@ export class SidenavComponent implements OnInit {
       this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
     }
   }
-
-  constructor(
-    private _router: Router
-  ) { }
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;

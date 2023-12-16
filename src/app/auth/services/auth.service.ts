@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 import { Register, RegisterResponse } from '../interfaces/register';
@@ -12,13 +12,12 @@ import { ResetPassword, ResetPasswordConfirm } from '../interfaces/reset-passwor
 })
 export class AuthService {
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  private _http = inject(HttpClient);
+  private urlApi: string = `${environment.url}auth/`;
 
   public register(form: Register):Observable<RegisterResponse>{
 
-    return this.http.post<RegisterResponse>(`${environment.url}auth/users/`, form, {
+    return this._http.post<RegisterResponse>(`${this.urlApi}users/`, form, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
@@ -27,7 +26,7 @@ export class AuthService {
 
   public login(form: Login): Observable<LoginResponse>{
 
-    return this.http.post<LoginResponse>(`${environment.url}auth/jwt/create/`, form, {
+    return this._http.post<LoginResponse>(`${this.urlApi}jwt/create/`, form, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
@@ -46,7 +45,7 @@ export class AuthService {
 
   public activateAcount(body: Activate):Observable<any>{
 
-    return this.http.post(`${environment.url}auth/users/activation/`, body, {
+    return this._http.post(`${this.urlApi}users/activation/`, body, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
@@ -55,7 +54,7 @@ export class AuthService {
 
   public resetPassword(form: ResetPassword):Observable<any>{
 
-    return this.http.post(`${environment.url}auth/users/reset_password/`, form, {
+    return this._http.post(`${this.urlApi}users/reset_password/`, form, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
@@ -64,7 +63,7 @@ export class AuthService {
 
   public resetPasswordConfirm(form: ResetPasswordConfirm): Observable<any>{
 
-    return this.http.post(`${environment.url}auth/users/reset_password_confirm/`, form, {
+    return this._http.post(`${this.urlApi}users/reset_password_confirm/`, form, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })

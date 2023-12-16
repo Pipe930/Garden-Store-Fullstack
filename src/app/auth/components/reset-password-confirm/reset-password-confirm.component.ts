@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -18,14 +18,14 @@ export class ResetPasswordConfirmComponent {
   private uid: string = "";
   private token: string = "";
 
-  constructor(
-    private _activate: ActivatedRoute,
-    private _builder: FormBuilder,
-    private _authService: AuthService,
-    private _alertService: AlertsService,
-    private _validatorService: ValidatorService,
-    private _router: Router
-  ) {
+  private _activate = inject(ActivatedRoute);
+  private _router = inject(Router);
+  private _builder = inject(FormBuilder);
+  private _authService = inject(AuthService);
+  private _alertService = inject(AlertsService);
+  private _validatorService = inject(ValidatorService);
+
+  constructor() {
     this._activate.params.subscribe(params =>{
       this.uid = params["uid"];
       this.token = params["token"];

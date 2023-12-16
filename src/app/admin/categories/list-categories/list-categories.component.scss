@@ -1,0 +1,31 @@
+@import '/src/themes/variables.scss';
+
+.container{
+
+  width: 100%;
+  background-color: $color-light;
+  padding: 2.2rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 10px 10px 8px -8px $color-dark-300;
+
+  .container__container-title{
+
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+
+    .container__btn{
+
+      background-color: $color-success;
+      color: $color-light;
+      padding: .6rem 1.4rem;
+      transition: background .3s ease-in-out;
+    }
+
+    .container__btn:hover{
+
+      background-color: $color-success-600;
+    }
+  }
+}

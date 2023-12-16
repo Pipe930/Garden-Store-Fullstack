@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ValidatorService } from 'src/app/shared/services/validator.service';
 import { AuthService } from '../../services/auth.service';
@@ -14,13 +14,13 @@ export class RegisterComponent {
 
   public formRegister: FormGroup;
 
-  constructor(
-    private _builder: FormBuilder,
-    private _router: Router,
-    private _validatorService: ValidatorService,
-    private _authService: AuthService,
-    private _alertService: AlertsService
-  ) {
+  private _router = inject(Router);
+  private _builder = inject(FormBuilder);
+  private _authService = inject(AuthService);
+  private _alertService = inject(AlertsService);
+  private _validatorService = inject(ValidatorService);
+
+  constructor() {
     this.formRegister = this._builder.group({
       first_name: new FormControl("", [Validators.required, Validators.maxLength(20), Validators.minLength(4)]),
       last_name: new FormControl("", [Validators.required, Validators.maxLength(20), Validators.minLength(4)]),

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -14,13 +14,13 @@ export class LoginComponent {
 
   public formLogin: FormGroup;
 
-  constructor(
-    private _builder: FormBuilder,
-    private _router: Router,
-    private _authService: AuthService,
-    private _alertService: AlertsService,
-    private _validatorService: ValidatorService
-  ) {
+  private _router = inject(Router);
+  private _builder = inject(FormBuilder);
+  private _authService = inject(AuthService);
+  private _alertService = inject(AlertsService);
+  private _validatorService = inject(ValidatorService);
+
+  constructor() {
     this.formLogin = this._builder.group({
       email: new FormControl("", [Validators.required, this._validatorService.emailValidator, Validators.maxLength(255)]),
       password: new FormControl("", [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
