@@ -7,6 +7,7 @@ from apps.users.urls import urlsSubcriptions, urlsUsers
 from apps.countries.urls import urlsRegions, urlsProvincies, urlsCommunes
 from apps.sales.urls import urlsCarts, urlsVouchers
 from apps.branchs.urls import urlsBranchs
+from apps.users.views import LoginView
 
 urls_api =  [
     path("categories/", include(urlsCategories)),
@@ -20,6 +21,7 @@ urls_api =  [
     path("vouchers/", include(urlsVouchers)),
     path("branchs/", include(urlsBranchs)),
     path("users/", include(urlsUsers)),
+    path("auth/jwt/create/", LoginView.as_view(), name="login"),
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt"))
 ]
