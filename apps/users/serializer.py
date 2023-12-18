@@ -16,21 +16,17 @@ class UserCreateSerializer(UserCreateSerializer):
             "is_active"
         )
 
-class CustomTokenObtainSerializer(TokenObtainPairSerializer):
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Customizes JWT default Serializer to add more information about user"""
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['username'] = user.username
+        token['email'] = user.email
+        token['is_superuser'] = user.is_superuser
+        token['is_staff'] = user.is_staff
 
-    def validate(self, attrs):
-
-        data = super().validate(attrs)
-
-        obj = self.user
-
-        data.update({
-            "username": obj.username,
-            "is_staff": obj.is_staff,
-            "is_superuser": obj.is_superuser
-        })
-
-        return data
+        return token
 
 # Serialized Subscription Model
 class CreateSubscriptionSerializer(ModelSerializer):

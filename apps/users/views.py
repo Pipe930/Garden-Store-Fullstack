@@ -1,10 +1,8 @@
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.models import TokenUser
 from django.contrib.auth import login, logout
 from .utils import Util
 from .models import Subscription, User
@@ -12,27 +10,28 @@ from .serializer import (
     CreateSubscriptionSerializer,
     ListSubscriptionSerializer,
     MessageSerializer,
-    CustomTokenObtainSerializer)
+    CustomTokenObtainPairSerializer)
 from rest_framework_simplejwt.views import TokenObtainPairView
 from core.messages import (
     message_response_created,
     message_response_bad_request,
     message_response_detail)
 
+# ----------------------------- USER VIEWS --------------------------------
 
 class LoginView(TokenObtainPairView):
 
-    serializer_class = CustomTokenObtainSerializer
+    serializer_class = CustomTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
 
-        try:
-            user = User.objects.get(email=request.data.get("email"))
-            if not user.is_active:
-                return Response({"message": "Esta cuenta no esta activa"}, status.HTTP_401_UNAUTHORIZED)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        except User.DoesNotExist:
-            return Response({"error": "Usuario invalido o contraseña invalida"}, status.HTTP_400_BAD_REQUEST)
+        if not User.objects.filter(email=request.data.get("email")).exists():
+            Response({"error": "Usuario invalido o contraseña invalida"}, status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.filter(email=request.data.get("email")).first()
 
         login(request, user)
 
