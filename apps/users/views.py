@@ -10,8 +10,11 @@ from .serializer import (
     CreateSubscriptionSerializer,
     ListSubscriptionSerializer,
     MessageSerializer,
-    CustomTokenObtainPairSerializer)
+    CustomTokenObtainPairSerializer,
+    LogoutSerializer)
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
 from core.messages import (
     message_response_created,
     message_response_bad_request,
@@ -19,6 +22,7 @@ from core.messages import (
 
 # ----------------------------- USER VIEWS --------------------------------
 
+# Login User View
 class LoginView(TokenObtainPairView):
 
     serializer_class = CustomTokenObtainPairSerializer
@@ -36,6 +40,30 @@ class LoginView(TokenObtainPairView):
         login(request, user)
 
         return super().post(request, *args, **kwargs)
+
+# Logout User View
+class LogoutView(CreateAPIView):
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = LogoutSerializer
+
+    def post(self, request, format=None):
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        token_refresh = serializer.validated_data["refresh_token"]
+
+        try:
+            token = RefreshToken(token_refresh)
+            token.blacklist()
+
+            logout(request)
+        except TokenError:
+            return Response({"status": "Bad Request", "message": "Este token ya esta en la lista negra"}, status.HTTP_400_BAD_REQUEST)
+
+
+        return Response({"status": "OK", "message": "Sesion Terminada con exito"}, status.HTTP_200_OK)
 
 # ----------------------------- SUBCRIPTION VIEWS --------------------------------
 

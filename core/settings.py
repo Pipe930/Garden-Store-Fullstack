@@ -187,7 +187,7 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': os.environ.get("KEY_JWT"),
+    'SIGNING_KEY': os.environ.get("SIMPLE_JWT_SIGNING_KEY"),
 
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }

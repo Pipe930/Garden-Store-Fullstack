@@ -16,6 +16,10 @@ class UserCreateSerializer(UserCreateSerializer):
             "is_active"
         )
 
+class LogoutSerializer(Serializer):
+
+    refresh_token = CharField()
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """Customizes JWT default Serializer to add more information about user"""
     @classmethod
