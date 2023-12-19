@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
 import { Product } from '../../interfaces/product';
 import { Category } from '../../interfaces/category';
@@ -16,20 +16,17 @@ export class ListProductsComponent implements OnInit {
   public listCategories: Array<Category> = [];
   public urlApi: string = environment.domain;
 
-  constructor(
-    private _ProductsService: ProductsService
-  ) {
-  }
+  private _productsService = inject(ProductsService);
 
   ngOnInit(): void {
 
-    this._ProductsService.getProducts();
-    this._ProductsService.listProducts$.subscribe(result => {
+    this._productsService.getProducts();
+    this._productsService.listProducts$.subscribe(result => {
 
       this.listProducts = result;
     })
 
-    this._ProductsService.getCategories().subscribe(result => {
+    this._productsService.getCategories().subscribe(result => {
 
       if(result != null){
         this.listCategories = result.data;
@@ -41,12 +38,12 @@ export class ListProductsComponent implements OnInit {
   public nextPage():void{
 
     this.pageNumber += 1;
-    this._ProductsService.getProductsPage(this.pageNumber);
+    this._productsService.getProductsPage(this.pageNumber);
   }
   public previousPage():void{
 
     this.pageNumber -= 1;
-    this._ProductsService.getProductsPage(this.pageNumber);
+    this._productsService.getProductsPage(this.pageNumber);
   }
 
   public searchProduct():void {
@@ -59,11 +56,11 @@ export class ListProductsComponent implements OnInit {
       name_product: search.value
     }
 
-    this._ProductsService.searchProduct(searchProduct);
+    this._productsService.searchProduct(searchProduct);
   }
 
   get getService(){
-    return this._ProductsService;
+    return this._productsService;
   }
 
 }

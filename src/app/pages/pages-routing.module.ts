@@ -5,6 +5,9 @@ import { HomeComponent } from './components/home/home.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { ListProductsComponent } from './components/list-products/list-products.component';
 import { DetailProductComponent } from './components/detail-product/detail-product.component';
+import { AccountComponent } from './components/account/account.component';
+import { authGuard } from '../shared/guards/auth.guard';
+
 
 const routes: Routes = [
   {
@@ -26,6 +29,11 @@ const routes: Routes = [
       {
         path: "product/:slug",
         component: DetailProductComponent
+      },
+      {
+        path: "account/:username",
+        component: AccountComponent,
+        canActivate: [authGuard]
       }
     ]
   }

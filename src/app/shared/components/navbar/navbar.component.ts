@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, Renderer2, inject } from '@angular/core';
 import { Navbar } from '../../interfaces/navbar';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -8,27 +10,53 @@ import { Navbar } from '../../interfaces/navbar';
 })
 export class NavbarComponent implements OnInit {
 
+  private _renderer2 = inject(Renderer2);
+  private _authService = inject(AuthService);
+  private _router = inject(Router);
+
   @Input() public sessionActivate: boolean = false;
   @Input() public ObjectsNavbar: Array<Navbar> = [];
   @Output() public eventThemeNavbar = new EventEmitter<boolean>();
+  @Output() public eventSession = new EventEmitter<boolean>();
+  @ViewChild("openDivNavbar") public containerNavbar!: ElementRef;
+
   public themeNavbar: boolean = false;
   public modeOriginal:string = "Normal";
   public modeDark:string = "Oscuro";
   public mode:string = this.modeOriginal;
   public showClass:boolean = false;
+  public username: string = "";
 
   ngOnInit(): void {
     this.eventThemeNavbar.emit(this.themeNavbar);
+
+    if(this.sessionActivate){
+      this.username = this._authService.getInfoUser().username;
+    }
   }
 
   public openNavbar():void{
-    let containerNavbar = document.querySelector(".navbar__container-right");
-    containerNavbar?.classList.add("visible");
+
+    let containerNavbar = this.containerNavbar.nativeElement;
+    this._renderer2.addClass(containerNavbar, "visible");
+
   }
 
   public closeNavbar():void{
-    let containerNavbar = document.querySelector(".navbar__container-right");
-    containerNavbar?.classList.remove("visible");
+
+    let containerNavbar = this.containerNavbar.nativeElement;
+    this._renderer2.removeClass(containerNavbar, "visible");
+  }
+
+  public logout():void {
+
+    this._authService.logout().subscribe(result => {
+
+      sessionStorage.clear();
+      this._router.navigate(['/home']);
+    });
+
+    this.eventSession.emit(false);
   }
 
   public themeChange():void{
@@ -44,6 +72,8 @@ export class NavbarComponent implements OnInit {
     } else {
       this.themeNavbar = false;
     }
+
+    this.eventThemeNavbar.emit(this.themeNavbar);
   }
 
 }

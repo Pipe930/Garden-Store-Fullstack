@@ -5,7 +5,7 @@
     <button class="navbar__btn-op-menu" (click)="openNavbar()">
       <i class='bx bx-menu bx-md'></i>
     </button>
-    <div class="navbar__container-right">
+    <div class="navbar__container-right" #openDivNavbar>
       <ul class="navbar__list">
         <span class="navbar__icon">
           <a href="" [routerLink]="['home']">Garden Store</a>
@@ -29,7 +29,7 @@
           modeDarkBtn:showClass
         }">Ingresar</button>
         <div class="navbar__container-login" *ngIf="sessionActivate">
-          <button class="navbar__btn-profile" [routerLink]="" [ngClass]="{
+          <button class="navbar__btn-profile" [routerLink]="['/account', username]" [ngClass]="{
             modoOscuro:showClass
           }">
             <i class='bx bxs-user'></i>
@@ -41,6 +41,7 @@
             <i class='bx bxs-cart'></i>
             Carrito
           </button>
+          <button (click)="logout()">Cerrar Sesion</button>
         </div>
         <button class="navbar__btn-theme" (click)="showClass = !showClass" (click)="themeChange()" [ngClass]="{
           modoOscuro:showClass

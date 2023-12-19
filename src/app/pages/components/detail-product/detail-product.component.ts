@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../interfaces/product';
 import { ProductsService } from '../../services/products.service';
@@ -16,17 +16,14 @@ export class DetailProductComponent implements OnInit {
   public urlApi: string = environment.domain;
   public quantity: number = 1;
 
-  constructor(
-    private _productsService: ProductsService,
-    private _activated: ActivatedRoute
-  ) {
+  private _productsService = inject(ProductsService);
+  private _activated = inject(ActivatedRoute);
+
+  ngOnInit(): void {
 
     this._activated.params.subscribe(params => {
       this.slug = params["slug"];
     });
-  }
-
-  ngOnInit(): void {
 
     this._productsService.getProduct(this.slug).subscribe(result => {
       this.product = result.data;

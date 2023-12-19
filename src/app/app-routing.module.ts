@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { isAdminGuard } from './shared/guards/is-admin.guard';
 
 const routes: Routes = [
   {
@@ -18,7 +19,8 @@ const routes: Routes = [
   },
   {
     path: "",
-    loadChildren: () => import('./admin/admin.module').then(module => module.AdminModule)
+    loadChildren: () => import('./admin/admin.module').then(module => module.AdminModule),
+    canActivate: [isAdminGuard]
   },
   {
     path: "**",

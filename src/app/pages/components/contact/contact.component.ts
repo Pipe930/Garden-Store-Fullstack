@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AlertsService } from 'src/app/shared/services/alerts.service';
 import { PagesService } from '../../services/pages.service';
 import { ValidatorService } from 'src/app/shared/services/validator.service';
@@ -10,22 +10,26 @@ import { Router } from '@angular/router';
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
-export class ContactComponent {
+export class ContactComponent implements OnInit {
 
-  public formContact: FormGroup;
+  private _builder = inject(FormBuilder);
+  private _pagesService = inject(PagesService);
+  private _alertService = inject(AlertsService);
+  private _validatorService = inject(ValidatorService);
+  private _router = inject(Router);
 
-  constructor(
-    private _builder: FormBuilder,
-    private _pagesService: PagesService,
-    private _alertService: AlertsService,
-    private _validatorService: ValidatorService,
-    private _router: Router
-  ) {
-    this.formContact = this._builder.group({
-      full_name: new FormControl("", [Validators.required, Validators.maxLength(40), Validators.minLength(4)]),
-      email: new FormControl("", [Validators.required, this._validatorService.emailValidator, Validators.maxLength(255)]),
-      message: new FormControl("", Validators.maxLength(255))
-    })
+  public formContact: FormGroup = this._builder.group({
+    full_name: new FormControl("", [Validators.required, Validators.maxLength(40), Validators.minLength(4)]),
+    email: new FormControl("", [Validators.required, this._validatorService.emailValidator, Validators.maxLength(255)]),
+    message: new FormControl("", Validators.maxLength(255))
+  });
+
+  ngOnInit(): void {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+      left: 0
+    });
   }
 
   public sendEmail():void{
