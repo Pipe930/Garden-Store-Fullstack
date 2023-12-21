@@ -43,7 +43,7 @@ export class SidenavComponent implements OnInit {
   public navData = navbarData;
   public multiple: boolean = false;
 
-  private _router = inject(Router);
+  private readonly _router = inject(Router);
 
   @HostListener("window:resize", ["$event"])
   onResize(event: any) {

@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
 
-  private _renderer2 = inject(Renderer2);
-  private _authService = inject(AuthService);
-  private _router = inject(Router);
+  private readonly _renderer2 = inject(Renderer2);
+  private readonly _authService = inject(AuthService);
+  private readonly _router = inject(Router);
 
   @Input() public sessionActivate: boolean = false;
   @Input() public ObjectsNavbar: Array<Navbar> = [];

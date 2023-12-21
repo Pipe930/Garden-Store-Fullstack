@@ -11,10 +11,10 @@ import { AlertsService } from 'src/app/shared/services/alerts.service';
 })
 export class CreateCategoryComponent {
 
-  private _builder = inject(FormBuilder);
-  private _router = inject(Router);
-  private _categoryService = inject(CategoryService);
-  private _alertService = inject(AlertsService);
+  private readonly _builder = inject(FormBuilder);
+  private readonly _router = inject(Router);
+  private readonly _categoryService = inject(CategoryService);
+  private readonly _alertService = inject(AlertsService);
 
   public formCategory: FormGroup = this._builder.group({
     name_category: new FormControl("", [Validators.required, Validators.maxLength(20), Validators.minLength(4)])

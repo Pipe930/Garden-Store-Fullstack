@@ -13,11 +13,17 @@ export interface ResponseListCategory {
   data: Array<Category>;
 }
 
-export interface ReponseCategory {
+export interface ReponseCreateCategory {
 
   status: string;
   data: Category;
   message: string;
+}
+
+export interface ReponseCategory {
+
+  status: string;
+  data: Category;
 }
 
 

@@ -16,7 +16,7 @@
         </td>
         <td *ngFor="let column of tableColumns" class="table__body-text">
           <div *ngIf="column.fieldName == 'action' && showActionButton">
-            <button class="table__btn-detail">
+            <button class="table__btn-detail" (click)="onEdit(object)">
               Detalle
             </button>
           </div>

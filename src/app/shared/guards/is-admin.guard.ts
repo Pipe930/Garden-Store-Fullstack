@@ -8,11 +8,17 @@ export const isAdminGuard: CanActivateFn = (route, state) => {
   const _router = inject(Router);
   const _authService = inject(AuthService);
 
-  if(_authService.getInfoUser().is_superuser){
-    return true;
+  if(_authService.getToken() == null){
+
+    _router.navigate(["/auth/login"]);
+    return false;
   }
 
-  _router.navigate(["/auth/login"]);
-  return false;
+  if(!_authService.getInfoUser().is_superuser){
 
+    _router.navigate(["/auth/login"]);
+    return false;
+  }
+
+  return true;
 };

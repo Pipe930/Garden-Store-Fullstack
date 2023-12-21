@@ -14,10 +14,10 @@ export class ActivateComponent implements OnInit {
   private uid: string = "";
   private token: string = "";
 
-  private _activate = inject(ActivatedRoute);
-  private _authService = inject(AuthService);
-  private _router = inject(Router);
-  private _alertService = inject(AlertsService);
+  private readonly _activate = inject(ActivatedRoute);
+  private readonly _authService = inject(AuthService);
+  private readonly _router = inject(Router);
+  private readonly _alertService = inject(AlertsService);
 
   ngOnInit(): void {
 

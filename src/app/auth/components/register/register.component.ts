@@ -12,11 +12,11 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent {
 
-  private _router = inject(Router);
-  private _builder = inject(FormBuilder);
-  private _authService = inject(AuthService);
-  private _alertService = inject(AlertsService);
-  private _validatorService = inject(ValidatorService);
+  private readonly _router = inject(Router);
+  private readonly _builder = inject(FormBuilder);
+  private readonly _authService = inject(AuthService);
+  private readonly _alertService = inject(AlertsService);
+  private readonly _validatorService = inject(ValidatorService);
 
   public messagePassword: Array<string> = [];
   public formRegister: FormGroup = this._builder.group({

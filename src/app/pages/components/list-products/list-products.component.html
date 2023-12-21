@@ -1,13 +1,13 @@
 <main class="container-main">
   <div class="container-main__continaer-inputs">
     <div class="contianer-inputs__container-search">
-      <input placeholder="Buscar..." type="search" id="search_product" class="continaer-inputs__search">
+      <input placeholder="Buscar..." type="search" #searchNameProduct class="continaer-inputs__search">
       <button (click)="searchProduct()" class="continaer-inputs__btn-search">
         <i class='bx bx-search-alt-2'></i>
       </button>
     </div>
     <div class="container-inputs__container-filter">
-      <select name="" id="select_category" class="continaer-inputs__select">
+      <select #selectIdCategory class="continaer-inputs__select">
         <option value="0">Categoria</option>
         <option [value]="category.id_category" *ngFor="let category of listCategories">{{category.name_category}}</option>
       </select>
@@ -26,7 +26,7 @@
 
         <article *ngFor="let product of listProducts" class="products__product">
           <picture>
-            <img [src]="urlApi + product.image" alt="imagen de producto">
+            <img [ngSrc]="urlApi + product.image" width="100px" height="100px" alt="imagen de producto">
           </picture>
           <div class="product__body">
             <h2 class="product__title">{{product.title}}</h2>

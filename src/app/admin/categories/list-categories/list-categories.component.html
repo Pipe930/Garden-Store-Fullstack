@@ -5,5 +5,5 @@
       Crear Categoria
     </button>
   </div>
-  <app-table [dataRows]="listCategories" [tableColumns]="columns" [showActionButton]="true"></app-table>
+  <app-table [dataRows]="listCategories" [tableColumns]="columns" [showActionButton]="true" (eventEdit)="editCategory($event)"></app-table>
 </div>

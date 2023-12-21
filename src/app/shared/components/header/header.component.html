@@ -1,0 +1,74 @@
+
+<header class="header">
+  <div class="header__header-content">
+
+    <div class="header__content-left">
+      <div class="header__search-container">
+        <div class="header__normal-search" *ngIf="!canShowSearch">
+          <input type="search" class="header__search" placeholder="Buscar..." name="" id="">
+          <button class="header__btn-search">
+            <i class='bx bx-search header__icon'></i>
+          </button>
+        </div>
+        <div *ngIf="canShowSearch">
+
+          <button
+          [cdkMenuTriggerFor]="searchOverlay"
+          class="header__menu-search-btn ripple"
+          >
+            <i class='bx bx-search header__icon'></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="header__content-right">
+      <div class="header__menu">
+        <div class="header__menu-item">
+          <button class="header__menu-item-btn ripple">
+            <img src="" alt="">
+          </button>
+        </div>
+        <div class="header__menu-item">
+          <button class="header__menu-item-btn ripple">
+            <i class='bx bx-fullscreen header__icon'></i>
+          </button>
+        </div>
+        <div class="header__menu-item">
+          <button class="header__menu-item-btn ripple">
+            <i class='bx bxs-bell header__icon'></i>
+          </button>
+        </div>
+        <div class="header__menu-item">
+          <button class="header__menu-item-btn ripple">
+            <i class='bx bxs-message header__icon'></i>
+          </button>
+        </div>
+      </div>
+      <div class="header__container-user-avatar">
+        <div class="header__user-avatar">
+          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="avatar_user" class="header__img-avatar">
+          <div class="circle-indicator pulse"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<ng-template #searchOverlay>
+  <div class="overlay overlay-search overlay-fall" cdkMenu>
+    <input type="search" placeholder="Buscar..." class="overlay__search">
+    <button class="overlay__search-btn">
+      <i class='bx bx-search overlay__icon'></i>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #notificationOverlay>
+  <div class="overlay overlay-notification overlay-fall" cdkMenu>
+    <ul>
+      <li>
+
+      </li>
+    </ul>
+  </div>
+</ng-template>

@@ -12,11 +12,11 @@ import { Router } from '@angular/router';
 })
 export class ContactComponent implements OnInit {
 
-  private _builder = inject(FormBuilder);
-  private _pagesService = inject(PagesService);
-  private _alertService = inject(AlertsService);
-  private _validatorService = inject(ValidatorService);
-  private _router = inject(Router);
+  private readonly _builder = inject(FormBuilder);
+  private readonly _pagesService = inject(PagesService);
+  private readonly _alertService = inject(AlertsService);
+  private readonly _validatorService = inject(ValidatorService);
+  private readonly _router = inject(Router);
 
   public formContact: FormGroup = this._builder.group({
     full_name: new FormControl("", [Validators.required, Validators.maxLength(40), Validators.minLength(4)]),

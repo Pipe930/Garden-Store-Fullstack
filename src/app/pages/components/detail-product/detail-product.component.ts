@@ -16,8 +16,8 @@ export class DetailProductComponent implements OnInit {
   public urlApi: string = environment.domain;
   public quantity: number = 1;
 
-  private _productsService = inject(ProductsService);
-  private _activated = inject(ActivatedRoute);
+  private readonly _productsService = inject(ProductsService);
+  private readonly _activated = inject(ActivatedRoute);
 
   ngOnInit(): void {
 

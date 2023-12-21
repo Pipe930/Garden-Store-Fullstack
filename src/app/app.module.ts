@@ -9,7 +9,6 @@ import { AuthModule } from './auth/auth.module';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { PagesModule } from './pages/pages.module';
 import { AdminModule } from './admin/admin.module';
-import { CategoriesModule } from './admin/categories/categories.module';
 
 import { AuthInterceptor } from './pages/services/auth.interceptor';
 
@@ -24,8 +23,7 @@ import { AuthInterceptor } from './pages/services/auth.interceptor';
     BrowserAnimationsModule,
     AuthModule,
     PagesModule,
-    AdminModule,
-    CategoriesModule
+    AdminModule
   ],
   providers:[
     {

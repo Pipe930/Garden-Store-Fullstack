@@ -12,11 +12,11 @@ import { ValidatorService } from 'src/app/shared/services/validator.service';
 })
 export class LoginComponent {
 
-  private _router = inject(Router);
-  private _builder = inject(FormBuilder);
-  private _authService = inject(AuthService);
-  private _alertService = inject(AlertsService);
-  private _validatorService = inject(ValidatorService);
+  private readonly _router = inject(Router);
+  private readonly _builder = inject(FormBuilder);
+  private readonly _authService = inject(AuthService);
+  private readonly _alertService = inject(AlertsService);
+  private readonly _validatorService = inject(ValidatorService);
 
   public formLogin: FormGroup = this._builder.group({
     email: new FormControl("", [Validators.required, this._validatorService.emailValidator, Validators.maxLength(255)]),
@@ -34,7 +34,14 @@ export class LoginComponent {
     this._authService.login(this.formLogin.value).subscribe((result) => {
 
       this._alertService.success("Inicio Exitoso", "Se inicio sesion correctamente");
-      this._router.navigate(['home']);
+      let user = this._authService.getInfoUser();
+
+      if(user.is_superuser){
+        this._router.navigate(['administration/dashboard']);
+      } else {
+        this._router.navigate(['home']);
+      }
+
     }, (error) => this._alertService.error("Error", "No se inicio sesion correctamente"))
 
   }

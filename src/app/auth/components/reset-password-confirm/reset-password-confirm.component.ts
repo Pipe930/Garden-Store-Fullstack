@@ -17,12 +17,12 @@ export class ResetPasswordConfirmComponent implements OnInit {
   private uid: string = "";
   private token: string = "";
 
-  private _activate = inject(ActivatedRoute);
-  private _router = inject(Router);
-  private _builder = inject(FormBuilder);
-  private _authService = inject(AuthService);
-  private _alertService = inject(AlertsService);
-  private _validatorService = inject(ValidatorService);
+  private readonly _activate = inject(ActivatedRoute);
+  private readonly _router = inject(Router);
+  private readonly _builder = inject(FormBuilder);
+  private readonly _authService = inject(AuthService);
+  private readonly _alertService = inject(AlertsService);
+  private readonly _validatorService = inject(ValidatorService);
 
   public messagePassword: Array<string> = [];
   public formResetPassword: FormGroup = this._builder.group({

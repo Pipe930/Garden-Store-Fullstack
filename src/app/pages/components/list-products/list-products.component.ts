@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
 import { Product } from '../../interfaces/product';
 import { Category } from '../../interfaces/category';
@@ -15,8 +15,10 @@ export class ListProductsComponent implements OnInit {
   public listProducts: Array<Product> = [];
   public listCategories: Array<Category> = [];
   public urlApi: string = environment.domain;
+  @ViewChild("searchNameProduct") public nameProduct!: ElementRef;
+  @ViewChild("selectIdCategory") public selectCategory!: ElementRef;
 
-  private _productsService = inject(ProductsService);
+  private readonly _productsService = inject(ProductsService);
 
   ngOnInit(): void {
 
@@ -48,12 +50,12 @@ export class ListProductsComponent implements OnInit {
 
   public searchProduct():void {
 
-    const search = document.querySelector("#search_product") as HTMLInputElement;
-    const select = document.querySelector("#select_category") as HTMLSelectElement;
+    const name_product = this.nameProduct.nativeElement;
+    const id_category = this.selectCategory.nativeElement;
 
     let searchProduct = {
-      id_category: Number.parseInt(select.value),
-      name_product: search.value
+      id_category: Number.parseInt(id_category.value),
+      name_product: name_product.value
     }
 
     this._productsService.searchProduct(searchProduct);

@@ -12,9 +12,15 @@ export class TableComponent implements OnInit {
   @Input() public dataRows: Array<any> = [];
   @Input() public showActionButton: boolean = false;
   @Output() public eventPages = new EventEmitter<boolean>();
+  @Output() public eventEdit = new EventEmitter<any>();
 
   ngOnInit(): void {
 
+  }
+
+  public onEdit(object: any):void{
+
+    this.eventEdit.emit(object);
   }
 
 }
