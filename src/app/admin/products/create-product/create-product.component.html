@@ -1,0 +1,65 @@
+
+<div class="container">
+
+  <div class="container__container-title">
+    <h2 class="container__container-title">Crear Producto</h2>
+    <button class="container__btn" [routerLink]="['/administration/products/list']">Volver</button>
+  </div>
+
+  <div class="container__container-form">
+    <form action="" class="container-form__form" [formGroup]="formProduct" (ngSubmit)="createProduct()">
+      <fieldset class="form__control">
+        <label for="title_product" class="form__text">Nombre Producto</label>
+        <input type="text" id="title_product" class="form__input" formControlName="title">
+        <div class="form__container-errors" *ngIf="title_product.invalid && (title_product.dirty || title_product.touched)">
+          <span class="form__errors" *ngIf="title_product.getError('required')">Este campo es requerido</span>
+          <span class="form__errors" *ngIf="title_product.getError('maxlength')">Tiene que ser maximo de 255 caracteres</span>
+        </div>
+      </fieldset>
+      <fieldset class="form__control">
+        <label for="brand_product" class="form__text">Marca</label>
+        <input type="text" id="brand_product" class="form__input" formControlName="brand">
+        <div class="form__container-errors" *ngIf="brand_product.invalid && (brand_product.dirty || brand_product.touched)">
+          <span class="form__errors" *ngIf="brand_product.getError('required')">Este campo es requerido</span>
+          <span class="form__errors" *ngIf="brand_product.getError('maxlength')">Tiene que ser maximo de 40 caracteres</span>
+        </div>
+      </fieldset>
+      <fieldset class="form__control">
+        <label for="price_product" class="form__text">Precio</label>
+        <input type="number" id="price_product" class="form__input" formControlName="price">
+        <div class="form__container-errors" *ngIf="price_product.invalid && (price_product.dirty || price_product.touched)">
+          <span class="form__errors" *ngIf="price_product.getError('required')">Este campo es requerido</span>
+          <span class="form__errors" *ngIf="price_product.getError('min')">Tiene que tener un precio minimo de $1.000</span>
+          <span class="form__errors" *ngIf="price_product.getError('max')">Tiene que tener un precio maximo de $1.000.000</span>
+        </div>
+      </fieldset>
+      <fieldset class="form__control">
+        <label for="description_product" class="form__text">Descripción</label>
+        <textarea id="description_product" class="form__text" cols="30" rows="10" formControlName="description"></textarea>
+        <div class="form__container-errors" *ngIf="description_product.invalid && (description_product.dirty || description_product.touched)">
+          <span class="form__errors" *ngIf="description_product.getError('maxlength')">Tiene que ser maximo de 255 caracteres</span>
+        </div>
+      </fieldset>
+      <fieldset class="form__control">
+        <label for="price_product" class="form__text">Categoria</label>
+        <select name="" id="" formControlName="category">
+          <option value="">categoria</option>
+          <option [value]="category.id_category" *ngFor="let category of listCategories">{{category.name_category}}</option>
+        </select>
+        <div class="form__container-errors" *ngIf="category_product.invalid && (category_product.dirty || category_product.touched)">
+          <span class="form__errors" *ngIf="category_product.getError('required')">Este campo es requerido</span>
+        </div>
+      </fieldset>
+      <fieldset class="form__control">
+        <label for="image_product" class="form__text">Imagen</label>
+        <input type="file" id="image_product" #imageProduct (change)="cambiarFoto()" class="form__input" formControlName="image">
+        <div class="form__container-errors" *ngIf="image_product.invalid && (image_product.dirty || image_product.touched)">
+          <span class="form__errors" *ngIf="image_product.getError('required')">Este campo es requerido</span>
+        </div>
+      </fieldset>
+      <button type="submit" class="form__btn-create">
+        Guardar
+      </button>
+    </form>
+  </div>
+</div>

@@ -24,7 +24,17 @@
 
           .description-product__prices{
             padding: 1rem 0;
-            font-size: 1.4rem;
+
+            .prices__price{
+
+              font-size: 2rem;
+            }
+
+            .prices__text{
+
+              font-size: 1rem;
+              color: $color-dark-600;
+            }
           }
 
           .description-product__cart{

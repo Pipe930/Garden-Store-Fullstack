@@ -1,0 +1,9 @@
+<div class="container">
+  <div class="container__container-title">
+    <h2 class="container__title">Productos</h2>
+    <button class="container__btn" [routerLink]="['/administration/products/create']">
+      Crear Producto
+    </button>
+  </div>
+  <app-table [dataRows]="listProducts" [tableColumns]="columns" [showActionButton]="true" (eventEdit)="editProduct($event)"></app-table>
+</div>

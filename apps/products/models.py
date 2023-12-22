@@ -71,7 +71,7 @@ class Product(models.Model):
         verbose_name_plural = "products"
 
     def __str__(self) -> str:
-        return self.name_product
+        return self.title
 
 # Function to define the slug of the product
 def set_slug(sender, instance, *args, **kwargs):
@@ -80,7 +80,7 @@ def set_slug(sender, instance, *args, **kwargs):
 
     id = str(uuid.uuid4())
     instance.slug = slugify("{}-{}".format(
-        instance.name_product, id
+        instance.title, id
     ))
 
 pre_save.connect(set_slug, sender = Product)

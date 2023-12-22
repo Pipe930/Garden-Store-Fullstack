@@ -11,7 +11,21 @@ import { environment } from 'src/environments/environment.development';
 })
 export class DetailProductComponent implements OnInit {
 
-  public product!: Product;
+  public product: Product = {
+    id_product: 0,
+    title: "",
+    brand: "",
+    stock: 0,
+    price: 0,
+    discount_price: 0,
+    aviable: false,
+    created: "",
+    slug: "",
+    image: "",
+    description: "",
+    category: "",
+  };
+
   public slug: string = "";
   public urlApi: string = environment.domain;
   public quantity: number = 1;

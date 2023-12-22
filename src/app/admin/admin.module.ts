@@ -6,6 +6,7 @@ import { AdminComponent } from './admin.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SharedModule } from '../shared/shared.module';
 import { CategoriesModule } from './categories/categories.module';
+import { ProductsModule } from './products/products.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { CategoriesModule } from './categories/categories.module';
     CommonModule,
     AdminRoutingModule,
     SharedModule,
-    CategoriesModule
+    CategoriesModule,
+    ProductsModule
   ]
 })
 export class AdminModule { }

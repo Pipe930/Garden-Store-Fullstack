@@ -20,7 +20,11 @@
               Detalle
             </button>
           </div>
-          <div *ngIf="column.fieldName !== 'action'">
+          <div *ngIf="column.dataType == 'boolean'">
+            <i class='bx bxs-check-circle table__icon table__icon--success' *ngIf="object[column.fieldName]"></i>
+            <i class='bx bxs-x-circle table__icon table__icon--danger' *ngIf="!object[column.fieldName]"></i>
+          </div>
+          <div *ngIf="column.fieldName !== 'action' && column.dataType !== 'boolean'">
             {{object[column.fieldName]}}
           </div>
         </td>
@@ -29,7 +33,7 @@
 
     <tfoot class="table__footer">
       <tr>
-        <td class="table__footer-text" colspan="3">
+        <td class="table__footer-text" [colSpan]="tableColumns.length + 1">
           <div class="table__btns-pages">
             <button class="table__btn-pre">Previous</button>
             <button class="table__btn-next">Next</button>

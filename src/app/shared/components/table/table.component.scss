@@ -37,6 +37,24 @@
 
           div{
 
+            .table__icon{
+
+              font-size: 1.4rem;
+            }
+
+            .table__icon--success{
+
+              color: $color-success;
+            }
+
+            .table__icon--danger{
+
+              color: $color-danger;
+            }
+          }
+
+          div{
+
             display: flex;
             justify-content: center;
 
