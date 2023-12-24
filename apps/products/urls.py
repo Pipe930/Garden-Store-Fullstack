@@ -1,20 +1,12 @@
 from django.urls import path
 from . import views
 
-urlsCategories = [
-    path("", views.ListCreateCategoryView.as_view(), name="listcreatecategory"),
-    path("category/<int:id>", views.UpdateDetailCategoryView.as_view(), name="updatedetailcategory")
+urls_categories = [
+    path("", views.ListCategoriesView.as_view(), name="listcreatecategory")
 ]
 
-urlsProducts = [
-    path("", views.ListCreateProductView.as_view(), name="listcreateproduct"),
-    path("client", views.ListProductClientView.as_view(), name="listclientproduct"),
-    path("product/<int:id>", views.UpdateDetailProductView.as_view(), name="updatedetailproduct"),
+urls_products = [
+    path("", views.ListProductView.as_view(), name="listclientproduct"),
     path("search", views.SearchProductView.as_view(), name="searchproduct"),
     path("detail/product/<str:slug>", views.DetailProductSlugView.as_view(), name="detailproductslug")
-]
-
-urlsOffers = [
-    path("", views.ListCreateOfferView.as_view(), name="listcreateoffer"),
-    path("offer/<int:id>", views.UpdateDetailOfferView.as_view(), name="updatedetailveoffer")
 ]

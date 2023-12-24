@@ -18,11 +18,11 @@ Esta es una aplicación web fullstack llamado garden store para vender productos
 # Instalación de Dependencias 📁
 
 # Django ❇️
-Para instalar las dependencias del proyecto de django, se adjunta un archivo llamado requirements.txt con todas las librerías necesarias. Pero primero, se debe crear un entorno virtual con Python usando el comando:
+Para instalar las dependencias del proyecto de django, se adjunta un archivo llamado `requirements.txt` con todas las librerías necesarias. Pero primero, se debe crear un entorno virtual con Python usando el comando:
 
     python -m venv env 
 
-Después de ejecutar el comando, se creará una carpeta con el entorno virtual. Para activar el entorno virtual, ejecute el archivo activate.bat ubicado en env\Scripts\activate.bat. Con el entorno virtual activado, instale las dependencias del proyecto usando el comando:
+Después de ejecutar el comando, se creará una carpeta con el entorno virtual. Para activar el entorno virtual, ejecute el archivo activate.bat ubicado en `env\Scripts\activate.bat`. Con el entorno virtual activado, instale las dependencias del proyecto usando el comando:
 
     pip install -r requirements.txt
 
@@ -30,7 +30,7 @@ Posteriormente se instalarán las dependencias para ejecutar el proyecto.
 
 # Variables de Entorno 📌
 
-Para poder crear las variables de entorno se necesita crear una archivo .env en la carpeta core/, adentro de este archivo se deben poner las siguientes variables de entorno:
+Para poder crear las variables de entorno se necesita crear una archivo `.env` en la carpeta `core/`, adentro de este archivo se deben poner las siguientes variables de entorno:
 
 ```bash
 NAME_DATABASE=<db-name>
@@ -43,7 +43,7 @@ DEBUG=<True|False>
 ```
 
 # Migraciones 📝
-Para migrar los modelos a la base de datos, primero se debe crear unas carpetas llamadas migrations/ en cada app del proyecto y un archivo __init__.py dentro de estas carpetas, configurar el archivo settings.py con los detalles de conexión de la base de datos (En las variables de entorno). Una vez que hayas hecho la configuración, ejecuta el comando:
+Para poder realizar las migraciones, cree 2 scripts `start_server.bat` para windows y `start.sh` para entornos linux, estos scripts van a crear la carpeta migrations/ (que no las inclui en el proyecto) para cada aplicación del proyecto y el archivo `__init__.py` dentro de las carpetas. Configurar el archivo `settings.py` con los detalles de conexión de la base de datos (En las variables de entorno). Una vez que hayas hecho la configuración, ejecuta el comando:
 
     python manage.py makemigrations
 
@@ -65,7 +65,7 @@ Para correr el servidor de angular primero que todo tenemos que instalar las dep
 
     npm install
 
-Donde se instalaran todas las dependencias del proyecto
+Donde creara la carpeta `node_modules` y se instalaran todas las dependencias del proyecto
 
 # Ejecución Angular ✅
 Después de haber instalado las dependencias al proyecto, ahora podrás ejecutarlo con el siguiente comando:

@@ -35,24 +35,47 @@
 
       .form__control{
 
+        margin: 1.4rem 0;
+
         .form__text{
 
           font-size: 1.1rem;
           margin-bottom: .4rem;
         }
 
-        .form__input{
+        .form__input,
+        .form__textarea{
 
           width: 40%;
-          border: 2px solid $color-dark-300;
+          border: 1px solid $color-dark-300;
           padding: 0.5rem;
           background-color: $color-light;
           transition: box-shadow .3s ease-in-out;
         }
 
-        .form__input:focus{
+        .form__input:focus,
+        .form__textarea:focus{
+
+          box-shadow: 0 0 10px -2px $color-dark-300;
+        }
+
+        .form__select{
+
+          width: 200px;
+          padding: .4rem;
+          background-color: $color-light;
+          border: 1px solid $color-dark-300;
+          transition: box-shadow .3s ease-in-out;
+        }
+
+        .form__select:focus{
 
           box-shadow: 0 0 10px $color-dark-300;
+        }
+
+        #image_product:hover{
+
+          cursor: pointer;
         }
 
         .form__container-errors{

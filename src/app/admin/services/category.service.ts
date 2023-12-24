@@ -10,22 +10,29 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 })
 export class CategoryService {
 
-  public urlApi: string = `${environment.url}categories/`
+  public urlApi: string = `${environment.url}admin/`;
 
   private readonly _http = inject(HttpClient);
   private readonly _authService = inject(AuthService);
 
   public getAllCategories():Observable<ResponseListCategory>{
-    return this._http.get<ResponseListCategory>(this.urlApi);
+    return this._http.get<ResponseListCategory>(`${this.urlApi}categories/`, {
+      headers: new HttpHeaders({
+        Authorization: "JWT " + this._authService.getToken()
+      })
+    });
   }
 
-
   public getCategory(id_category:number):Observable<ReponseCategory>{
-    return this._http.get<ReponseCategory>(`${this.urlApi}category/${id_category}`);
+    return this._http.get<ReponseCategory>(`${this.urlApi}category/${id_category}`, {
+      headers: new HttpHeaders({
+        Authorization: "JWT " + this._authService.getToken()
+      })
+    });
   }
 
   public createCategory(category: Category):Observable<ReponseCreateCategory>{
-    return this._http.post<ReponseCreateCategory>(`${this.urlApi}`, category, {
+    return this._http.post<ReponseCreateCategory>(`${this.urlApi}categories/`, category, {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
         Authorization: "JWT " + this._authService.getToken()

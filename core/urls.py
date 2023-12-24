@@ -2,11 +2,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from apps.products.urls import urlsCategories, urlsProducts, urlsOffers
-from apps.users.urls import urlsSubcriptions, urlsUsers
-from apps.countries.urls import urlsRegions, urlsProvincies, urlsCommunes
-from apps.sales.urls import urlsCarts, urlsVouchers
-from apps.branchs.urls import urlsBranchs
+from apps.products.urls import urls_categories, urls_products
+from apps.users.urls import urls_subcriptions, urls_users
+from apps.countries.urls import urls_communes, urls_provincies, urls_regions
+from apps.sales.urls import urls_carts, urls_vouchers
+from apps.branchs.urls import urls_branchs
+from apps.admin.urls import urls_administration
 from apps.users.views import LoginView, LogoutView
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -17,17 +18,17 @@ urls_jwt = [
 ]
 
 urls_api =  [
-    path("categories/", include(urlsCategories)),
-    path("products/", include(urlsProducts)),
-    path("offers/", include(urlsOffers)),
-    path("subscriptions/", include(urlsSubcriptions)),
-    path("regions/", include(urlsRegions)),
-    path("provinces/", include(urlsProvincies)),
-    path("communes/", include(urlsCommunes)),
-    path("carts/", include(urlsCarts)),
-    path("vouchers/", include(urlsVouchers)),
-    path("branchs/", include(urlsBranchs)),
-    path("users/", include(urlsUsers)),
+    path("categories/", include(urls_categories)),
+    path("products/", include(urls_products)),
+    path("subscriptions/", include(urls_subcriptions)),
+    path("regions/", include(urls_regions)),
+    path("provinces/", include(urls_provincies)),
+    path("communes/", include(urls_communes)),
+    path("carts/", include(urls_carts)),
+    path("vouchers/", include(urls_vouchers)),
+    path("branchs/", include(urls_branchs)),
+    path("users/", include(urls_users)),
+    path("admin/", include(urls_administration)),
     path("auth/", include("djoser.urls")),
     path("auth/jwt/", include(urls_jwt))
 ]

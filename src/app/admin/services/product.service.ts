@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 })
 export class ProductService {
 
-  public urlApi: string = `${environment.url}products/`;
+  public urlApi: string = `${environment.url}admin/products/`;
 
   private readonly _http = inject(HttpClient);
   private readonly _authService = inject(AuthService);

@@ -1,14 +1,14 @@
 from django.urls import path
 from . import views
 
-urlsRegions = [
+urls_regions = [
     path("", views.ListRegionsView.as_view(), name="listregions")
 ]
 
-urlsProvincies = [
+urls_provincies = [
     path("region/<int:id>", views.ListProvincesRegionView.as_view(), name="listprovincies")
 ]
 
-urlsCommunes = [
+urls_communes = [
     path("province/<int:id>", views.ListCommuneProvinceView.as_view(), name="listcommunes")
 ]

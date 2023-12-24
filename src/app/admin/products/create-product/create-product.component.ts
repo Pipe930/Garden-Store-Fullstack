@@ -101,7 +101,6 @@ export class CreateProductComponent implements OnInit {
 
       reader.onload = () => {
         this.loadImage = false;
-        console.log('Carga terminada :D');
         this.imageBase64 = reader.result as string;
       }
       reader.onerror = () => {
