@@ -4,12 +4,14 @@ $screen-size: 1200px;
 
 .main-content{
   width: 85%;
+  max-width: 1300px;
   margin: auto;
 
   .header__container-company{
 
     display: flex;
     gap: 1rem;
+    justify-content: center;
 
     a{
       width: 19rem;

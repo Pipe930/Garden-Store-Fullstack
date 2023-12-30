@@ -13,10 +13,7 @@ import { Category } from '../../interfaces/category';
 export class UpdateCategoryComponent implements OnInit {
 
   public id_category: number = 0;
-  public category: Category = {
-    id_category: 0,
-    name_category: ""
-  };
+  public category!: Category;
 
   private readonly _builder = inject(FormBuilder);
   private readonly _router = inject(Router);
@@ -59,6 +56,8 @@ export class UpdateCategoryComponent implements OnInit {
 
     this._categoryService.getCategory(this.id_category).subscribe(result => {
       this.category = result.data;
+      this.formUpdateCategory.get("name_category")?.setValue(result.data.name_category);
+      this.formUpdateCategory.updateValueAndValidity();
     });
   }
 

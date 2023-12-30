@@ -8,6 +8,7 @@ export interface Product {
   discount_price: number;
   stock: number;
   brand: string;
+  sold: number;
   image: string;
   slug: string;
   aviable: boolean;
@@ -17,6 +18,11 @@ export interface Product {
   offer?: string;
 }
 
+export interface ResponseProduct {
+
+  status: string;
+  data: Product;
+}
 
 export interface ResponseListProduct {
 
@@ -33,7 +39,7 @@ export interface createProduct{
   category: number;
   image: string;
   description: string;
-
+  offer?: string;
 }
 
 export const productColumns: Array<TableColumns> = [

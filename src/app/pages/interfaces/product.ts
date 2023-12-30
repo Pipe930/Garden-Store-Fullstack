@@ -5,6 +5,7 @@ export interface Product {
   price: number;
   discount_price: number;
   stock: number;
+  sold: number;
   image: string;
   brand: string;
   slug: string;

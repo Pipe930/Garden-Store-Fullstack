@@ -21,7 +21,7 @@ export class ProductsService {
 
   public getProducts():void {
 
-    this.http.get<ResponseProducts>(`${this.url}client`).subscribe( result => {
+    this.http.get<ResponseProducts>(this.url).subscribe( result => {
 
       if(result != null){
 
@@ -36,7 +36,7 @@ export class ProductsService {
   }
 
   public getProductsPage(page: number):void{
-    this.http.get<ResponseProducts>(`${this.url}client?page=${page}`).subscribe( result => {
+    this.http.get<ResponseProducts>(`${this.url}?page=${page}`).subscribe( result => {
 
       this.validatedPage(result.next, result.previous);
       this.listProducts$.next(result.results);

@@ -29,7 +29,7 @@ export class ListProductsComponent implements OnInit {
 
   public editProduct(product: Product):void{
 
-    console.log(product);
+    this._router.navigate(['/administration/products/update', product.id_product]);
   }
 
 }

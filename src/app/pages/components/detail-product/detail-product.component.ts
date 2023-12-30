@@ -17,6 +17,7 @@ export class DetailProductComponent implements OnInit {
     brand: "",
     stock: 0,
     price: 0,
+    sold: 0,
     discount_price: 0,
     aviable: false,
     created: "",

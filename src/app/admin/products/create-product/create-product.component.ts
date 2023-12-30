@@ -20,6 +20,7 @@ export class CreateProductComponent implements OnInit {
   private readonly _alertService = inject(AlertsService);
 
   @ViewChild('imageProduct') public imageProduct!: ElementRef;
+  @ViewChild('imagePreview') public imagePreview!: ElementRef;
 
   private imageBase64: string = "";
   public loadImage: boolean = false;
@@ -88,14 +89,19 @@ export class CreateProductComponent implements OnInit {
 
   }
 
-  public cambiarFoto(){
+  public changeImage(){
 
     this.loadImage = true;
-    const elemento = this.imageProduct.nativeElement;
+    const imageProduct = this.imageProduct.nativeElement;
+    const imagePreview = this.imagePreview.nativeElement;
 
-    if (elemento instanceof HTMLInputElement && elemento.files && elemento.files.length > 0) {
-      const archivo = elemento.files[0];
-      // Resto del código...
+    if (imageProduct instanceof HTMLInputElement && imageProduct.files && imageProduct.files.length > 0) {
+
+      const archivo = imageProduct.files[0];
+      const src = URL.createObjectURL(imageProduct.files[0]);
+
+      imagePreview.src = src;
+
       const reader = new FileReader();
       reader.readAsDataURL(archivo);
 
@@ -103,10 +109,10 @@ export class CreateProductComponent implements OnInit {
         this.loadImage = false;
         this.imageBase64 = reader.result as string;
       }
-      reader.onerror = () => {
-
-      }
+      return;
     }
+
+    imagePreview.src = "/assets/imgs/upload-image_2023-04-11-023334_kxuh.png";
   }
 
 }

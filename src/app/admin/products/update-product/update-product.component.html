@@ -2,12 +2,12 @@
 <div class="container">
 
   <div class="container__container-title">
-    <h2 class="container__container-title">Crear Producto</h2>
+    <h2 class="container__container-title">Actualizar Producto {{product.title}}</h2>
     <button class="container__btn" [routerLink]="['/administration/products/list']">Volver</button>
   </div>
 
   <div class="container__container-form">
-    <form action="" class="container-form__form" [formGroup]="formProduct" (ngSubmit)="createProduct()">
+    <form action="" class="container-form__form" [formGroup]="formUpdateProduct" (ngSubmit)="updateProduct()">
       <fieldset class="form__control">
         <label for="title_product" class="form__text">Nombre Producto</label>
         <input type="text" id="title_product" class="form__input" formControlName="title">
@@ -43,7 +43,6 @@
       <fieldset class="form__control">
         <label for="select_category" class="form__text">Categoría</label>
         <select id="select_category" class="form__select" formControlName="category">
-          <option value="">Categoría</option>
           <option [value]="category.id_category" *ngFor="let category of listCategories">{{category.name_category}}</option>
         </select>
         <div class="form__container-errors" *ngIf="category_product.invalid && (category_product.dirty || category_product.touched)">

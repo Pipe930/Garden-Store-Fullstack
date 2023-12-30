@@ -1,6 +1,7 @@
 from django.db import models
 from os.path import join
 import uuid
+import hashlib
 from datetime import datetime
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
@@ -41,6 +42,7 @@ class Offer(models.Model):
 
 # Function to name images
 def nameImage(request, name_image):
+
     old_name = name_image
     current_date = datetime.now().strftime("%Y%m%d%H:%M:%S")
     name_image = "%s%s" % (current_date, old_name)
