@@ -1,0 +1,39 @@
+<div class="container">
+
+  <div class="container__container-title">
+    <h2 class="container__container-title">Crear Oferta</h2>
+    <button class="container__btn" [routerLink]="['/administration/offers/list']">Volver</button>
+  </div>
+
+  <div class="container__container-form">
+    <form action="" class="container-form__form" [formGroup]="formCreateOffer" (ngSubmit)="createOffer()">
+      <fieldset class="form__control">
+        <label for="name_offer" class="form__text">Nombre Oferta</label>
+        <input type="text" id="name_offer" class="form__input" formControlName="name_offer">
+        <div class="form__container-errors" *ngIf="name_offer.invalid && (name_offer.dirty || name_offer.touched)">
+          <span class="form__errors" *ngIf="name_offer.getError('required')">Este campo es requerido</span>
+          <span class="form__errors" *ngIf="name_offer.getError('maxlength')">Tiene que ser maximo de 255 caracteres</span>
+        </div>
+      </fieldset>
+      <fieldset class="form__control">
+        <label for="date_offer" class="form__text">Fecha de Termino</label>
+        <input type="date" id="date_offer" [min]="dateTomorrow" class="form__input" formControlName="end_date">
+        <div class="form__container-errors" *ngIf="end_date.invalid && (end_date.dirty || end_date.touched)">
+          <span class="form__errors" *ngIf="end_date.getError('required')">Este campo es requerido</span>
+        </div>
+      </fieldset>
+      <fieldset class="form__control">
+        <label for="discount_offer" class="form__text">Porcentaje Descuento</label>
+        <input type="number" id="discount_offer" class="form__input" formControlName="percentage_discount">
+        <div class="form__container-errors" *ngIf="percentage_discount.invalid && (percentage_discount.dirty || percentage_discount.touched)">
+          <span class="form__errors" *ngIf="percentage_discount.getError('required')">Este campo es requerido</span>
+          <span class="form__errors" *ngIf="percentage_discount.getError('min')">Tiene que ser un minimo de 1% de descuento</span>
+          <span class="form__errors" *ngIf="percentage_discount.getError('max')">Tiene que ser un minimo de 100% de descuento</span>
+        </div>
+      </fieldset>
+      <button type="submit" class="form__btn-create">
+        Guardar
+      </button>
+    </form>
+  </div>
+</div>

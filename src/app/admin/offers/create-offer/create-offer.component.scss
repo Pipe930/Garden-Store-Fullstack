@@ -1,0 +1,88 @@
+@import '/src/themes/variables.scss';
+
+.container{
+
+  width: 100%;
+  background-color: $color-light;
+  padding: 2.2rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 10px 10px 8px -8px $color-dark-300;
+
+  .container__container-title{
+
+    display: flex;
+    justify-content: space-between;
+
+    .container__btn{
+
+      background-color: $color-success;
+      color: $color-light;
+      padding: .6rem 1.4rem;
+      transition: background .3s ease-in-out;
+    }
+
+    .container__btn:hover{
+
+      background-color: $color-success-600;
+    }
+  }
+
+  .container__container-form{
+    margin-top: 2rem;
+
+    .container-form__form{
+
+      .form__control{
+
+        margin: 1.4rem 0;
+
+        .form__text{
+
+          font-size: 1.1rem;
+          margin-bottom: .4rem;
+        }
+
+        .form__input{
+
+          width: 40%;
+          border: 2px solid $color-dark-300;
+          padding: 0.5rem;
+          background-color: $color-light;
+          transition: box-shadow .3s ease-in-out;
+        }
+
+        .form__input:focus{
+
+          box-shadow: 0 0 10px $color-dark-300;
+        }
+
+        .form__container-errors{
+
+          margin-top: .2rem;
+
+          .form__errors{
+
+            color: $color-danger;
+          }
+        }
+
+      }
+
+      .form__btn-create{
+
+        background-color: $color-success;
+        padding: 0.6rem 1rem;
+        margin-top: 2rem;
+        color: $color-light;
+        transition: background .3s ease;
+      }
+
+      .form__btn-create:hover{
+
+        background-color: $color-success-600;
+
+      }
+    }
+  }
+}

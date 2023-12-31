@@ -7,6 +7,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SharedModule } from '../shared/shared.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
+import { OffersModule } from './offers/offers.module';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ProductsModule } from './products/products.module';
     AdminRoutingModule,
     SharedModule,
     CategoriesModule,
-    ProductsModule
+    ProductsModule,
+    OffersModule
   ]
 })
 export class AdminModule { }

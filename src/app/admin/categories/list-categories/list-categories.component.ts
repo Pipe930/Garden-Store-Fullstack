@@ -11,11 +11,10 @@ import { Router } from '@angular/router';
 export class ListCategoriesComponent implements OnInit {
 
   private readonly _router = inject(Router);
+  private readonly _categoryService = inject(CategoryService);
 
   public listCategories: Array<Category> = [];
   public columns = categoryColumns;
-
-  private readonly _categoryService = inject(CategoryService);
 
   ngOnInit(): void {
 

@@ -39,6 +39,16 @@ export const navbarData: Array<Sidenav> = [
   {
     routerLink: "offers",
     icon: "bx bxs-offer",
-    label: "Ofertas"
+    label: "Ofertas",
+    items: [
+      {
+        routerLink: "offers/list",
+        label: "Lista Ofertas",
+      },
+      {
+        routerLink: "offers/create",
+        label: "Crear Oferta",
+      }
+    ]
   }
 ]
