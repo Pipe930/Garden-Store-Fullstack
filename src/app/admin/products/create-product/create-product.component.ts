@@ -3,8 +3,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { CategoryService } from '../../services/category.service';
+import { OfferService } from '../../services/offer.service';
 import { Category } from '../../interfaces/category';
 import { AlertsService } from 'src/app/shared/services/alerts.service';
+import { Offer } from '../../interfaces/offer';
 
 @Component({
   selector: 'app-create-product',
@@ -17,6 +19,7 @@ export class CreateProductComponent implements OnInit {
   private readonly _router = inject(Router);
   private readonly _productService = inject(ProductService);
   private readonly _categoryService = inject(CategoryService);
+  private readonly _offerService = inject(OfferService);
   private readonly _alertService = inject(AlertsService);
 
   @ViewChild('imageProduct') public imageProduct!: ElementRef;
@@ -25,6 +28,7 @@ export class CreateProductComponent implements OnInit {
   private imageBase64: string = "";
   public loadImage: boolean = false;
   public listCategories: Array<Category> = [];
+  public listOffers: Array<Offer> = [];
 
   public formProduct: FormGroup = this._builder.group({
 
@@ -33,6 +37,7 @@ export class CreateProductComponent implements OnInit {
     price: new FormControl(0, [Validators.required, Validators.min(1000), Validators.max(1000000)]),
     description: new FormControl("", Validators.maxLength(255)),
     category: new FormControl("", Validators.required),
+    offer: new FormControl(""),
     image: new FormControl("", Validators.required)
   });
 
@@ -40,7 +45,11 @@ export class CreateProductComponent implements OnInit {
 
     this._categoryService.getAllCategories().subscribe(result => {
       this.listCategories = result.data;
-    })
+    });
+
+    this._offerService.getAllOffers().subscribe(result => {
+      this.listOffers = result.data;
+    });
   }
 
   get title_product(){

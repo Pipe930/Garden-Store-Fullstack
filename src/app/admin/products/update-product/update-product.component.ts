@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { CategoryService } from '../../services/category.service';
+import { OfferService } from '../../services/offer.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Product } from '../../interfaces/product';
 import { Category } from '../../interfaces/category';
 import { AlertsService } from 'src/app/shared/services/alerts.service';
+import { Offer } from '../../interfaces/offer';
 
 @Component({
   selector: 'app-update-product',
@@ -16,6 +18,7 @@ export class UpdateProductComponent implements OnInit {
 
   private readonly _productService = inject(ProductService);
   private readonly _categoryService = inject(CategoryService);
+  private readonly _offerService = inject(OfferService);
   private readonly _alertService = inject(AlertsService);
   private readonly _router = inject(Router);
   private readonly _builder = inject(FormBuilder);
@@ -31,6 +34,7 @@ export class UpdateProductComponent implements OnInit {
     price: new FormControl(0, [Validators.required, Validators.min(1000), Validators.max(1000000)]),
     description: new FormControl("", Validators.maxLength(255)),
     category: new FormControl("", Validators.required),
+    offer: new FormControl(""),
     image: new FormControl("", Validators.required)
   });
 
@@ -48,31 +52,46 @@ export class UpdateProductComponent implements OnInit {
     image: "",
     description: "",
     category: "",
+    offer: {
+      id_offer: 0,
+      name_offer: "",
+      percentage_discount: 0
+    }
   };
 
   public productID: number = 0;
   public imageBase64: string = "";
   public listCategories: Array<Category> = [];
+  public listOffer: Array<Offer> = [];
   public loadImage: boolean = false;
 
   ngOnInit(): void {
 
-    this._activeRouter.params.subscribe(result => {
-      this.productID = result["id"];
-    });
+    this.productID = Number(this._activeRouter.snapshot.paramMap.get("id"));
 
     this._categoryService.getAllCategories().subscribe(result => {
       this.listCategories = result.data;
+    });
+
+    this._offerService.getAllOffers().subscribe(result => {
+      this.listOffer = result.data;
     })
 
     this._productService.getProduct(this.productID).subscribe(result => {
+
+      const categoryObtain = this.listCategories.filter((category) => category.name_category == result.data.category);
+
 
       this.product = result.data;
       this.formUpdateProduct.get("title")?.setValue(result.data.title);
       this.formUpdateProduct.get("brand")?.setValue(result.data.brand);
       this.formUpdateProduct.get("price")?.setValue(result.data.price);
       this.formUpdateProduct.get("description")?.setValue(result.data.description);
-      this.formUpdateProduct.get("category")?.setValue(result.data.category);
+      this.formUpdateProduct.get("category")?.setValue(categoryObtain[0].id_category);
+      if(result.data.offer){
+        const offerObtain = this.listOffer.filter((offer) => offer.name_offer === result.data.offer?.name_offer);
+        this.formUpdateProduct.get("offer")?.setValue(offerObtain[0].id_offer);
+      }
       this.imageBase64 = result.data.image;
       this.formUpdateProduct.updateValueAndValidity();
     });
@@ -116,7 +135,7 @@ export class UpdateProductComponent implements OnInit {
     }
 
     this._productService.updateProduct(formulario, this.product.id_product).subscribe(result => {
-      console.log(result);
+
       this._alertService.success("Producto Actualizado", "El producto se a actualizado correctamente");
       this._router.navigate(["/administration/products/list"]);
     }, (error) => this._alertService.error("Error", "El producto no se a actualizado correctamente"))

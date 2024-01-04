@@ -17,6 +17,11 @@ export interface CreateOffer {
   percentage_discount: number;
 }
 
+export interface ResponseOffer {
+  status: string;
+  data: Offer;
+}
+
 export interface ResponseListOffer {
 
   status: string;

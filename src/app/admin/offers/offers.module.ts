@@ -6,12 +6,14 @@ import { ListOffersComponent } from './list-offers/list-offers.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CreateOfferComponent } from './create-offer/create-offer.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UpdateOfferComponent } from './update-offer/update-offer.component';
 
 
 @NgModule({
   declarations: [
     ListOffersComponent,
-    CreateOfferComponent
+    CreateOfferComponent,
+    UpdateOfferComponent
   ],
   imports: [
     CommonModule,

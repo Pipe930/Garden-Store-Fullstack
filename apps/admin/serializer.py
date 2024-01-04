@@ -59,10 +59,11 @@ class CreateUpdateProductSerializer(ModelSerializer):
     def create(self, validated_data):
 
         try:
+            price = validated_data["price"]
             offer = validated_data["offer"]
 
             if offer is not None:
-                discount_price = discount(product.price, offer.percentage_discount)
+                discount_price = discount(price, offer.percentage_discount)
         except KeyError:
             discount_price = 0
 

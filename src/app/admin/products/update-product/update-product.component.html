@@ -50,6 +50,12 @@
         </div>
       </fieldset>
       <fieldset class="form__control">
+        <label for="select_offer" class="form__text">Oferta</label>
+        <select id="select_offer" class="form__select" formControlName="offer">
+          <option [value]="offer.id_offer" *ngFor="let offer of listOffer">{{offer.name_offer}}</option>
+        </select>
+      </fieldset>
+      <fieldset class="form__control">
         <label for="image_product" class="form__text">Imagen</label>
         <input type="file" id="image_product" #imageProduct (change)="changeImage()" accept="image/*" class="form__input" formControlName="image">
         <div class="form__container-errors" *ngIf="image_product.invalid && (image_product.dirty || image_product.touched)">

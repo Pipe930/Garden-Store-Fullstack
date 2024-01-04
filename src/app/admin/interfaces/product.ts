@@ -1,5 +1,11 @@
 import { TableColumns } from "src/app/shared/interfaces/table";
 
+interface Offer {
+  id_offer: number;
+  name_offer: string;
+  percentage_discount: number;
+}
+
 export interface Product {
 
   id_product: number;
@@ -15,7 +21,7 @@ export interface Product {
   created: string;
   description: string;
   category: string;
-  offer?: string;
+  offer?: Offer;
 }
 
 export interface ResponseProduct {

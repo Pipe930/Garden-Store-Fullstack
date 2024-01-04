@@ -17,7 +17,7 @@ export class UpdateCategoryComponent implements OnInit {
 
   private readonly _builder = inject(FormBuilder);
   private readonly _router = inject(Router);
-  private readonly _activeRoute = inject(ActivatedRoute);
+  private readonly _activeRouter = inject(ActivatedRoute);
   private readonly _categoryService = inject(CategoryService);
   private readonly _alertService = inject(AlertsService);
 
@@ -50,9 +50,8 @@ export class UpdateCategoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._activeRoute.params.subscribe(result => {
-      this.id_category = result["id"];
-    });
+
+    this.id_category = Number(this._activeRouter.snapshot.paramMap.get("id"));
 
     this._categoryService.getCategory(this.id_category).subscribe(result => {
       this.category = result.data;
