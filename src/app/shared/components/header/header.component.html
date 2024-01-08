@@ -1,51 +1,36 @@
-
 <header class="header">
   <div class="header__header-content">
 
     <div class="header__content-left">
-      <div class="header__search-container">
-        <div class="header__normal-search" *ngIf="!canShowSearch">
-          <input type="search" class="header__search" placeholder="Buscar..." name="" id="">
-          <button class="header__btn-search">
-            <i class='bx bx-search header__icon'></i>
-          </button>
-        </div>
-        <div *ngIf="canShowSearch">
-
-          <button
-          [cdkMenuTriggerFor]="searchOverlay"
-          class="header__menu-search-btn ripple"
-          >
-            <i class='bx bx-search header__icon'></i>
-          </button>
-        </div>
-      </div>
+      <h2 class="header__title">Dashboard</h2>
     </div>
     <div class="header__content-right">
       <div class="header__menu">
-        <div class="header__menu-item">
-          <button class="header__menu-item-btn ripple">
-            <img src="" alt="">
-          </button>
+        <div class="header__search-container">
+          <div class="header__normal-search" *ngIf="!canShowSearchAsOverlay">
+            <input type="search" class="header__search" placeholder="Buscar..." name="" id="">
+            <button class="header__btn-search">
+              <i class='bx bx-search header__icon'></i>
+            </button>
+          </div>
+          <div *ngIf="canShowSearchAsOverlay">
+
+            <button
+            [cdkMenuTriggerFor]="searchOverlay"
+            class="header__menu-search-btn ripple"
+            >
+              <i class='bx bx-search header__icon'></i>
+            </button>
+          </div>
         </div>
         <div class="header__menu-item">
-          <button class="header__menu-item-btn ripple">
-            <i class='bx bx-fullscreen header__icon'></i>
-          </button>
-        </div>
-        <div class="header__menu-item">
-          <button class="header__menu-item-btn ripple">
+          <button class="header__menu-item-btn ripple" [cdkMenuTriggerFor]="notificationOverlay">
             <i class='bx bxs-bell header__icon'></i>
-          </button>
-        </div>
-        <div class="header__menu-item">
-          <button class="header__menu-item-btn ripple">
-            <i class='bx bxs-message header__icon'></i>
           </button>
         </div>
       </div>
       <div class="header__container-user-avatar">
-        <div class="header__user-avatar">
+        <div class="header__user-avatar" [cdkMenuTriggerFor]="userOverlay">
           <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="avatar_user" class="header__img-avatar">
           <div class="circle-indicator pulse"></div>
         </div>
@@ -66,8 +51,42 @@
 <ng-template #notificationOverlay>
   <div class="overlay overlay-notification overlay-fall" cdkMenu>
     <ul>
-      <li>
+      <li class="overlay__notification-head-container">
+        <div class="overlay__norification-head">
+          <h3>Notification</h3>
+        </div>
+        <span class="overlay__view-all-link">
+          <a href="">View All</a>
+        </span>
+      </li>
+      <li class="overlay__notification-message-container"
+      *ngFor="let notification of listNotifications"
+      cdkMenuItem
+      >
+        <i [class]="notification.icon"></i>
+        <div>
+          <div class="overlay__notification-subject">
+            {{notification.subject}}
+          </div>
+          <p class="overlay__notification-description">
+            {{notification.description}}
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</ng-template>
 
+<ng-template #userOverlay>
+  <div class="overlay overlay-user overlay-fall" cdkMenu>
+
+    <ul>
+      <li *ngFor="let item of listUserItems" cdkMenuItem>
+        <a href="">
+
+          <i class="icon" [ngClass]="item.icon"></i>
+          <span>{{item.label}}</span>
+        </a>
       </li>
     </ul>
   </div>

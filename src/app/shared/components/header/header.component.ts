@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { notifications, userItems } from './header-dummy-data';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +8,9 @@ import { Component, HostListener, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  public canShowSearch: boolean = false;
+  public canShowSearchAsOverlay: boolean = true;
+  public listNotifications = notifications;
+  public listUserItems = userItems;
 
   ngOnInit(): void {
     this.checkCanShowSearch(window.innerWidth);
@@ -22,10 +25,10 @@ export class HeaderComponent implements OnInit {
 
     if(innerWidth < 845){
 
-      this.canShowSearch = true;
+      this.canShowSearchAsOverlay = true;
     } else {
 
-      this.canShowSearch = false;
+      this.canShowSearchAsOverlay = false;
     }
   }
 

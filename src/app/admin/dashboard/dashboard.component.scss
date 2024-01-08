@@ -1,0 +1,105 @@
+@import '/src/themes/variables.scss';
+
+.container{
+
+  background-color: $color-light;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 10px 10px 8px -8px $color-dark-300;
+  overflow: hidden;
+
+  .container__statistics{
+
+    margin-bottom: 2rem;
+
+    .statistics__title{
+
+      font-size: 24px;
+      margin-bottom: 2rem;
+    }
+
+    .statistics__container{
+
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+
+      .statitics__card{
+
+        background-color: $color-dark-100;
+        padding: 1.4rem;
+        display: flex;
+        align-items: center;
+        border-radius: 1rem;
+        width: 22%;
+        overflow: hidden;
+
+        @media screen and (max-width: 1300px) {
+          width: 100%;
+        }
+
+        .card__container-icon{
+
+          background-color: $color-primary-300;
+          height: 60px;
+          width: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 1rem;
+          margin-right: 15px;
+
+          .card__icon{
+
+            font-size: 24px;
+            color: $color-light;
+          }
+        }
+
+        .card__content{
+
+          font-weight: 900;
+        }
+
+      }
+    }
+  }
+  .container__table-orders{
+
+    .container__table-title{
+
+      margin-bottom: 1rem;
+      font-size: 24px;
+    }
+
+    .container__table{
+
+      width: 100%;
+
+      thead{
+
+
+        border: 1px solid $color-dark-400;
+        tr{
+
+          th{
+
+            text-align: left;
+            padding: 1rem 0;
+          }
+        }
+      }
+
+      tbody{
+
+        tr{
+
+          td{
+
+            padding: 1rem;
+          }
+        }
+      }
+    }
+  }
+}
